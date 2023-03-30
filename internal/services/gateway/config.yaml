@@ -1,0 +1,8 @@
+log:
+  dir: "./log/"
+micro:
+  service: "gateway"
+  version: "latest"
+gin:
+  mode: "debug"
+  port: ":8080"

@@ -1,0 +1,11 @@
+{
+  "fields.time": "215ms",
+  "ip": "::1",
+  "level": "info",
+  "method": "POST",
+  "msg": "[]",
+  "path": "/inn/api/v1/user/login",
+  "status_code": 200,
+  "time": "2023-03-30 13:58:41",
+  "x-request-id": "6655463e-ceb5-4133-9564-a3c40bf26ef3"
+}

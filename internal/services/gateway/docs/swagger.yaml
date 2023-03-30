@@ -1,0 +1,78 @@
+basePath: /inn/api/v1
+definitions:
+  internal.Response:
+    properties:
+      data: {}
+      message:
+        type: string
+      status:
+        type: integer
+    type: object
+  user.user:
+    properties:
+      account:
+        type: string
+      avatar:
+        type: string
+      nickname:
+        type: string
+      password:
+        type: string
+      sex:
+        type: integer
+    required:
+    - account
+    - password
+    type: object
+host: 139.196.30.123
+info:
+  contact: {}
+  description: Inn
+  title: Inn
+  version: "1.0"
+paths:
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: 用户通过学号登录
+      parameters:
+      - description: 用户信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/user.user'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 登陆 api
+      tags:
+      - user
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: 用户通过学号注册
+      parameters:
+      - description: 用户信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/user.user'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 注册 api
+      tags:
+      - user
+swagger: "2.0"

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package post;
+
+option go_package = "./proto;post";
+
+service Post {
+  rpc CreatePost
+}
+
