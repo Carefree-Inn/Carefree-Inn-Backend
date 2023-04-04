@@ -1,0 +1,3 @@
+./internal/service/**/log
+**/.idea
+*.yaml
