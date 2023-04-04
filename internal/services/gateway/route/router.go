@@ -1,6 +1,7 @@
 package route
 
 import (
+	"gateway/pkg/middlewares"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -8,6 +9,10 @@ import (
 )
 
 func Route(engine *gin.Engine) {
+	engine.Use(middlewares.SetUuid(),
+		middlewares.Logger(), gin.Recovery(),
+	)
+	
 	engine.NoRoute(func(c *gin.Context) {
 		c.String(http.StatusNotFound, "page is not exist")
 	})
@@ -15,4 +20,5 @@ func Route(engine *gin.Engine) {
 	
 	base := engine.Group("/inn/api/v1")
 	userRoute(base)
+	postRoute(base)
 }

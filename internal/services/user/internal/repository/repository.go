@@ -30,6 +30,7 @@ type UserRepository interface {
 	CreateUserIfNotExist(user *model.User) error
 	GetUserProfile(account string) (*model.User, error)
 	VerifyUser(account, password string) error
+	GetBatchUserProfile(accounts []string) ([]*model.User, error)
 }
 
 func NewUserRepository(dbUp *gorm.DB) UserRepository {

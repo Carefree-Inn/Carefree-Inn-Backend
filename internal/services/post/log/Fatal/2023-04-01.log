@@ -1,0 +1,42 @@
+{
+  "error": "Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1",
+  "level": "fatal",
+  "msg": "[数据表初始化失败]",
+  "stack": "Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1\npost/internal/repository.Init\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/internal/repository/repository.go:56\nmain.main\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/main.go:29\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1571",
+  "time": "2023-04-01 19:55:58"
+}
+{
+  "error": "Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '；uniqueKey,PRIMARY KEY (`tag_id`))' at line 1",
+  "level": "fatal",
+  "msg": "[数据表初始化失败]",
+  "stack": "Error 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '；uniqueKey,PRIMARY KEY (`tag_id`))' at line 1\npost/internal/repository.Init\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/internal/repository/repository.go:56\nmain.main\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/main.go:29\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1571",
+  "time": "2023-04-01 20:10:57"
+}
+{
+  "error": "Error 1062 (23000): Duplicate entry 'test1' for key 'tag.title'",
+  "level": "fatal",
+  "msg": "[数据表初始化失败]",
+  "stack": "Error 1062 (23000): Duplicate entry 'test1' for key 'tag.title'\npost/internal/repository.Init\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/internal/repository/repository.go:56\nmain.main\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/main.go:29\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1571",
+  "time": "2023-04-01 20:55:28"
+}
+{
+  "error": "Error 1062 (23000): Duplicate entry 't1' for key 'category.title'",
+  "level": "fatal",
+  "msg": "[分区初始化失败]",
+  "stack": "Error 1062 (23000): Duplicate entry 't1' for key 'category.title'\npost/internal/repository.Init\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/internal/repository/repository.go:62\nmain.main\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/main.go:29\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1571",
+  "time": "2023-04-01 20:59:26"
+}
+{
+  "error": "Error 1062 (23000): Duplicate entry 't1' for key 'category.title'",
+  "level": "fatal",
+  "msg": "[分区初始化失败]",
+  "stack": "Error 1062 (23000): Duplicate entry 't1' for key 'category.title'\npost/internal/repository.Init\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/internal/repository/repository.go:61\nmain.main\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/main.go:29\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1571",
+  "time": "2023-04-01 21:19:40"
+}
+{
+  "error": "Error 1062 (23000): Duplicate entry 't1' for key 'category.title'",
+  "level": "fatal",
+  "msg": "[分区初始化失败]",
+  "stack": "Error 1062 (23000): Duplicate entry 't1' for key 'category.title'\npost/internal/repository.Init\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/internal/repository/repository.go:61\nmain.main\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/main.go:29\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1571",
+  "time": "2023-04-01 21:25:01"
+}

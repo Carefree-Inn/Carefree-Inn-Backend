@@ -9,10 +9,14 @@ service User {
 	rpc UserLogin(CCNUInfoRequest) returns(CCNULoginResponse) {}
 	rpc GetUserProfile(Request) returns(InnUserProfileResponse){}
 	rpc UpdateUserProfile(InnUserProfileRequest) returns(Response){}
+	rpc GetBatchUserProfile(BatchUserProfileRequest) returns(BatchUserProfileResponse){}
 }
 
 message Request {
 	string account = 1;
+}
+message BatchUserProfileRequest{
+	repeated string accounts = 1;
 }
 message Response {}
 enum Sex {
@@ -28,8 +32,6 @@ message CCNUInfoRequest{
 	Sex sex = 5;
 }
 message CCNULoginResponse{
-	string token = 1;
-	string redirect_url = 2;
 }
 
 message InnUserProfileRequest{
@@ -44,4 +46,8 @@ message InnUserProfileResponse {
 	string nickname = 2;
 	string avatar = 3;
 	Sex sex = 4;
+}
+
+message BatchUserProfileResponse {
+	repeated InnUserProfileResponse data = 1;
 }

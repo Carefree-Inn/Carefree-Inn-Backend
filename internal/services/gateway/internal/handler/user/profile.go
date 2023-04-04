@@ -11,7 +11,7 @@ import (
 	pb "user/proto"
 )
 
-type userInfo struct {
+type UserInfo struct {
 	Account  string `json:"account"`
 	Nickname string `json:"nickname"`
 	Sex      int8   `json:"sex"`
@@ -26,7 +26,7 @@ type userInfo struct {
 //	@Produce		json
 //	@Param			Authorzation	header		string	true	"用户token"
 //	@Success		200		{object}	internal.Response
-//	@Router			/user/profile [put]
+//	@Router			/user/profile [get]
 func (u *userHandler) GetProfile(c *gin.Context) {
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
 	account := c.MustGet("account").(string)
@@ -40,7 +40,7 @@ func (u *userHandler) GetProfile(c *gin.Context) {
 		return
 	}
 	
-	internal.Success(c, userInfo{
+	internal.Success(c, UserInfo{
 		Account:  profile.Account,
 		Nickname: profile.Nickname,
 		Sex:      int8(profile.Sex),
@@ -55,11 +55,11 @@ func (u *userHandler) GetProfile(c *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			Authorzation	header		string	true	"用户token"
-//  @Param          object          body        userInfo    true    "需要修改的信息"
+//  @Param          object          body        UserInfo    true    "需要修改的信息"
 //	@Success		200		{object}	internal.Response
 //	@Router			/user/profile [put]
 func (u *userHandler) UpdateProfile(c *gin.Context) {
-	var req userInfo
+	var req UserInfo
 	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
 		internal.Error(c, errno.JsonDataError)
 		log.Info(

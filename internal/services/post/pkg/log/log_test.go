@@ -6,7 +6,7 @@ import (
 )
 
 func TestFatal(t *testing.T) {
-	NewLogger(4)
+	NewLogger()
 	Warn(nil, nil, "eee")
 	Warn(nil, nil, "eee")
 	Warn(nil, nil, "eee")

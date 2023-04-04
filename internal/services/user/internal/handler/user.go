@@ -76,3 +76,23 @@ func (u *UserService) UpdateUserProfile(ctx context.Context, in *pb.InnUserProfi
 	}
 	return nil
 }
+
+func (u *UserService) GetBatchUserProfile(ctx context.Context, in *pb.BatchUserProfileRequest, resp *pb.BatchUserProfileResponse) error {
+	data, err := u.userDao.GetBatchUserProfile(in.Accounts)
+	if err != nil {
+		return err
+	}
+	
+	var users = make([]*pb.InnUserProfileResponse, 0, len(data))
+	for _, v := range data {
+		users = append(users, &pb.InnUserProfileResponse{
+			Account:  v.Account,
+			Nickname: v.Nickname,
+			Avatar:   v.Avatar,
+			Sex:      pb.Sex(v.Sex),
+		})
+	}
+	
+	resp.Data = users
+	return nil
+}

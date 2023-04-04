@@ -12,8 +12,9 @@ import (
 
 func main() {
 	// Create service
-	log.NewLogger()
+	
 	cfg := config.Run(os.Getenv("USER_CONFIG_FILE_PATH"))
+	log.NewLogger(cfg.Log.Dir)
 	
 	srv := micro.NewService()
 	srv.Init(

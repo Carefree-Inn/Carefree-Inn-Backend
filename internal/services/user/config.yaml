@@ -4,9 +4,7 @@ micro:
   service: "userService"
   version: "latest"
 server:
-  http:
-    host: "127.0.0.1"
-    port: 8080
+  address: "127.0.0.1:8081"
 log:
   dir: "./log/"
 user:

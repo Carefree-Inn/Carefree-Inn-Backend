@@ -12,7 +12,7 @@ import (
 
 var logger *logrus.Logger
 
-func NewLogger() {
+func NewLogger(dir string) {
 	logger = logrus.New()
 	
 	logger.SetOutput(os.Stdout)
@@ -21,7 +21,7 @@ func NewLogger() {
 		PrettyPrint:     true,
 	})
 	
-	logger.AddHook(loggerHook())
+	logger.AddHook(loggerHook(dir))
 }
 
 func WithFields(key string, value interface{}) *logrus.Entry {
@@ -32,14 +32,14 @@ func WithField(fields logrus.Fields) *logrus.Entry {
 	return logrus.WithFields(fields)
 }
 
-func loggerHook() *lfshook.LfsHook {
+func loggerHook(dir string) *lfshook.LfsHook {
 	return lfshook.NewHook(
 		lfshook.WriterMap{
-			logrus.InfoLevel:  fileDivisionByTime("Info"),
-			logrus.DebugLevel: fileDivisionByTime("Debug"),
-			logrus.WarnLevel:  fileDivisionByTime("Warn"),
-			logrus.PanicLevel: fileDivisionByTime("Panic"),
-			logrus.FatalLevel: fileDivisionByTime("Fatal"),
+			logrus.InfoLevel:  fileDivisionByTime(dir + "Info"),
+			logrus.DebugLevel: fileDivisionByTime(dir + "Debug"),
+			logrus.WarnLevel:  fileDivisionByTime(dir + "Warn"),
+			logrus.PanicLevel: fileDivisionByTime(dir + "Panic"),
+			logrus.FatalLevel: fileDivisionByTime(dir + "Fatal"),
 		}, &logrus.JSONFormatter{
 			TimestampFormat: "2006-01-02 15:04:05",
 			PrettyPrint:     true,
@@ -48,7 +48,7 @@ func loggerHook() *lfshook.LfsHook {
 
 func fileDivisionByTime(level string) *rotatelogs.RotateLogs {
 	division, err := rotatelogs.New(
-		"./log/"+level+"/%Y-%m-%d.log",
+		level+"/%Y-%m-%d.log",
 		rotatelogs.WithMaxAge(time.Hour*24*7),
 		rotatelogs.WithRotationTime(time.Hour*24),
 	)

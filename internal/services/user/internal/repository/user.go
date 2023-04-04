@@ -41,10 +41,14 @@ func (d *User) VerifyUser(account, password string) error {
 }
 
 func (d *User) CreateUserIfNotExist(user *model.User) error {
+	session := d.db.Begin()
 	if errors.Is(d.ExistUser(user.Account), gorm.ErrRecordNotFound) {
-		return errors.WithStack(d.db.Table(user.Table()).Create(&user).Error)
+		if err := session.Table(user.Table()).Create(&user).Error; err != nil {
+			session.Rollback()
+			return errors.WithStack(err)
+		}
 	}
-	return nil
+	return errors.WithStack(session.Commit().Error)
 }
 
 func (d *User) GetUserProfile(account string) (*model.User, error) {
@@ -57,5 +61,20 @@ func (d *User) GetUserProfile(account string) (*model.User, error) {
 }
 
 func (d *User) UpdateExistUserProfile(user *model.User) error {
-	return errors.WithStack(d.db.Table(user.Table()).Updates(&user).Error)
+	session := d.db.Begin()
+	if err := session.Table(user.Table()).Updates(&user).Error;
+		err != nil {
+		session.Rollback()
+		return errors.WithStack(err)
+	}
+	return errors.WithStack(session.Commit().Error)
+}
+
+func (d *User) GetBatchUserProfile(accounts []string) ([]*model.User, error) {
+	var users = make([]*model.User, 0, len(accounts))
+	if err := d.db.Table(model.User{}.Table()).Where("account IN ?", accounts).
+		Find(&users).Error; err != nil {
+		return nil, errors.WithStack(err)
+	}
+	return users, nil
 }

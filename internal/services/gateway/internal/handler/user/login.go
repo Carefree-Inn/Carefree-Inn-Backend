@@ -8,6 +8,7 @@ import (
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	"github.com/pkg/errors"
 	pb "user/proto"
 )
 
@@ -32,9 +33,9 @@ func (u *userHandler) Register(c *gin.Context) {
 	var req user
 	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
 		internal.Error(c, errno.JsonDataError)
-		log.Info(
+		log.Warn(
 			log.WithField("X-Request-Id", c.MustGet("uuid")),
-			errno.JsonDataError.Error(),
+			errors.WithStack(err), errno.JsonDataError.Error(),
 		)
 		return
 	}
@@ -66,7 +67,7 @@ func (u *userHandler) Register(c *gin.Context) {
 	if err != nil {
 		internal.ServerError(c, errno.TokenGenerateError.Error())
 		log.Panic(log.WithField("X-Request-Id", c.MustGet("uuid")),
-			err)
+			errors.WithStack(err))
 		return
 	}
 	
@@ -87,9 +88,9 @@ func (u *userHandler) Login(c *gin.Context) {
 	var req user
 	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
 		internal.Error(c, errno.JsonDataError)
-		log.Info(
+		log.Warn(
 			log.WithField("X-Request-Id", c.MustGet("uuid")),
-			errno.JsonDataError.Error(),
+			errors.WithStack(err), errno.JsonDataError.Error(),
 		)
 		return
 	}
@@ -108,9 +109,9 @@ func (u *userHandler) Login(c *gin.Context) {
 			return
 		}
 		
-		internal.ServerError(c, err.Error())
+		internal.ServerError(c, errno.LoginServerError.Error())
 		log.Panic(log.WithField("X-Request-Id", c.MustGet("uuid")),
-			err, errno.LoginServerError.Error())
+			errors.WithStack(err), err.Error())
 		return
 	}
 	

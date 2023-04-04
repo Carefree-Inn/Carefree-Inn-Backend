@@ -3,7 +3,6 @@ package main
 import (
 	_ "gateway/docs" // necessary
 	"gateway/pkg/log"
-	"gateway/pkg/middlewares"
 	"gateway/route"
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +15,6 @@ import (
 func main() {
 	log.NewLogger()
 	engine := gin.New()
-	engine.Use(middlewares.SetUuid(), middlewares.Logger(), gin.Recovery())
 	route.Route(engine)
 	engine.Run(":8080")
 }

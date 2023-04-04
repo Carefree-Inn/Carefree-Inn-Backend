@@ -3,7 +3,7 @@ package config
 import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"user/pkg/log"
+	"post/pkg/log"
 )
 
 type config struct {
@@ -15,8 +15,7 @@ type Config struct {
 		Dsn string `yaml:"dsn"`
 	} `yaml:"database"`
 	Http struct {
-		Host string `yaml:"host"`
-		Port int    `yaml:"port"`
+		Address string `yaml:"address"`
 	} `yaml:"http"`
 	Log struct {
 		Dir string `yaml:"dir"`
@@ -25,6 +24,7 @@ type Config struct {
 		Service string `yaml:"service"`
 		Version string `yaml:"version"`
 	} `yaml:"micro"`
+	Category []string `yaml:"category"`
 }
 
 func (cfg *config) init() {

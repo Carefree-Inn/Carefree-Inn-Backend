@@ -40,6 +40,7 @@ type UserService interface {
 	UserLogin(ctx context.Context, in *CCNUInfoRequest, opts ...client.CallOption) (*CCNULoginResponse, error)
 	GetUserProfile(ctx context.Context, in *Request, opts ...client.CallOption) (*InnUserProfileResponse, error)
 	UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, opts ...client.CallOption) (*Response, error)
+	GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, opts ...client.CallOption) (*BatchUserProfileResponse, error)
 }
 
 type userService struct {
@@ -94,6 +95,16 @@ func (c *userService) UpdateUserProfile(ctx context.Context, in *InnUserProfileR
 	return out, nil
 }
 
+func (c *userService) GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, opts ...client.CallOption) (*BatchUserProfileResponse, error) {
+	req := c.c.NewRequest(c.name, "User.GetBatchUserProfile", in)
+	out := new(BatchUserProfileResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
@@ -101,6 +112,7 @@ type UserHandler interface {
 	UserLogin(context.Context, *CCNUInfoRequest, *CCNULoginResponse) error
 	GetUserProfile(context.Context, *Request, *InnUserProfileResponse) error
 	UpdateUserProfile(context.Context, *InnUserProfileRequest, *Response) error
+	GetBatchUserProfile(context.Context, *BatchUserProfileRequest, *BatchUserProfileResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
@@ -109,6 +121,7 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		UserLogin(ctx context.Context, in *CCNUInfoRequest, out *CCNULoginResponse) error
 		GetUserProfile(ctx context.Context, in *Request, out *InnUserProfileResponse) error
 		UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, out *Response) error
+		GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, out *BatchUserProfileResponse) error
 	}
 	type User struct {
 		user
@@ -135,4 +148,8 @@ func (h *userHandler) GetUserProfile(ctx context.Context, in *Request, out *InnU
 
 func (h *userHandler) UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, out *Response) error {
 	return h.UserHandler.UpdateUserProfile(ctx, in, out)
+}
+
+func (h *userHandler) GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, out *BatchUserProfileResponse) error {
+	return h.UserHandler.GetBatchUserProfile(ctx, in, out)
 }
