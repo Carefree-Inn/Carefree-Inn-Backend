@@ -1,44 +1,19 @@
 syntax = "proto3";
 
-package userpost;
+package user_post;
 
-option go_package = "./proto;userpost";
+option go_package = "./proto;user_post";
 
 service UserPost {
-	rpc Call(CallRequest) returns (CallResponse) {}
-	rpc ClientStream(stream ClientStreamRequest) returns (ClientStreamResponse) {}
-	rpc ServerStream(ServerStreamRequest) returns (stream ServerStreamResponse) {}
-	rpc BidiStream(stream BidiStreamRequest) returns (stream BidiStreamResponse) {}
+  rpc AssemblePostAndUser()
 }
 
-message CallRequest {
-	string name = 1;
+message Request{}
+message Response{}
+
+message PostAndUser {
+
 }
 
-message CallResponse {
-	string msg = 1;
-}
+message 
 
-message ClientStreamRequest {
-	int64 stroke = 1;
-}
-
-message ClientStreamResponse {
-	int64 count = 1;
-}
-
-message ServerStreamRequest {
-	int64 count = 1;
-}
-
-message ServerStreamResponse {
-	int64 count = 1;
-}
-
-message BidiStreamRequest {
-	int64 stroke = 1;
-}
-
-message BidiStreamResponse {
-	int64 stroke = 1;
-}
