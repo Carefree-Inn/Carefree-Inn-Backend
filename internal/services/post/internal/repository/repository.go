@@ -15,9 +15,10 @@ import (
 
 type PostRepository interface {
 	CreatePost(post *model.Post) error
-	GetCategory(title string) (*model.Category, error)
+	GetCategory(id []uint32) ([]*model.Category, error)
 	DeletePost(post *model.Post) error
 	GetAllCategory() ([]*model.Category, error)
+	GetPostOfTag(title string) ([]*model.Post, error)
 	GetPostOfCategory(category *model.Category, page, limit uint32) ([]*model.Post, error)
 }
 

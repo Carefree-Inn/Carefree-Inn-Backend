@@ -13,10 +13,13 @@ import (
 )
 
 type createPost struct {
-	CategoryId uint32 `json:"category_id" binding:"required"`
-	Title      string `json:"title" binding:"required"`
-	Content    string `json:"content" binding:"required"`
-	Tags       []struct {
+	Category struct {
+		CategoryId uint32 `json:"category_id"`
+		Title      string `json:"title"`
+	} `json:"category" binding:"required"`
+	Title   string `json:"title" binding:"required"`
+	Content string `json:"content" binding:"required"`
+	Tags    []struct {
 		Tag string `json:"tag"`
 	} `json:"tags"`
 }
@@ -53,11 +56,14 @@ func (p *postHandler) CreatePost(c *gin.Context) {
 	}
 	
 	_, err := p.PostService.CreatePost(ctx, &pb.CreatePostRequest{
-		Account:    account,
-		Title:      req.Title,
-		Content:    req.Content,
-		CategoryId: req.CategoryId,
-		Tag:        tags,
+		Account: account,
+		Title:   req.Title,
+		Content: req.Content,
+		Category: &pb.CategoryInfo{
+			Title:      req.Category.Title,
+			CategoryId: req.Category.CategoryId,
+		},
+		Tag: tags,
 	})
 	if err != nil {
 		internal.ServerError(c, errno.CreatePostError.Error())

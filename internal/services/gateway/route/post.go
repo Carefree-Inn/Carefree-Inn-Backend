@@ -12,6 +12,7 @@ func postRoute(engine *gin.RouterGroup) {
 	
 	pRoute.POST("/", middlewares.Auth(), pHandler.CreatePost)
 	pRoute.DELETE("/", middlewares.Auth(), pHandler.DeletePost)
-	pRoute.GET("/category", pHandler.GetCategory)
-	pRoute.GET("/category/:category_id", pHandler.GetPostOfCategory)
+	pRoute.GET("/category/all", pHandler.GetCategory)
+	pRoute.GET("/category", pHandler.GetPostOfCategory)
+	pRoute.GET("/tag", pHandler.GetPostOfTag)
 }

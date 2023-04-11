@@ -21,11 +21,11 @@ type postHandler struct {
 
 type tagInfo struct {
 	TagId uint32 `json:"tag_id"`
-	Title string `json:"title"`
+	Title string `json:"title" binding:"required"`
 }
 
 type categoryInfo struct {
-	CategoryId uint32 `json:"category_id"`
+	CategoryId uint32 `json:"category_id" binding:"required"`
 	Title      string `json:"title"`
 }
 

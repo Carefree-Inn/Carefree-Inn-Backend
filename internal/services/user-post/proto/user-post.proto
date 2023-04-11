@@ -11,9 +11,26 @@ service UserPost {
 message Request{}
 message Response{}
 
+message TagInfo{
+  string Title = 1;
+  uint32 TagId = 2;
+}
+
+message PostInfo{
+  string Account = 1;
+  uint32 PostId = 2;
+  string Title = 3;
+  string Content = 4;
+  uint32 CategoryId= 5;
+  uint32 Star = 6;
+  uint32 Comments = 7;
+  string CreateTime = 8;
+  repeated TagInfo tag = 9;
+}
+
 message PostAndUser {
 
 }
 
-message 
+message
 

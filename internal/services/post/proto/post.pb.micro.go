@@ -40,6 +40,7 @@ type PostService interface {
 	DeletePost(ctx context.Context, in *DeletePostRequest, opts ...client.CallOption) (*Response, error)
 	GetCategory(ctx context.Context, in *Request, opts ...client.CallOption) (*CategoryResponse, error)
 	GetPostOfCategory(ctx context.Context, in *CategoryRequest, opts ...client.CallOption) (*PostResponse, error)
+	GetPostOfTag(ctx context.Context, in *TagInfo, opts ...client.CallOption) (*PostResponse, error)
 }
 
 type postService struct {
@@ -94,6 +95,16 @@ func (c *postService) GetPostOfCategory(ctx context.Context, in *CategoryRequest
 	return out, nil
 }
 
+func (c *postService) GetPostOfTag(ctx context.Context, in *TagInfo, opts ...client.CallOption) (*PostResponse, error) {
+	req := c.c.NewRequest(c.name, "Post.GetPostOfTag", in)
+	out := new(PostResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Post service
 
 type PostHandler interface {
@@ -101,6 +112,7 @@ type PostHandler interface {
 	DeletePost(context.Context, *DeletePostRequest, *Response) error
 	GetCategory(context.Context, *Request, *CategoryResponse) error
 	GetPostOfCategory(context.Context, *CategoryRequest, *PostResponse) error
+	GetPostOfTag(context.Context, *TagInfo, *PostResponse) error
 }
 
 func RegisterPostHandler(s server.Server, hdlr PostHandler, opts ...server.HandlerOption) error {
@@ -109,6 +121,7 @@ func RegisterPostHandler(s server.Server, hdlr PostHandler, opts ...server.Handl
 		DeletePost(ctx context.Context, in *DeletePostRequest, out *Response) error
 		GetCategory(ctx context.Context, in *Request, out *CategoryResponse) error
 		GetPostOfCategory(ctx context.Context, in *CategoryRequest, out *PostResponse) error
+		GetPostOfTag(ctx context.Context, in *TagInfo, out *PostResponse) error
 	}
 	type Post struct {
 		post
@@ -135,4 +148,8 @@ func (h *postHandler) GetCategory(ctx context.Context, in *Request, out *Categor
 
 func (h *postHandler) GetPostOfCategory(ctx context.Context, in *CategoryRequest, out *PostResponse) error {
 	return h.PostHandler.GetPostOfCategory(ctx, in, out)
+}
+
+func (h *postHandler) GetPostOfTag(ctx context.Context, in *TagInfo, out *PostResponse) error {
+	return h.PostHandler.GetPostOfTag(ctx, in, out)
 }
