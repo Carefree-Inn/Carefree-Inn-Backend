@@ -1,0 +1,26 @@
+version: "2"
+services:
+  db:
+    networks:
+      - post_network
+    restart: always
+    image: mysql:8.0.29
+    volumes:
+      - /docker/volume/inn/post/conf/my.cnf
+      - /docker/volume/inn/post/data:/var/lib/mysql
+      - /docker/volume/inn/post/post.sql:/docker-entrypoint-initdb.d/post.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+
+  post:
+    networks:
+      - post_network
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      db:
+        condition: service_started
+    ports:
+      - "${POST_PORT}:80"
