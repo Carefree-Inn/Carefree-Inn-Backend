@@ -7,8 +7,8 @@ import (
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	pb "github.com/jackj-ohn1/package/proto/user"
 	"golang.org/x/net/context"
-	pb "user/proto"
 )
 
 type UserInfo struct {

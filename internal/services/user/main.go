@@ -14,7 +14,7 @@ func main() {
 	// Create service
 	
 	cfg := config.Run(os.Getenv("USER_CONFIG_FILE_PATH"))
-	log.NewLogger(cfg.Log.Dir)
+	log.NewLogger("./log/")
 	
 	srv := micro.NewService()
 	srv.Init(

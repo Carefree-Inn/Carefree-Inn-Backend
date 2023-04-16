@@ -2,7 +2,7 @@ package user
 
 import (
 	"gateway/internal/service"
-	pb "user/proto"
+	pb "github.com/jackj-ohn1/package/proto/user"
 )
 
 func NewUserHandler() *userHandler {

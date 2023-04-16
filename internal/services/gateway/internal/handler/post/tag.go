@@ -7,8 +7,8 @@ import (
 	"gateway/pkg/errno"
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
+	pb "github.com/jackj-ohn1/package/proto/post"
 	"github.com/pkg/errors"
-	pb "post/proto"
 )
 
 func (p *postHandler) GetPostOfTag(c *gin.Context) {

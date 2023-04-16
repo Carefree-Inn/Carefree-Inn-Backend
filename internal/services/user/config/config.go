@@ -17,9 +17,6 @@ type Config struct {
 	Http struct {
 		Address string `yaml:"address"`
 	} `yaml:"http"`
-	Log struct {
-		Dir string `yaml:"dir"`
-	} `yaml:"log"`
 	Micro struct {
 		Service string `yaml:"service"`
 		Version string `yaml:"version"`

@@ -3,8 +3,8 @@ package post
 import (
 	"gateway/internal/handler/user"
 	"gateway/internal/service"
-	pbPost "post/proto"
-	pbUser "user/proto"
+	pbPost "github.com/jackj-ohn1/package/proto/post"
+	pbUser "github.com/jackj-ohn1/package/proto/user"
 )
 
 func NewPostHandler() *postHandler {

@@ -8,8 +8,8 @@ import (
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	pb "github.com/jackj-ohn1/package/proto/user"
 	"github.com/pkg/errors"
-	pb "user/proto"
 )
 
 type user struct {
@@ -49,10 +49,7 @@ func (u *userHandler) Register(c *gin.Context) {
 		Sex:      pb.Sex(req.Sex),
 	})
 	if err != nil {
-		if errno.Is(err, errno.UserNotExistError) {
-			internal.Error(c, err)
-			return
-		} else if errno.Is(err, errno.LoginWrongInfoError) {
+		if errno.Is(err, errno.LoginWrongInfoError) {
 			internal.Error(c, err)
 			return
 		}

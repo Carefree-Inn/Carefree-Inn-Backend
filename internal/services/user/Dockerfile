@@ -9,14 +9,13 @@ RUN apk --update --no-cache add ca-certificates gcc libtool make musl-dev protoc
 
 # Build Go binary
 COPY Makefile go.mod go.sum ./
-RUN make init && go mod download 
+RUN make init && go env -w GOPROXY=https://proxy.golang.com.cn,direct
 COPY . .
 RUN make proto tidy build
 
 # Deployment container
 FROM scratch
 
-COPY --from=builder /etc/ssl/certs /etc/ssl/certs
 COPY --from=builder /go/src/user/user /user
-ENTRYPOINT ["/user"]
+ENTRYPOINT ["/post"]
 CMD []

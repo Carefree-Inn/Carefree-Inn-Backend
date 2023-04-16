@@ -8,8 +8,8 @@ import (
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
+	pb "github.com/jackj-ohn1/package/proto/post"
 	"github.com/pkg/errors"
-	pb "post/proto"
 )
 
 type createPost struct {

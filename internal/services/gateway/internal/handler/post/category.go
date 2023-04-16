@@ -8,10 +8,10 @@ import (
 	"gateway/pkg/errno"
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
+	pbPost "github.com/jackj-ohn1/package/proto/post"
+	pbUser "github.com/jackj-ohn1/package/proto/user"
 	"github.com/pkg/errors"
-	pbPost "post/proto"
 	"strconv"
-	pbUser "user/proto"
 )
 
 //  GetCategory getCategory

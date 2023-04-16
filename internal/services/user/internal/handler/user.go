@@ -5,7 +5,6 @@ import (
 	"gorm.io/gorm"
 	"user/internal/repository"
 	"user/internal/repository/model"
-	CCNU "user/pkg"
 	errno "user/pkg/errno"
 	
 	pb "user/proto"
@@ -22,9 +21,6 @@ func NewUserService(db *gorm.DB) *UserService {
 }
 
 func (u *UserService) UserRegister(ctx context.Context, in *pb.CCNUInfoRequest, resp *pb.Response) error {
-	if err := CCNU.Login(in.Account, in.Password); err != nil {
-		return err
-	}
 	
 	if err := u.userDao.CreateUserIfNotExist(&model.User{
 		Account:  in.Account,
@@ -44,11 +40,6 @@ func (u *UserService) UserLogin(ctx context.Context, in *pb.CCNUInfoRequest, res
 }
 
 func (u *UserService) GetUserProfile(ctx context.Context, in *pb.Request, resp *pb.InnUserProfileResponse) error {
-	//account, exist := ctx.Value("account").(string)
-	//if !exist {
-	//	return nil
-	//}
-	
 	if one, err := u.userDao.GetUserProfile(in.Account); err != nil {
 		return err
 	} else {

@@ -1,7 +1,0 @@
-{
-  "error": "Error 1049 (42000): Unknown database 'post_service'",
-  "level": "fatal",
-  "msg": "[数据库初始化失败]",
-  "stack": "Error 1049 (42000): Unknown database 'post_service'\npost/internal/repository.Init\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/internal/repository/repository.go:51\nmain.main\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post/main.go:29\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1571",
-  "time": "2023-04-10 18:04:07"
-}
