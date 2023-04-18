@@ -14,13 +14,18 @@ type Config struct {
 	Database struct {
 		Dsn string `yaml:"dsn"`
 	} `yaml:"database"`
-	Http struct {
-		Address string `yaml:"address"`
-	} `yaml:"http"`
+	Server struct {
+		Http struct {
+			Address string `yaml:"address"`
+		} `yaml:"http"`
+	} `yaml:"server"`
 	Micro struct {
 		Service string `yaml:"service"`
 		Version string `yaml:"version"`
 	} `yaml:"micro"`
+	User struct {
+		DefaultAvatar string `yaml:"default_avatar"`
+	} `yaml:"user"`
 }
 
 func (cfg *config) init() {

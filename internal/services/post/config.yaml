@@ -1,14 +1,16 @@
 database:
-  dsn: "root:root@tcp(db:3306)/post_service?charset=utf8&parseTime=True&loc=Local"
+  dsn: "root:Root@123@tcp(139.196.30.123:3306)/post_service?charset=utf8&parseTime=True&loc=Local"
 micro:
   service: "postService"
   version: "latest"
 server:
   http:
-    address: "127.0.0.1:80"
+    address: "127.0.0.1:8082"
 category:
-  - "t1"
-  - "t2"
-  - "t3"
-  - "t4"
-  - "t5"
+  start: false
+  region:
+    - "t1"
+    - "t2"
+    - "t3"
+    - "t4"
+    - "t5"

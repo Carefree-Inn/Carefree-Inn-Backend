@@ -25,7 +25,7 @@ type UserInfo struct {
 //	@Accept			json
 //	@Produce		json
 //	@Param			Authorzation	header		string	true	"用户token"
-//	@Success		200		{object}	internal.Response
+//	@Success		200				{object}	internal.Response
 //	@Router			/user/profile [get]
 func (u *userHandler) GetProfile(c *gin.Context) {
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
@@ -54,9 +54,9 @@ func (u *userHandler) GetProfile(c *gin.Context) {
 //	@Description	修改用户信息
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string	true	"用户token"
-//  @Param          object          body        UserInfo    true    "需要修改的信息"
-//	@Success		200		{object}	internal.Response
+//	@Param			Authorzation	header		string		true	"用户token"
+//	@Param			object			body		UserInfo	true	"需要修改的信息"
+//	@Success		200				{object}	internal.Response
 //	@Router			/user/profile [put]
 func (u *userHandler) UpdateProfile(c *gin.Context) {
 	var req UserInfo

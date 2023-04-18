@@ -56,11 +56,13 @@ func Init(cfg config.Config) *gorm.DB {
 		log.Fatal(nil, errors.WithStack(err), "数据表初始化失败")
 	}
 	
-	//if err := Db.Table(model.Category{}.Table()).
-	//	Exec(insertBatchCategory(cfg.Category)).Error;
-	//	err != nil {
-	//	log.Fatal(nil, errors.WithStack(err), "分区初始化失败")
-	//}
+	if cfg.Category.Start {
+		if err := Db.Table(model.Category{}.Table()).
+			Exec(insertBatchCategory(cfg.Category.Region)).Error;
+			err != nil {
+			log.Fatal(nil, errors.WithStack(err), "分区初始化失败")
+		}
+	}
 	return Db
 }
 

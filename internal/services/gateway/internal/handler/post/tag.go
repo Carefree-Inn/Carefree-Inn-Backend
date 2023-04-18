@@ -11,6 +11,15 @@ import (
 	"github.com/pkg/errors"
 )
 
+//  GetPostOfTag getPostOfTag
+//	@Summary		获取tag下的帖子 api
+//	@Tags			post
+//	@Description	获取tag下的帖子
+//	@Accept			json
+//	@Produce		json
+//	@Param			object	body		tagInfo	true	"tag信息"
+//	@Success		200		{object}	internal.Response
+//	@Router			/post/tag [post]
 func (p *postHandler) GetPostOfTag(c *gin.Context) {
 	var tag tagInfo
 	if err := c.ShouldBindJSON(&tag); err != nil {

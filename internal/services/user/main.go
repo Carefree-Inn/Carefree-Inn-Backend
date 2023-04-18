@@ -12,15 +12,14 @@ import (
 
 func main() {
 	// Create service
-	
-	cfg := config.Run(os.Getenv("USER_CONFIG_FILE_PATH"))
 	log.NewLogger("./log/")
+	cfg := config.Run(os.Getenv("USER_CONFIG_FILE_PATH"))
 	
 	srv := micro.NewService()
 	srv.Init(
 		micro.Name(cfg.Micro.Service),
 		micro.Version(cfg.Micro.Version),
-		micro.Address("127.0.0.1:8081"),
+		micro.Address(cfg.Server.Http.Address),
 	)
 	
 	// Register handler

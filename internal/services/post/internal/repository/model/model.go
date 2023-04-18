@@ -21,6 +21,11 @@ type Post struct {
 	Tags       []*Tag    `gorm:"many2many:post_tags;foreignKey:post_id"`
 }
 
+type PostTag struct {
+	TagId  uint32 `gorm:"column:tag_id;primaryKey"`
+	PostId uint32 `gorm:"column:post_id;primaryKey"`
+}
+
 type Tag struct {
 	TagId uint32  `gorm:"column:tag_id;primaryKey;autoIncrement"`
 	Title string  `gorm:"column:title;type:VARCHAR(200)"`

@@ -20,7 +20,7 @@ import (
 //	@Description	获取分区信息
 //	@Accept			json
 //	@Produce		json
-//	@Success		200		{object}	internal.Response
+//	@Success		200	{object}	internal.Response
 //	@Router			/post/category/all [get]
 func (p *postHandler) GetCategory(c *gin.Context) {
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
@@ -42,8 +42,8 @@ func (p *postHandler) GetCategory(c *gin.Context) {
 //	@Description	获取分区帖子信息
 //	@Accept			json
 //	@Produce		json
-//  @Param          page            query       int false  "页码"
-//  @Param          limit           query       int false  "条数"
+//	@Param			page	query		int	false	"页码"
+//	@Param			limit	query		int	false	"条数"
 //	@Success		200		{object}	internal.Response
 //	@Router			/post/category [get]
 func (p *postHandler) GetPostOfCategory(c *gin.Context) {

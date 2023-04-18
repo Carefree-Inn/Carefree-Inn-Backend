@@ -16,6 +16,180 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/post": {
+            "post": {
+                "description": "创建帖子",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "创建帖子 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorzation",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "帖子信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/post.createPost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "删除帖子",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "删除帖子 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorzation",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "帖子信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/post.deletePost"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/category": {
+            "get": {
+                "description": "获取分区帖子信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "获取分区帖子信息 api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "条数",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/category/all": {
+            "get": {
+                "description": "获取分区信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "获取分区信息 api",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/tag": {
+            "post": {
+                "description": "获取tag下的帖子",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "获取tag下的帖子 api",
+                "parameters": [
+                    {
+                        "description": "tag信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/post.tagInfo"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/user/login": {
             "post": {
                 "description": "用户通过学号登录",
@@ -37,6 +211,77 @@ const docTemplate = `{
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/user.user"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/profile": {
+            "get": {
+                "description": "获取用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获取用户信息 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorzation",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "修改用户信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "修改用户信息 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorzation",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "需要修改的信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.UserInfo"
                         }
                     }
                 ],
@@ -94,6 +339,83 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "status": {
+                    "type": "integer"
+                }
+            }
+        },
+        "post.createPost": {
+            "type": "object",
+            "required": [
+                "category",
+                "content",
+                "title"
+            ],
+            "properties": {
+                "category": {
+                    "type": "object",
+                    "properties": {
+                        "category_id": {
+                            "type": "integer"
+                        },
+                        "title": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "content": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "tag": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "post.deletePost": {
+            "type": "object",
+            "properties": {
+                "post_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "post.tagInfo": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "tag_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.UserInfo": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "sex": {
                     "type": "integer"
                 }
             }

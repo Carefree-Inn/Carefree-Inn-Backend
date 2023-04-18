@@ -8,6 +8,56 @@ definitions:
       status:
         type: integer
     type: object
+  post.createPost:
+    properties:
+      category:
+        properties:
+          category_id:
+            type: integer
+          title:
+            type: string
+        type: object
+      content:
+        type: string
+      tags:
+        items:
+          properties:
+            tag:
+              type: string
+          type: object
+        type: array
+      title:
+        type: string
+    required:
+    - category
+    - content
+    - title
+    type: object
+  post.deletePost:
+    properties:
+      post_id:
+        type: integer
+    type: object
+  post.tagInfo:
+    properties:
+      tag_id:
+        type: integer
+      title:
+        type: string
+    required:
+    - title
+    type: object
+  user.UserInfo:
+    properties:
+      account:
+        type: string
+      avatar:
+        type: string
+      nickname:
+        type: string
+      sex:
+        type: integer
+    type: object
   user.user:
     properties:
       account:
@@ -31,6 +81,120 @@ info:
   title: Inn
   version: "1.0"
 paths:
+  /post:
+    delete:
+      consumes:
+      - application/json
+      description: 删除帖子
+      parameters:
+      - description: 用户token
+        in: header
+        name: Authorzation
+        required: true
+        type: string
+      - description: 帖子信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/post.deletePost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 删除帖子 api
+      tags:
+      - post
+    post:
+      consumes:
+      - application/json
+      description: 创建帖子
+      parameters:
+      - description: 用户token
+        in: header
+        name: Authorzation
+        required: true
+        type: string
+      - description: 帖子信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/post.createPost'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 创建帖子 api
+      tags:
+      - post
+  /post/category:
+    get:
+      consumes:
+      - application/json
+      description: 获取分区帖子信息
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        type: integer
+      - description: 条数
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 获取分区帖子信息 api
+      tags:
+      - post
+  /post/category/all:
+    get:
+      consumes:
+      - application/json
+      description: 获取分区信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 获取分区信息 api
+      tags:
+      - post
+  /post/tag:
+    post:
+      consumes:
+      - application/json
+      description: 获取tag下的帖子
+      parameters:
+      - description: tag信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/post.tagInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 获取tag下的帖子 api
+      tags:
+      - post
   /user/login:
     post:
       consumes:
@@ -51,6 +215,53 @@ paths:
           schema:
             $ref: '#/definitions/internal.Response'
       summary: 登陆 api
+      tags:
+      - user
+  /user/profile:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户信息
+      parameters:
+      - description: 用户token
+        in: header
+        name: Authorzation
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 获取用户信息 api
+      tags:
+      - user
+    put:
+      consumes:
+      - application/json
+      description: 修改用户信息
+      parameters:
+      - description: 用户token
+        in: header
+        name: Authorzation
+        required: true
+        type: string
+      - description: 需要修改的信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/user.UserInfo'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 修改用户信息 api
       tags:
       - user
   /user/register:

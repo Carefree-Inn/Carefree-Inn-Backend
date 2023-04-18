@@ -30,9 +30,9 @@ type createPost struct {
 //	@Description	创建帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string	true	"用户token"
-//  @Param           object     body   createPost true "帖子信息"
-//	@Success		200		{object}	internal.Response
+//	@Param			Authorzation	header		string		true	"用户token"
+//	@Param			object			body		createPost	true	"帖子信息"
+//	@Success		200				{object}	internal.Response
 //	@Router			/post [post]
 func (p *postHandler) CreatePost(c *gin.Context) {
 	var req createPost
@@ -85,9 +85,9 @@ type deletePost struct {
 //	@Description	删除帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string	true	"用户token"
-//  @Param           object     body   deletePost true "帖子信息"
-//	@Success		200		{object}	internal.Response
+//	@Param			Authorzation	header		string		true	"用户token"
+//	@Param			object			body		deletePost	true	"帖子信息"
+//	@Success		200				{object}	internal.Response
 //	@Router			/post [delete]
 func (p *postHandler) DeletePost(c *gin.Context) {
 	var req deletePost

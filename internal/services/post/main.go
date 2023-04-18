@@ -21,7 +21,7 @@ func main() {
 	srv.Init(
 		micro.Name(cfg.Micro.Service),
 		micro.Version(cfg.Micro.Version),
-		micro.Address("127.0.0.1:8082"),
+		micro.Address(cfg.Server.Http.Address),
 	)
 	
 	// Register handler

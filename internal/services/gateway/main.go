@@ -1,6 +1,7 @@
 package main
 
 import (
+	"gateway/config"
 	_ "gateway/docs" // necessary
 	"gateway/pkg/log"
 	"gateway/route"
@@ -14,7 +15,10 @@ import (
 //	@BasePath		/inn/api/v1
 func main() {
 	log.NewLogger()
+	cfg := config.Run("./config.yaml")
+	
 	engine := gin.New()
 	route.Route(engine)
-	engine.Run(":8080")
+	gin.SetMode(cfg.Gin.Mode)
+	engine.Run(cfg.Gin.Port)
 }

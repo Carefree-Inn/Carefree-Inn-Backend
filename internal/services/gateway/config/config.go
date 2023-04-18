@@ -1,9 +1,9 @@
 package config
 
 import (
+	"gateway/pkg/log"
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"user/pkg/log"
 )
 
 type config struct {
@@ -11,9 +11,6 @@ type config struct {
 }
 
 type Config struct {
-	Log struct {
-		Dir string `yaml:"dir"`
-	} `yaml:"log"`
 	Micro struct {
 		Service string `yaml:"service"`
 		Version string `yaml:"version"`
