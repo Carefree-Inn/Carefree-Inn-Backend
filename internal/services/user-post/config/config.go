@@ -3,7 +3,7 @@ package config
 import (
 	"github.com/fsnotify/fsnotify"
 	"github.com/spf13/viper"
-	"post/pkg/log"
+	"log"
 )
 
 type config struct {
@@ -14,17 +14,15 @@ type Config struct {
 	Database struct {
 		Dsn string `yaml:"dsn"`
 	} `yaml:"database"`
-	Http struct {
-		Address string `yaml:"address"`
-	} `yaml:"http"`
-	Log struct {
-		Dir string `yaml:"dir"`
-	} `yaml:"log"`
+	Server struct {
+		Http struct {
+			Address string `yaml:"address"`
+		} `yaml:"http"`
+	} `yaml:"server"`
 	Micro struct {
 		Service string `yaml:"service"`
 		Version string `yaml:"version"`
 	} `yaml:"micro"`
-	Category []string `yaml:"category"`
 }
 
 func (cfg *config) init() {
@@ -43,7 +41,7 @@ func (cfg *config) init() {
 func (cfg *config) watch() {
 	viper.WatchConfig()
 	viper.OnConfigChange(func(in fsnotify.Event) {
-		log.Info(nil, "Config file changed: %s", in.Name)
+		log.Println(nil, "Config file changed: %s", in.Name)
 	})
 }
 

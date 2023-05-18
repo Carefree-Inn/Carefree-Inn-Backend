@@ -22,7 +22,8 @@ func (p *PostService) GetCategory(ctx context.Context, in *pb.Request, resp *pb.
 	resp.Categories = data
 	return nil
 }
-func (p *PostService) GetPostOfCategory(ctx context.Context, in *pb.CategoryRequest, resp *pb.PostResponse) error {
+
+func (p *PostService) GetPostOfCategory(ctx context.Context, in *pb.PostOfCategoryRequest, resp *pb.PostResponse) error {
 	posts, err := p.postDao.GetPostOfCategory(&model.Category{
 		CategoryId: in.Category.CategoryId,
 		Title:      in.Category.Title,

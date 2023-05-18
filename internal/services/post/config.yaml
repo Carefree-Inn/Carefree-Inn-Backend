@@ -1,5 +1,5 @@
 database:
-  dsn: "root:Root@123@tcp(139.196.30.123:3306)/post_service?charset=utf8&parseTime=True&loc=Local"
+  dsn: "root:Root@123@tcp(139.196.30.123:3306)/inn?charset=utf8&parseTime=True&loc=Local"
 micro:
   service: "postService"
   version: "latest"

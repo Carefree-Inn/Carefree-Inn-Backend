@@ -14,21 +14,14 @@ type User struct {
 
 // 功能反馈
 type Feedback struct {
-	Account string `gorm:"column:account;primaryKey""`
-	Content string `gorm:"content"`
-}
-
-// 点赞
-type Star struct {
+	Account      string `gorm:"column:account;primaryKey""`
+	FeedbackType string `gorm:"column:feedback_type;type:VARCHAR(100)"`
+	Content      string `gorm:"content;type:TEXT"`
 }
 
 // 收藏
 type Collection struct {
 	Account string `gorm:"column:account;"`
-}
-
-func (Star) Table() string {
-	return "star"
 }
 
 func (Collection) Table() string {

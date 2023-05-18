@@ -7,13 +7,21 @@ option go_package = "./proto;post";
 service Post {
 	rpc CreatePost(CreatePostRequest) returns (Response){}
 	rpc DeletePost (DeletePostRequest) returns (Response){}
+
 	rpc GetCategory(Request) returns (CategoryResponse){}
-	rpc GetPostOfCategory(CategoryRequest) returns (PostResponse){}
-	rpc GetPostOfTag(TagInfo) returns (PostResponse){}
+	rpc GetPostOfCategory(PostOfCategoryRequest) returns (PostResponse){}
+
+	rpc GetPostOfTag(PostOfTagRequest) returns (PostResponse){}
+
+	rpc SearchPost(SearchRequest) returns (PostResponse){}
 }
 
 message Request{}
 message Response{}
+message SearchRequest{
+	string Content = 1;
+	string SearchType = 2;
+}
 
 message CreatePostRequest{
 	string Account = 1;
@@ -28,19 +36,24 @@ message DeletePostRequest{
 	string Account = 2;
 }
 
-message CategoryRequest{
+message PostOfCategoryRequest{
 	CategoryInfo category = 1;
 	uint32 Page = 2;
 	uint32 Limit = 3;
 }
 
+message CategoryResponse{
+	repeated CategoryInfo categories= 1;
+}
+
+message PostOfTagRequest{
+	string Title = 1;
+	uint32 TagId = 2;
+}
+
 message CategoryInfo{
 	string Title = 1;
 	uint32 CategoryId = 2;
-}
-
-message CategoryResponse{
-	repeated CategoryInfo categories= 1;
 }
 
 message TagInfo{
@@ -54,7 +67,7 @@ message PostInfo{
 	string Title = 3;
 	string Content = 4;
 	CategoryInfo Category = 5;
-	uint32 Star = 6;
+	uint32 Likes = 6;
 	uint32 Comments = 7;
 	string CreateTime = 8;
 	repeated TagInfo tag = 9;

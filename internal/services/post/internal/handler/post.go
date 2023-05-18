@@ -33,7 +33,7 @@ func (p *PostService) CreatePost(ctx context.Context, in *pb.CreatePostRequest, 
 		CategoryId: in.Category.CategoryId,
 		Content:    in.Content,
 		Account:    in.Account,
-		Star:       0,
+		Likes:      0,
 		Comments:   0,
 		Tags:       tags,
 	}

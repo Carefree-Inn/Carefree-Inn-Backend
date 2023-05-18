@@ -2,29 +2,11 @@ package repository
 
 import (
 	"github.com/pkg/errors"
+	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
-	"sync"
 	"user/internal/repository/model"
 	"user/pkg/errno"
 )
-
-type User struct {
-	db   *gorm.DB
-	once sync.Once
-}
-
-func (d *User) init(dbUp *gorm.DB) {
-	if d.db == nil {
-		d.once.Do(func() {
-			d.db = dbUp
-		})
-	}
-}
-
-func (d *User) ExistUser(account string) error {
-	var user model.User
-	return d.db.Table(user.Table()).Where("account=?", account).First(&user).Error
-}
 
 func (d *User) VerifyUser(account, password string) error {
 	var user model.User
@@ -34,19 +16,21 @@ func (d *User) VerifyUser(account, password string) error {
 		}
 		return errors.WithStack(err)
 	}
-	if user.Password != password {
+	afterBcrypt, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	if user.Password != string(afterBcrypt) {
 		return errno.LoginWrongInfoError
 	}
 	return nil
 }
 
-func (d *User) CreateUserIfNotExist(user *model.User) error {
+func (d *User) CreateUser(user *model.User) error {
 	session := d.db.Begin()
-	if errors.Is(d.ExistUser(user.Account), gorm.ErrRecordNotFound) {
-		if err := session.Table(user.Table()).Create(&user).Error; err != nil {
-			session.Rollback()
-			return errors.WithStack(err)
-		}
+	if err := session.Table(user.Table()).Create(&user).Error; err != nil {
+		session.Rollback()
+		return errors.WithStack(err)
 	}
 	return errors.WithStack(session.Commit().Error)
 }

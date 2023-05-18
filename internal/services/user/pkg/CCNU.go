@@ -2,7 +2,9 @@ package CCNU
 
 import (
 	"github.com/PuerkitoBio/goquery"
+	jsoniter "github.com/json-iterator/go"
 	"io"
+	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -13,6 +15,29 @@ import (
 )
 
 const loginUrl = "https://account.ccnu.edu.cn/cas/login"
+const avatarUrl = "http://yichen.api.z7zz.cn/api/sjtx2.php"
+const defaultAvatat = ""
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
+func GetAvatar() string {
+	resp, err := http.Get(avatarUrl)
+	if err != nil {
+		return defaultAvatat
+	}
+	
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return defaultAvatat
+	}
+	
+	var m = make(map[string]any)
+	if json.Unmarshal(body, &m) != nil {
+		return defaultAvatat
+	}
+	avatar := m["text"].(string)
+	return avatar
+}
 
 func Login(sid, psd string) error {
 	return request(sid, psd)
@@ -50,6 +75,7 @@ func request(sid, psd string) error {
 	if err != nil {
 		return err
 	}
+	log.Println(string(info))
 	
 	if yes, err := regexp.Match("success", info); err != nil {
 		return err

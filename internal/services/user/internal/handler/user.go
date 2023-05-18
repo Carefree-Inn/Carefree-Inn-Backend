@@ -2,10 +2,12 @@ package handler
 
 import (
 	"context"
+	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"user/internal/repository"
 	"user/internal/repository/model"
-	errno "user/pkg/errno"
+	CCNU "user/pkg"
+	"user/pkg/errno"
 	
 	pb "user/proto"
 )
@@ -20,23 +22,22 @@ func NewUserService(db *gorm.DB) *UserService {
 	}
 }
 
-func (u *UserService) UserRegister(ctx context.Context, in *pb.CCNUInfoRequest, resp *pb.Response) error {
-	
-	if err := u.userDao.CreateUserIfNotExist(&model.User{
-		Account:  in.Account,
-		Password: in.Password,
-		Nickname: in.Nickname,
-		Avatar:   in.Avatar,
-		Sex:      int32(in.Sex),
-	}); err != nil {
-		return errno.LoginServerError
-	}
-	
-	return nil
-}
-
 func (u *UserService) UserLogin(ctx context.Context, in *pb.CCNUInfoRequest, resp *pb.CCNULoginResponse) error {
-	return u.userDao.VerifyUser(in.Account, in.Password)
+	verifyErr := u.userDao.VerifyUser(in.Account, in.Password)
+	if verifyErr != nil {
+		if errors.Is(verifyErr, errno.UserNotExistError) {
+			if err := u.userDao.CreateUser(&model.User{
+				Account:  in.Account,
+				Password: in.Password,
+				Nickname: in.Account,
+				Avatar:   CCNU.GetAvatar(),
+			}); err != nil {
+				return err
+			}
+		}
+		return verifyErr
+	}
+	return nil
 }
 
 func (u *UserService) GetUserProfile(ctx context.Context, in *pb.Request, resp *pb.InnUserProfileResponse) error {

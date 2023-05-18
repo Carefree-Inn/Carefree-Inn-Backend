@@ -2,7 +2,7 @@ package user
 
 import (
 	"gateway/internal/service"
-	pb "github.com/jackj-ohn1/package/proto/user"
+	pb "user/proto"
 )
 
 func NewUserHandler() *userHandler {
@@ -13,4 +13,11 @@ func NewUserHandler() *userHandler {
 
 type userHandler struct {
 	pb.UserService
+}
+
+type userInfo struct {
+	Account  string `json:"account"`
+	Nickname string `json:"nickname"`
+	Sex      int8   `json:"sex"`
+	Avatar   string `json:"avatar"`
 }

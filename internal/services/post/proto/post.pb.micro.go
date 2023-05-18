@@ -39,8 +39,9 @@ type PostService interface {
 	CreatePost(ctx context.Context, in *CreatePostRequest, opts ...client.CallOption) (*Response, error)
 	DeletePost(ctx context.Context, in *DeletePostRequest, opts ...client.CallOption) (*Response, error)
 	GetCategory(ctx context.Context, in *Request, opts ...client.CallOption) (*CategoryResponse, error)
-	GetPostOfCategory(ctx context.Context, in *CategoryRequest, opts ...client.CallOption) (*PostResponse, error)
-	GetPostOfTag(ctx context.Context, in *TagInfo, opts ...client.CallOption) (*PostResponse, error)
+	GetPostOfCategory(ctx context.Context, in *PostOfCategoryRequest, opts ...client.CallOption) (*PostResponse, error)
+	GetPostOfTag(ctx context.Context, in *PostOfTagRequest, opts ...client.CallOption) (*PostResponse, error)
+	SearchPost(ctx context.Context, in *SearchRequest, opts ...client.CallOption) (*PostResponse, error)
 }
 
 type postService struct {
@@ -85,7 +86,7 @@ func (c *postService) GetCategory(ctx context.Context, in *Request, opts ...clie
 	return out, nil
 }
 
-func (c *postService) GetPostOfCategory(ctx context.Context, in *CategoryRequest, opts ...client.CallOption) (*PostResponse, error) {
+func (c *postService) GetPostOfCategory(ctx context.Context, in *PostOfCategoryRequest, opts ...client.CallOption) (*PostResponse, error) {
 	req := c.c.NewRequest(c.name, "Post.GetPostOfCategory", in)
 	out := new(PostResponse)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -95,8 +96,18 @@ func (c *postService) GetPostOfCategory(ctx context.Context, in *CategoryRequest
 	return out, nil
 }
 
-func (c *postService) GetPostOfTag(ctx context.Context, in *TagInfo, opts ...client.CallOption) (*PostResponse, error) {
+func (c *postService) GetPostOfTag(ctx context.Context, in *PostOfTagRequest, opts ...client.CallOption) (*PostResponse, error) {
 	req := c.c.NewRequest(c.name, "Post.GetPostOfTag", in)
+	out := new(PostResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *postService) SearchPost(ctx context.Context, in *SearchRequest, opts ...client.CallOption) (*PostResponse, error) {
+	req := c.c.NewRequest(c.name, "Post.SearchPost", in)
 	out := new(PostResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
@@ -111,8 +122,9 @@ type PostHandler interface {
 	CreatePost(context.Context, *CreatePostRequest, *Response) error
 	DeletePost(context.Context, *DeletePostRequest, *Response) error
 	GetCategory(context.Context, *Request, *CategoryResponse) error
-	GetPostOfCategory(context.Context, *CategoryRequest, *PostResponse) error
-	GetPostOfTag(context.Context, *TagInfo, *PostResponse) error
+	GetPostOfCategory(context.Context, *PostOfCategoryRequest, *PostResponse) error
+	GetPostOfTag(context.Context, *PostOfTagRequest, *PostResponse) error
+	SearchPost(context.Context, *SearchRequest, *PostResponse) error
 }
 
 func RegisterPostHandler(s server.Server, hdlr PostHandler, opts ...server.HandlerOption) error {
@@ -120,8 +132,9 @@ func RegisterPostHandler(s server.Server, hdlr PostHandler, opts ...server.Handl
 		CreatePost(ctx context.Context, in *CreatePostRequest, out *Response) error
 		DeletePost(ctx context.Context, in *DeletePostRequest, out *Response) error
 		GetCategory(ctx context.Context, in *Request, out *CategoryResponse) error
-		GetPostOfCategory(ctx context.Context, in *CategoryRequest, out *PostResponse) error
-		GetPostOfTag(ctx context.Context, in *TagInfo, out *PostResponse) error
+		GetPostOfCategory(ctx context.Context, in *PostOfCategoryRequest, out *PostResponse) error
+		GetPostOfTag(ctx context.Context, in *PostOfTagRequest, out *PostResponse) error
+		SearchPost(ctx context.Context, in *SearchRequest, out *PostResponse) error
 	}
 	type Post struct {
 		post
@@ -146,10 +159,14 @@ func (h *postHandler) GetCategory(ctx context.Context, in *Request, out *Categor
 	return h.PostHandler.GetCategory(ctx, in, out)
 }
 
-func (h *postHandler) GetPostOfCategory(ctx context.Context, in *CategoryRequest, out *PostResponse) error {
+func (h *postHandler) GetPostOfCategory(ctx context.Context, in *PostOfCategoryRequest, out *PostResponse) error {
 	return h.PostHandler.GetPostOfCategory(ctx, in, out)
 }
 
-func (h *postHandler) GetPostOfTag(ctx context.Context, in *TagInfo, out *PostResponse) error {
+func (h *postHandler) GetPostOfTag(ctx context.Context, in *PostOfTagRequest, out *PostResponse) error {
 	return h.PostHandler.GetPostOfTag(ctx, in, out)
+}
+
+func (h *postHandler) SearchPost(ctx context.Context, in *SearchRequest, out *PostResponse) error {
+	return h.PostHandler.SearchPost(ctx, in, out)
 }

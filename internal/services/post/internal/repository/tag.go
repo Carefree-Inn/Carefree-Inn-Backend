@@ -35,9 +35,12 @@ func CheckTag(db *gorm.DB, titles []string) ([]*model.Tag, []*model.Tag, error) 
 func (p *Post) GetPostOfTag(title string) ([]*model.Post, error) {
 	var data = make([]*model.Post, 0, 16)
 	
-	if err := p.db.Table(model.Post{}.Table()).Preload("Tags").Exec("SELECT * FROM `post` WHERE `post_id` IN" +
-		"(SELECT `post_post_id` FROM `post_tags` JOIN `tag` ON `tag`.`tag_id`=" +
-		"`post_tags`.`tag_tag_id`)").Find(&data).Error; err != nil {
+	if err := p.db.Table(model.Post{}.Table()).
+		Joins("JOIN post_tags pt ON post.post_id = pt.post_post_id").
+		Joins("JOIN tag t ON t.tag_id = pt.tag_tag_id").
+		Where("t.title = ?", title).
+		Preload("Tags").
+		Find(&data).Error; err != nil {
 		return nil, errors.WithStack(err)
 	}
 	return data, nil

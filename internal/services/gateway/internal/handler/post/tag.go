@@ -7,9 +7,13 @@ import (
 	"gateway/pkg/errno"
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
-	pb "github.com/jackj-ohn1/package/proto/post"
 	"github.com/pkg/errors"
+	pb "post/proto"
 )
+
+type getPostOfTag struct {
+	Title string `json:"title" binding:"required"`
+}
 
 //  GetPostOfTag getPostOfTag
 //	@Summary		获取tag下的帖子 api
@@ -17,11 +21,11 @@ import (
 //	@Description	获取tag下的帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			object	body		tagInfo	true	"tag信息"
+//	@Param			object	body		getPostOfTag	true	"tag信息"
 //	@Success		200		{object}	internal.Response
 //	@Router			/post/tag [post]
 func (p *postHandler) GetPostOfTag(c *gin.Context) {
-	var tag tagInfo
+	var tag getPostOfTag
 	if err := c.ShouldBindJSON(&tag); err != nil {
 		internal.Error(c, errno.JsonDataError)
 		log.Warn(
@@ -32,14 +36,11 @@ func (p *postHandler) GetPostOfTag(c *gin.Context) {
 	}
 	
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
-	resp, err := p.PostService.GetPostOfTag(ctx, &pb.TagInfo{
+	resp, err := p.PostService.GetPostOfTag(ctx, &pb.PostOfTagRequest{
 		Title: tag.Title,
-		TagId: tag.TagId,
 	})
 	if err != nil {
 		internal.ServerError(c, errno.CreatePostError.Error())
-		log.Panic(log.WithField("X-Request-Id", c.MustGet("uuid")),
-			errors.WithStack(err), errno.CreatePostError.Error())
 		return
 	}
 	
@@ -48,13 +49,11 @@ func (p *postHandler) GetPostOfTag(c *gin.Context) {
 		accounts = append(accounts, v.Account)
 	}
 	
-	data, err := p.GetUserInfoWithAny(ctx, accounts, resp.Posts, p.assemble)
+	data, err := p.AssemblePostAndUser(ctx, resp.Posts)
 	if err != nil {
 		internal.ServerError(c, errno.GetCategoryCategoryPostError.Error())
-		log.Panic(log.WithField("X-Request-Id", c.MustGet("uuid")),
-			errors.WithStack(err), errno.GetCategoryCategoryPostError.Error())
 		return
 	}
 	
-	internal.Success(c, data.([]*PostInfo))
+	internal.Success(c, data)
 }

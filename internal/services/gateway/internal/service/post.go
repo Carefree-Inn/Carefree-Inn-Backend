@@ -2,9 +2,9 @@ package service
 
 import (
 	opentracingWrapper "github.com/go-micro/plugins/v4/wrapper/trace/opentracing"
-	pb "github.com/jackj-ohn1/package/proto/post"
 	"github.com/opentracing/opentracing-go"
 	"go-micro.dev/v4"
+	pb "post/proto"
 )
 
 func NewPostService() pb.PostService {

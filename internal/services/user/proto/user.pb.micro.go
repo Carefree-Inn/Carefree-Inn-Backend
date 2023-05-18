@@ -36,7 +36,6 @@ func NewUserEndpoints() []*api.Endpoint {
 // Client API for User service
 
 type UserService interface {
-	UserRegister(ctx context.Context, in *CCNUInfoRequest, opts ...client.CallOption) (*Response, error)
 	UserLogin(ctx context.Context, in *CCNUInfoRequest, opts ...client.CallOption) (*CCNULoginResponse, error)
 	GetUserProfile(ctx context.Context, in *Request, opts ...client.CallOption) (*InnUserProfileResponse, error)
 	UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, opts ...client.CallOption) (*Response, error)
@@ -53,16 +52,6 @@ func NewUserService(name string, c client.Client) UserService {
 		c:    c,
 		name: name,
 	}
-}
-
-func (c *userService) UserRegister(ctx context.Context, in *CCNUInfoRequest, opts ...client.CallOption) (*Response, error) {
-	req := c.c.NewRequest(c.name, "User.UserRegister", in)
-	out := new(Response)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *userService) UserLogin(ctx context.Context, in *CCNUInfoRequest, opts ...client.CallOption) (*CCNULoginResponse, error) {
@@ -108,7 +97,6 @@ func (c *userService) GetBatchUserProfile(ctx context.Context, in *BatchUserProf
 // Server API for User service
 
 type UserHandler interface {
-	UserRegister(context.Context, *CCNUInfoRequest, *Response) error
 	UserLogin(context.Context, *CCNUInfoRequest, *CCNULoginResponse) error
 	GetUserProfile(context.Context, *Request, *InnUserProfileResponse) error
 	UpdateUserProfile(context.Context, *InnUserProfileRequest, *Response) error
@@ -117,7 +105,6 @@ type UserHandler interface {
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
 	type user interface {
-		UserRegister(ctx context.Context, in *CCNUInfoRequest, out *Response) error
 		UserLogin(ctx context.Context, in *CCNUInfoRequest, out *CCNULoginResponse) error
 		GetUserProfile(ctx context.Context, in *Request, out *InnUserProfileResponse) error
 		UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, out *Response) error
@@ -132,10 +119,6 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 
 type userHandler struct {
 	UserHandler
-}
-
-func (h *userHandler) UserRegister(ctx context.Context, in *CCNUInfoRequest, out *Response) error {
-	return h.UserHandler.UserRegister(ctx, in, out)
 }
 
 func (h *userHandler) UserLogin(ctx context.Context, in *CCNUInfoRequest, out *CCNULoginResponse) error {

@@ -43,7 +43,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/post.createPost"
+                            "$ref": "#/definitions/post.createPostRequest"
                         }
                     }
                 ],
@@ -82,7 +82,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/post.deletePost"
+                            "$ref": "#/definitions/post.deletePostRequest"
                         }
                     }
                 ],
@@ -121,6 +121,15 @@ const docTemplate = `{
                         "description": "条数",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "description": "分类信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/post.getPostOfCategoryRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -156,6 +165,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/post/search": {
+            "post": {
+                "description": "搜索帖子",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "搜索帖子 api",
+                "parameters": [
+                    {
+                        "description": "搜索信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/post.searchRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/post/tag": {
             "post": {
                 "description": "获取tag下的帖子",
@@ -176,7 +219,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/post.tagInfo"
+                            "$ref": "#/definitions/post.getPostOfTag"
                         }
                     }
                 ],
@@ -281,41 +324,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.UserInfo"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/internal.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/user/register": {
-            "post": {
-                "description": "用户通过学号注册",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "user"
-                ],
-                "summary": "注册 api",
-                "parameters": [
-                    {
-                        "description": "用户信息",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/user.user"
+                            "$ref": "#/definitions/user.userInfo"
                         }
                     }
                 ],
@@ -343,7 +352,7 @@ const docTemplate = `{
                 }
             }
         },
-        "post.createPost": {
+        "post.createPostRequest": {
             "type": "object",
             "required": [
                 "category",
@@ -381,42 +390,51 @@ const docTemplate = `{
                 }
             }
         },
-        "post.deletePost": {
+        "post.deletePostRequest": {
             "type": "object",
+            "required": [
+                "post_id"
+            ],
             "properties": {
                 "post_id": {
                     "type": "integer"
                 }
             }
         },
-        "post.tagInfo": {
+        "post.getPostOfCategoryRequest": {
+            "type": "object",
+            "required": [
+                "category_id"
+            ],
+            "properties": {
+                "category_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "post.getPostOfTag": {
             "type": "object",
             "required": [
                 "title"
             ],
             "properties": {
-                "tag_id": {
-                    "type": "integer"
-                },
                 "title": {
                     "type": "string"
                 }
             }
         },
-        "user.UserInfo": {
+        "post.searchRequest": {
             "type": "object",
+            "required": [
+                "data",
+                "search_type"
+            ],
             "properties": {
-                "account": {
+                "data": {
                     "type": "string"
                 },
-                "avatar": {
+                "search_type": {
                     "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "sex": {
-                    "type": "integer"
                 }
             }
         },
@@ -430,13 +448,21 @@ const docTemplate = `{
                 "account": {
                     "type": "string"
                 },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "user.userInfo": {
+            "type": "object",
+            "properties": {
+                "account": {
+                    "type": "string"
+                },
                 "avatar": {
                     "type": "string"
                 },
                 "nickname": {
-                    "type": "string"
-                },
-                "password": {
                     "type": "string"
                 },
                 "sex": {

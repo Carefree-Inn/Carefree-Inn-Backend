@@ -1,10 +1,8 @@
 package main
 
 import (
-	"gateway/config"
 	_ "gateway/docs" // necessary
-	"gateway/pkg/log"
-	"gateway/route"
+	"gateway/internal/handler/notification"
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,11 +12,11 @@ import (
 //	@Host			139.196.30.123
 //	@BasePath		/inn/api/v1
 func main() {
-	log.NewLogger()
-	cfg := config.Run("./config.yaml")
+	nh := notification.NewNotificationHandler()
 	
 	engine := gin.New()
-	route.Route(engine)
-	gin.SetMode(cfg.Gin.Mode)
-	engine.Run(cfg.Gin.Port)
+	
+	engine.GET("/ws", nh.SendNotification)
+	
+	engine.Run(":8080")
 }

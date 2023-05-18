@@ -5,43 +5,42 @@ option go_package = "./proto;user";
 package user;
 
 service User {
-	rpc UserRegister(CCNUInfoRequest) returns (Response) {}
-	rpc UserLogin(CCNUInfoRequest) returns(CCNULoginResponse) {}
-	rpc GetUserProfile(Request) returns(InnUserProfileResponse){}
-	rpc UpdateUserProfile(InnUserProfileRequest) returns(Response){}
+	rpc UserLogin(LoginRequest) returns(LoginResponse) {}
+
+	rpc GetUserProfile(Request) returns(UserProfileResponse){}
+	rpc UpdateUserProfile(UserProfileRequest) returns(Response){}
 	rpc GetBatchUserProfile(BatchUserProfileRequest) returns(BatchUserProfileResponse){}
 }
 
 message Request {
 	string account = 1;
 }
+
 message BatchUserProfileRequest{
 	repeated string accounts = 1;
 }
+
 message Response {}
 enum Sex {
 	WOMAN = 0;
 	MAN = 1;
 }
 
-message CCNUInfoRequest{
+message LoginRequest{
 	string account = 1;
 	string password = 2;
-	string nickname = 3;
-	string avatar = 4;
-	Sex sex = 5;
 }
-message CCNULoginResponse{
+message LoginResponse{
 }
 
-message InnUserProfileRequest{
+message UserProfileRequest{
 	string nickname = 1;
 	string avatar = 2;
 	string account = 3;
 	Sex sex = 4;
 }
 
-message InnUserProfileResponse {
+message UserProfileResponse {
 	string account = 1;
 	string nickname = 2;
 	string avatar = 3;
@@ -49,5 +48,5 @@ message InnUserProfileResponse {
 }
 
 message BatchUserProfileResponse {
-	repeated InnUserProfileResponse data = 1;
+	repeated UserProfileResponse data = 1;
 }

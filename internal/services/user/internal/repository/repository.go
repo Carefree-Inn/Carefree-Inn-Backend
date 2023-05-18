@@ -5,6 +5,7 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/schema"
+	"sync"
 	"user/internal/repository/model"
 	"user/pkg/log"
 )
@@ -25,9 +26,22 @@ func Init(dsn string) *gorm.DB {
 	return Db
 }
 
+type User struct {
+	db   *gorm.DB
+	once sync.Once
+}
+
+func (d *User) init(dbUp *gorm.DB) {
+	if d.db == nil {
+		d.once.Do(func() {
+			d.db = dbUp
+		})
+	}
+}
+
 type UserRepository interface {
 	UpdateExistUserProfile(user *model.User) error
-	CreateUserIfNotExist(user *model.User) error
+	CreateUser(user *model.User) error
 	GetUserProfile(account string) (*model.User, error)
 	VerifyUser(account, password string) error
 	GetBatchUserProfile(accounts []string) ([]*model.User, error)

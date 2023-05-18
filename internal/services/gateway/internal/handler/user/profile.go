@@ -7,16 +7,9 @@ import (
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	pb "github.com/jackj-ohn1/package/proto/user"
 	"golang.org/x/net/context"
+	pb "user/proto"
 )
-
-type UserInfo struct {
-	Account  string `json:"account"`
-	Nickname string `json:"nickname"`
-	Sex      int8   `json:"sex"`
-	Avatar   string `json:"avatar"`
-}
 
 //  GetProfile getProfile
 //	@Summary		获取用户信息 api
@@ -40,7 +33,7 @@ func (u *userHandler) GetProfile(c *gin.Context) {
 		return
 	}
 	
-	internal.Success(c, UserInfo{
+	internal.Success(c, userInfo{
 		Account:  profile.Account,
 		Nickname: profile.Nickname,
 		Sex:      int8(profile.Sex),
@@ -55,11 +48,11 @@ func (u *userHandler) GetProfile(c *gin.Context) {
 //	@Accept			json
 //	@Produce		json
 //	@Param			Authorzation	header		string		true	"用户token"
-//	@Param			object			body		UserInfo	true	"需要修改的信息"
+//	@Param			object			body		userInfo	true	"需要修改的信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/user/profile [put]
 func (u *userHandler) UpdateProfile(c *gin.Context) {
-	var req UserInfo
+	var req userInfo
 	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
 		internal.Error(c, errno.JsonDataError)
 		log.Info(
@@ -79,8 +72,6 @@ func (u *userHandler) UpdateProfile(c *gin.Context) {
 	})
 	if err != nil {
 		internal.ServerError(c, errno.DatabaseError.Error())
-		log.Panic(log.WithField("X-Request-Id", c.MustGet("uuid")),
-			err)
 		return
 	}
 	

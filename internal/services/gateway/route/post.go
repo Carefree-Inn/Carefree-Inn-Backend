@@ -15,4 +15,5 @@ func postRoute(engine *gin.RouterGroup) {
 	pRoute.GET("/category/all", pHandler.GetCategory)
 	pRoute.GET("/category", pHandler.GetPostOfCategory)
 	pRoute.GET("/tag", pHandler.GetPostOfTag)
+	pRoute.POST("/search", pHandler.SearchPost)
 }

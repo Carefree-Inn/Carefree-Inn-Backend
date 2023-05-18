@@ -5,32 +5,96 @@ package user_post;
 option go_package = "./proto;user_post";
 
 service UserPost {
-  rpc AssemblePostAndUser()
+  rpc MakeComment(MakeCommentRequest) returns(Response) {}
+  rpc DeleteComment(DeleteCommentRequest) returns(Response) {}
+  rpc GetCommentOfPost(GetCommentOfPostRequest) returns(CommentOfPostResponse) {}
+
+  rpc MakeLike(MakeLikeRequest) returns(Response) {}
+  rpc CancelLike(CancelLikeRequest) returns(Response) {}
+  rpc GetLikeOfUser(LikeOfUserRequest) returns(LikeOfUserResponse) {}
+  rpc IsBatchLiked(BactchLikedRequest) returns(BatchLikedResponse) {}
 }
 
 message Request{}
 message Response{}
 
-message TagInfo{
-  string Title = 1;
-  uint32 TagId = 2;
+message MakeCommentRequest{
+  string FromUserId = 1;
+  string ToUserId = 2;
+  string Content = 3;
+  uint32 PostId = 4;
+  bool IsTop = 5;
+  uint32 TopCommentId = 6;
 }
 
-message PostInfo{
-  string Account = 1;
-  uint32 PostId = 2;
-  string Title = 3;
+message DeleteCommentRequest{
+  uint32 CommentId = 1;
+}
+
+message GetCommentOfPostRequest{
+  uint32 PostId = 1;
+  uint32 Page = 2;
+  uint32 Limit = 3;
+}
+
+message CommentResponse{
+  uint32 CommentId = 1;
+  string FromUserId = 2;
+  string ToUserId = 3;
   string Content = 4;
-  uint32 CategoryId= 5;
-  uint32 Star = 6;
-  uint32 Comments = 7;
-  string CreateTime = 8;
-  repeated TagInfo tag = 9;
+  string CreateTime = 5;
 }
 
-message PostAndUser {
-
+message TopCommentResponse{
+  uint32 CommentId = 1;
+  string FromUserId = 2;
+  string Content = 3;
+  string CreateTime = 4;
+  repeated CommentResponse Comments = 5;
 }
 
-message
+message CommentOfPostResponse{
+  uint32 PostId = 1;
+  repeated TopCommentResponse Comments = 2;
+}
+
+message MakeLikeRequest{
+  uint32 PostId = 1;
+  string Account = 2;
+}
+
+message CancelLikeRequest{
+  uint32 PostId = 1;
+  string Account = 2;
+}
+
+message LikeOfUserRequest{
+  string Account = 1;
+  int32 Page = 2;
+  int32 Limit = 3;
+}
+
+message LikeOfUserResponse{
+  string Account = 1;
+  repeated uint32 PostIds = 2;
+}
+
+message LikeStatus{
+  uint32 PostId = 1;
+  bool Liked = 2;
+}
+
+message BactchLikedRequest{
+  string Account = 1;
+  repeated uint32 PostIds = 2;
+}
+
+message BatchLikedResponse{
+  string Account = 1;
+  repeated LikeStatus Status = 2;
+}
+
+
+
+
 

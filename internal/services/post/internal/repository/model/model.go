@@ -15,15 +15,10 @@ type Post struct {
 	CategoryId uint32    `gorm:"column:category_id"`
 	Title      string    `gorm:"column:title;type:VARCHAR(200)"`
 	Content    string    `gorm:"column:content;type:TEXT"`
-	Star       uint32    `gorm:"column:star;type:INT"`
-	Comments   uint32    `gorm:"column:comments;type:INT"`
+	Likes      uint32    `gorm:"column:likes"`
+	Comments   uint32    `gorm:"column:comments"`
 	CreateTime time.Time `gorm:"column:create_time;autoCreateTime"`
 	Tags       []*Tag    `gorm:"many2many:post_tags;foreignKey:post_id"`
-}
-
-type PostTag struct {
-	TagId  uint32 `gorm:"column:tag_id;primaryKey"`
-	PostId uint32 `gorm:"column:post_id;primaryKey"`
 }
 
 type Tag struct {

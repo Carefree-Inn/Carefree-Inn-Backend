@@ -41,4 +41,5 @@ var (
 	UserNotExistError     = &Errno{message: "用户不存在", statusCode: 200204}
 	CategoryNotExistError = &Errno{message: "Category不存在", statusCode: 200204}
 	NoPowerDeleteError    = &Errno{message: "无权删除该资源", statusCode: 400401}
+	ResourceNotExist      = &Errno{message: "资源不存在", statusCode: 200204}
 )

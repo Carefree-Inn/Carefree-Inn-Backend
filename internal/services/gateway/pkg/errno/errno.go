@@ -55,4 +55,5 @@ var (
 	CreatePostError              = &Errno{message: "创建帖子失败", statusCode: 500501}
 	GetCategoryInfoError         = &Errno{message: "获取分区失败", statusCode: 500501}
 	GetCategoryCategoryPostError = &Errno{message: "获取分区帖子失败", statusCode: 500501}
+	ResourceNotExist             = &Errno{message: "资源不存在", statusCode: 200204}
 )

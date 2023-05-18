@@ -2,10 +2,10 @@ package main
 
 import (
 	"os"
-	"post/config"
-	"post/internal/handler"
-	"post/internal/repository"
-	"post/pkg/log"
+	"user-post/config"
+	"user-post/internal/handler"
+	"user-post/internal/repository"
+	"user-post/pkg/log"
 	pb "user-post/proto"
 	
 	"go-micro.dev/v4"
@@ -21,14 +21,16 @@ func main() {
 	srv.Init(
 		micro.Name(cfg.Micro.Service),
 		micro.Version(cfg.Micro.Version),
-		micro.Address("127.0.0.1:8082"),
+		micro.Address(cfg.Server.Http.Address),
 	)
 	
 	// Register handler
-	if err := pb.RegisterPostHandler(srv.Server(),
-		handler.NewPostService(repository.Init(cfg))); err != nil {
+	if err := pb.RegisterUserPostHandler(srv.Server(),
+		handler.NewUserPostService(
+			repository.Init(cfg.Database.Dsn))); err != nil {
 		log.Fatal(nil, err, "注册handler失败")
 	}
+	
 	// Run service
 	if err := srv.Run(); err != nil {
 		log.Fatal(nil, err, "服务运行失败")

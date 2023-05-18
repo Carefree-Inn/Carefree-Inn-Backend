@@ -8,11 +8,11 @@ import (
 	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	pb "github.com/jackj-ohn1/package/proto/post"
 	"github.com/pkg/errors"
+	pb "post/proto"
 )
 
-type createPost struct {
+type createPostRequest struct {
 	Category struct {
 		CategoryId uint32 `json:"category_id"`
 		Title      string `json:"title"`
@@ -24,18 +24,18 @@ type createPost struct {
 	} `json:"tags"`
 }
 
-//  CreatePost createPost
+//  CreatePost createPostRequest
 //	@Summary		创建帖子 api
 //	@Tags			post
 //	@Description	创建帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string		true	"用户token"
-//	@Param			object			body		createPost	true	"帖子信息"
+//	@Param			Authorzation	header		string				true	"用户token"
+//	@Param			object			body		createPostRequest	true	"帖子信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/post [post]
 func (p *postHandler) CreatePost(c *gin.Context) {
-	var req createPost
+	var req createPostRequest
 	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
 		internal.Error(c, errno.JsonDataError)
 		log.Warn(
@@ -75,22 +75,22 @@ func (p *postHandler) CreatePost(c *gin.Context) {
 	internal.Success(c, nil)
 }
 
-type deletePost struct {
-	PostId uint32 `json:"post_id"`
+type deletePostRequest struct {
+	PostId uint32 `json:"post_id" binding:"required"`
 }
 
-//  DeletePost deletePost
+//  DeletePost deletePostRequest
 //	@Summary		删除帖子 api
 //	@Tags			post
 //	@Description	删除帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string		true	"用户token"
-//	@Param			object			body		deletePost	true	"帖子信息"
+//	@Param			Authorzation	header		string				true	"用户token"
+//	@Param			object			body		deletePostRequest	true	"帖子信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/post [delete]
 func (p *postHandler) DeletePost(c *gin.Context) {
-	var req deletePost
+	var req deletePostRequest
 	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
 		internal.Error(c, errno.JsonDataError)
 		log.Warn(

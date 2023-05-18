@@ -8,7 +8,7 @@ definitions:
       status:
         type: integer
     type: object
-  post.createPost:
+  post.createPostRequest:
     properties:
       category:
         properties:
@@ -33,46 +33,57 @@ definitions:
     - content
     - title
     type: object
-  post.deletePost:
+  post.deletePostRequest:
     properties:
       post_id:
         type: integer
+    required:
+    - post_id
     type: object
-  post.tagInfo:
+  post.getPostOfCategoryRequest:
     properties:
-      tag_id:
+      category_id:
         type: integer
+    required:
+    - category_id
+    type: object
+  post.getPostOfTag:
+    properties:
       title:
         type: string
     required:
     - title
     type: object
-  user.UserInfo:
+  post.searchRequest:
     properties:
-      account:
+      data:
         type: string
-      avatar:
+      search_type:
         type: string
-      nickname:
-        type: string
-      sex:
-        type: integer
+    required:
+    - data
+    - search_type
     type: object
   user.user:
     properties:
       account:
         type: string
+      password:
+        type: string
+    required:
+    - account
+    - password
+    type: object
+  user.userInfo:
+    properties:
+      account:
+        type: string
       avatar:
         type: string
       nickname:
         type: string
-      password:
-        type: string
       sex:
         type: integer
-    required:
-    - account
-    - password
     type: object
 host: 139.196.30.123
 info:
@@ -97,7 +108,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/post.deletePost'
+          $ref: '#/definitions/post.deletePostRequest'
       produces:
       - application/json
       responses:
@@ -123,7 +134,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/post.createPost'
+          $ref: '#/definitions/post.createPostRequest'
       produces:
       - application/json
       responses:
@@ -148,6 +159,12 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: 分类信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/post.getPostOfCategoryRequest'
       produces:
       - application/json
       responses:
@@ -173,6 +190,28 @@ paths:
       summary: 获取分区信息 api
       tags:
       - post
+  /post/search:
+    post:
+      consumes:
+      - application/json
+      description: 搜索帖子
+      parameters:
+      - description: 搜索信息
+        in: body
+        name: object
+        required: true
+        schema:
+          $ref: '#/definitions/post.searchRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal.Response'
+      summary: 搜索帖子 api
+      tags:
+      - post
   /post/tag:
     post:
       consumes:
@@ -184,7 +223,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/post.tagInfo'
+          $ref: '#/definitions/post.getPostOfTag'
       produces:
       - application/json
       responses:
@@ -253,7 +292,7 @@ paths:
         name: object
         required: true
         schema:
-          $ref: '#/definitions/user.UserInfo'
+          $ref: '#/definitions/user.userInfo'
       produces:
       - application/json
       responses:
@@ -262,28 +301,6 @@ paths:
           schema:
             $ref: '#/definitions/internal.Response'
       summary: 修改用户信息 api
-      tags:
-      - user
-  /user/register:
-    post:
-      consumes:
-      - application/json
-      description: 用户通过学号注册
-      parameters:
-      - description: 用户信息
-        in: body
-        name: object
-        required: true
-        schema:
-          $ref: '#/definitions/user.user'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/internal.Response'
-      summary: 注册 api
       tags:
       - user
 swagger: "2.0"

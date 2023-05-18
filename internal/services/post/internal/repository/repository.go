@@ -5,6 +5,7 @@ import (
 	"github.com/pkg/errors"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"post/config"
 	"post/internal/repository/model"
@@ -20,6 +21,7 @@ type PostRepository interface {
 	GetAllCategory() ([]*model.Category, error)
 	GetPostOfTag(title string) ([]*model.Post, error)
 	GetPostOfCategory(category *model.Category, page, limit uint32) ([]*model.Post, error)
+	SearchPost(content string, searchType string) ([]*model.Post, error)
 }
 
 func NewPostRepository(dbUp *gorm.DB) PostRepository {
@@ -46,6 +48,7 @@ func Init(cfg config.Config) *gorm.DB {
 		NamingStrategy: schema.NamingStrategy{
 			SingularTable: true,
 		},
+		Logger: logger.Default.LogMode(logger.Info),
 	})
 	if err != nil {
 		log.Fatal(nil, errors.WithStack(err), "数据库初始化失败")

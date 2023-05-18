@@ -24,11 +24,11 @@ func NewLogger(dir string) {
 	logger.AddHook(loggerHook(dir))
 }
 
-func WithFields(key string, value interface{}) *logrus.Entry {
+func WithField(key string, value interface{}) *logrus.Entry {
 	return logger.WithField(key, value)
 }
 
-func WithField(fields logrus.Fields) *logrus.Entry {
+func WithFields(fields logrus.Fields) *logrus.Entry {
 	return logrus.WithFields(fields)
 }
 
