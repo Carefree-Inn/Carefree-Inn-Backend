@@ -44,4 +44,5 @@ type PostInfo struct {
 	Likes      uint32       `json:"likes"`
 	CreateTime string       `json:"create_time"`
 	PostId     uint32       `json:"post_id"`
+	Liked      bool         `json:"liked"`
 }

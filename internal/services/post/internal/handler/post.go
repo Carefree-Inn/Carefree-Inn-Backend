@@ -50,3 +50,33 @@ func (p *PostService) DeletePost(ctx context.Context, in *pb.DeletePostRequest, 
 		Account: in.Account,
 	})
 }
+
+func (p *PostService) GetPostOfUser(ctx context.Context, in *pb.PostOfUserRequest, resp *pb.PostResponse) error {
+	posts, err := p.postDao.GetPostOfUser(in.Account, in.Page, in.Limit)
+	if err != nil {
+		return err
+	}
+	
+	data, err := p.convertPost(posts)
+	if err != nil {
+		return err
+	}
+	
+	resp.Posts = data
+	return nil
+}
+
+func (p *PostService) GetPostOfUserLiked(ctx context.Context, in *pb.PostOfUserRequest, resp *pb.PostResponse) error {
+	posts, err := p.postDao.GetPostOfUserLiked(in.Account, in.Page, in.Limit)
+	if err != nil {
+		return err
+	}
+	
+	data, err := p.convertPost(posts)
+	if err != nil {
+		return err
+	}
+	
+	resp.Posts = data
+	return nil
+}

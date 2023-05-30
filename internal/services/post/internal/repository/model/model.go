@@ -19,6 +19,7 @@ type Post struct {
 	Comments   uint32    `gorm:"column:comments"`
 	CreateTime time.Time `gorm:"column:create_time;autoCreateTime"`
 	Tags       []*Tag    `gorm:"many2many:post_tags;foreignKey:post_id"`
+	Liked      bool      `gorm"-"`
 }
 
 type Tag struct {

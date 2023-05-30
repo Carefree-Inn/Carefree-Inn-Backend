@@ -41,6 +41,8 @@ type PostService interface {
 	GetCategory(ctx context.Context, in *Request, opts ...client.CallOption) (*CategoryResponse, error)
 	GetPostOfCategory(ctx context.Context, in *PostOfCategoryRequest, opts ...client.CallOption) (*PostResponse, error)
 	GetPostOfTag(ctx context.Context, in *PostOfTagRequest, opts ...client.CallOption) (*PostResponse, error)
+	GetPostOfUser(ctx context.Context, in *PostOfUserRequest, opts ...client.CallOption) (*PostResponse, error)
+	GetPostOfUserLiked(ctx context.Context, in *PostOfUserRequest, opts ...client.CallOption) (*PostResponse, error)
 	SearchPost(ctx context.Context, in *SearchRequest, opts ...client.CallOption) (*PostResponse, error)
 }
 
@@ -106,6 +108,26 @@ func (c *postService) GetPostOfTag(ctx context.Context, in *PostOfTagRequest, op
 	return out, nil
 }
 
+func (c *postService) GetPostOfUser(ctx context.Context, in *PostOfUserRequest, opts ...client.CallOption) (*PostResponse, error) {
+	req := c.c.NewRequest(c.name, "Post.GetPostOfUser", in)
+	out := new(PostResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *postService) GetPostOfUserLiked(ctx context.Context, in *PostOfUserRequest, opts ...client.CallOption) (*PostResponse, error) {
+	req := c.c.NewRequest(c.name, "Post.GetPostOfUserLiked", in)
+	out := new(PostResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *postService) SearchPost(ctx context.Context, in *SearchRequest, opts ...client.CallOption) (*PostResponse, error) {
 	req := c.c.NewRequest(c.name, "Post.SearchPost", in)
 	out := new(PostResponse)
@@ -124,6 +146,8 @@ type PostHandler interface {
 	GetCategory(context.Context, *Request, *CategoryResponse) error
 	GetPostOfCategory(context.Context, *PostOfCategoryRequest, *PostResponse) error
 	GetPostOfTag(context.Context, *PostOfTagRequest, *PostResponse) error
+	GetPostOfUser(context.Context, *PostOfUserRequest, *PostResponse) error
+	GetPostOfUserLiked(context.Context, *PostOfUserRequest, *PostResponse) error
 	SearchPost(context.Context, *SearchRequest, *PostResponse) error
 }
 
@@ -134,6 +158,8 @@ func RegisterPostHandler(s server.Server, hdlr PostHandler, opts ...server.Handl
 		GetCategory(ctx context.Context, in *Request, out *CategoryResponse) error
 		GetPostOfCategory(ctx context.Context, in *PostOfCategoryRequest, out *PostResponse) error
 		GetPostOfTag(ctx context.Context, in *PostOfTagRequest, out *PostResponse) error
+		GetPostOfUser(ctx context.Context, in *PostOfUserRequest, out *PostResponse) error
+		GetPostOfUserLiked(ctx context.Context, in *PostOfUserRequest, out *PostResponse) error
 		SearchPost(ctx context.Context, in *SearchRequest, out *PostResponse) error
 	}
 	type Post struct {
@@ -165,6 +191,14 @@ func (h *postHandler) GetPostOfCategory(ctx context.Context, in *PostOfCategoryR
 
 func (h *postHandler) GetPostOfTag(ctx context.Context, in *PostOfTagRequest, out *PostResponse) error {
 	return h.PostHandler.GetPostOfTag(ctx, in, out)
+}
+
+func (h *postHandler) GetPostOfUser(ctx context.Context, in *PostOfUserRequest, out *PostResponse) error {
+	return h.PostHandler.GetPostOfUser(ctx, in, out)
+}
+
+func (h *postHandler) GetPostOfUserLiked(ctx context.Context, in *PostOfUserRequest, out *PostResponse) error {
+	return h.PostHandler.GetPostOfUserLiked(ctx, in, out)
 }
 
 func (h *postHandler) SearchPost(ctx context.Context, in *SearchRequest, out *PostResponse) error {

@@ -11,8 +11,6 @@ service UserPost {
 
   rpc MakeLike(MakeLikeRequest) returns(Response) {}
   rpc CancelLike(CancelLikeRequest) returns(Response) {}
-  rpc GetLikeOfUser(LikeOfUserRequest) returns(LikeOfUserResponse) {}
-  rpc IsBatchLiked(BactchLikedRequest) returns(BatchLikedResponse) {}
 }
 
 message Request{}
@@ -25,6 +23,8 @@ message MakeCommentRequest{
   uint32 PostId = 4;
   bool IsTop = 5;
   uint32 TopCommentId = 6;
+  string Title = 7;
+  string Avatar = 8;
 }
 
 message DeleteCommentRequest{
@@ -61,6 +61,8 @@ message CommentOfPostResponse{
 message MakeLikeRequest{
   uint32 PostId = 1;
   string Account = 2;
+  string Title = 3;
+  string Avatar = 4;
 }
 
 message CancelLikeRequest{

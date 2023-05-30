@@ -21,4 +21,6 @@ func Route(engine *gin.Engine) {
 	base := engine.Group("/inn/api/v1")
 	userRoute(base)
 	postRoute(base)
+	userPostRoute(base)
+	notificationRoute(base)
 }

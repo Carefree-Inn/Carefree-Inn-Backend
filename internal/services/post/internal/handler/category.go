@@ -27,7 +27,7 @@ func (p *PostService) GetPostOfCategory(ctx context.Context, in *pb.PostOfCatego
 	posts, err := p.postDao.GetPostOfCategory(&model.Category{
 		CategoryId: in.Category.CategoryId,
 		Title:      in.Category.Title,
-	}, in.Page, in.Limit)
+	}, in.Account, in.Page, in.Limit)
 	if err != nil {
 		return err
 	}

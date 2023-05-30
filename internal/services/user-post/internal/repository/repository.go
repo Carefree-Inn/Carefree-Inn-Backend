@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	jsoniter "github.com/json-iterator/go"
 	"github.com/pkg/errors"
@@ -25,7 +26,7 @@ func Init(dsn string) *Database {
 		log.Fatal(nil, errors.WithStack(err), "数据库初始化失败")
 	}
 	
-	if err := db.AutoMigrate(); err != nil {
+	if err := db.AutoMigrate(&model.PostLike{}, &model.Comment{}); err != nil {
 		log.Fatal(nil, errors.WithStack(err), "数据表初始化失败")
 	}
 	
@@ -70,6 +71,7 @@ func (d *UserPost) processLike() {
 	likeCh := like.Channel()
 	
 	for msg := range likeCh {
+		print("in")
 		likeInfo := LikeInfo{}
 		err := json.Unmarshal([]byte(msg.Payload), &likeInfo)
 		if err != nil {
@@ -77,15 +79,15 @@ func (d *UserPost) processLike() {
 			continue
 		}
 		session := d.db.Begin()
-		
+		fmt.Println(likeInfo)
 		switch likeInfo.LikeType {
 		case "make":
 			createTime, err := time.Parse("2006-04-02 15:04:05", likeInfo.CreateTime)
 			if err != nil {
 				createTime = time.Now()
 			}
-			if err := session.Table(model.Like{}.Table()).Create(
-				&model.Like{
+			if err := session.Table(model.PostLike{}.Table()).Create(
+				&model.PostLike{
 					PostId:     likeInfo.PostId,
 					Account:    likeInfo.Account,
 					CreateTime: createTime,
@@ -95,6 +97,7 @@ func (d *UserPost) processLike() {
 					"account": likeInfo.Account,
 				}), errors.WithStack(err), "点赞失败")
 				session.Rollback()
+				continue
 			} else {
 				if errAdd := session.Exec("UPDATE post SET likes = likes + 1 WHERE post_id = ?",
 					likeInfo.PostId).Error; errAdd != nil {
@@ -103,6 +106,7 @@ func (d *UserPost) processLike() {
 						"account": likeInfo.Account,
 					}), errors.WithStack(err), "点赞失败")
 					session.Rollback()
+					continue
 				}
 				
 				log.Info(log.WithFields(logrus.Fields{
@@ -117,12 +121,13 @@ func (d *UserPost) processLike() {
 		case "delete":
 			if err := session.Where(
 				"post_id=? AND account=?", likeInfo.PostId,
-				likeInfo.Account).Delete(&model.Like{}).Error; err != nil {
+				likeInfo.Account).Delete(&model.PostLike{}).Error; err != nil {
 				log.Warn(log.WithFields(logrus.Fields{
 					"post_id": likeInfo.PostId,
 					"account": likeInfo.Account,
 				}), errors.WithStack(err), "取消点赞失败")
 				session.Rollback()
+				continue
 			} else {
 				if errAdd := session.Exec("UPDATE post SET likes = likes - 1 WHERE post_id = ?",
 					likeInfo.PostId).Error; errAdd != nil {
@@ -131,6 +136,7 @@ func (d *UserPost) processLike() {
 						"account": likeInfo.Account,
 					}), errors.WithStack(err), "点赞失败")
 					session.Rollback()
+					continue
 				}
 				
 				log.Info(log.WithFields(logrus.Fields{
@@ -148,13 +154,13 @@ var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 type UserPostRepository interface {
 	DeleteComment(comment *model.Comment) error
-	MakeComment(comment *model.Comment) error
+	MakeComment(comment *model.Comment, title string, avatar string) error
 	GetCommentOfPost(postId uint32, page, limit uint32) ([]*model.Comment, error)
 	
-	MakeLike(postId uint32, account string) error
+	MakeLike(postId uint32, account string, title string, avatar string) error
 	DeleteLike(postId uint32, account string) error
-	GetLikes(account string, page int32, limit int32) ([]*model.Like, error)
-	IsBatchLiked(account string, postIds []uint32) ([]*model.Like, error)
+	GetLikes(account string, page int32, limit int32) ([]*model.PostLike, error)
+	IsBatchLiked(account string, postIds []uint32) ([]*model.PostLike, error)
 }
 
 func NewUserPostRepository(database *Database) UserPostRepository {

@@ -10,6 +10,7 @@ import (
 	"github.com/gin-gonic/gin/binding"
 	"github.com/pkg/errors"
 	pb "post/proto"
+	"strconv"
 )
 
 type createPostRequest struct {
@@ -115,4 +116,86 @@ func (p *postHandler) DeletePost(c *gin.Context) {
 	}
 	
 	internal.Success(c, nil)
+}
+
+//  GetPostOfUser getPostOfUser
+//	@Summary		获取用户发布的帖子 api
+//	@Tags			post
+//	@Description	获取用户发布的帖子
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorzation	header		string	true	"用户token"
+//	@Param			page			query		int		false	"页码"
+//	@Param			limit			query		int		false	"条数"
+//	@Success		200				{object}	internal.Response
+func (p *postHandler) GetPostOfUser(c *gin.Context) {
+	page, errPage := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, errLimit := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	if errPage != nil || errLimit != nil {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.ParamDataError)
+		return
+	}
+	
+	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
+	account := c.MustGet("account").(string)
+	
+	resp, err := p.PostService.GetPostOfUser(ctx, &pb.PostOfUserRequest{
+		Account: account,
+		Limit:   int32(limit),
+		Page:    int32(page),
+	})
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	data, err := p.AssemblePostAndUser(ctx, resp.Posts)
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	internal.Success(c, data)
+}
+
+//  GetPostOfUserLiked getPostOfUserLiked
+//	@Summary		获取用户点赞的帖子 api
+//	@Tags			post
+//	@Description	获取用户点赞的帖子
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorzation	header		string	true	"用户token"
+//	@Param			page			query		int		false	"页码"
+//	@Param			limit			query		int		false	"条数"
+//	@Success		200				{object}	internal.Response
+func (p *postHandler) GetPostOfUserLiked(c *gin.Context) {
+	page, errPage := strconv.Atoi(c.DefaultQuery("page", "1"))
+	limit, errLimit := strconv.Atoi(c.DefaultQuery("limit", "10"))
+	if errPage != nil || errLimit != nil {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.ParamDataError)
+		return
+	}
+	
+	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
+	account := c.MustGet("account").(string)
+	
+	resp, err := p.PostService.GetPostOfUserLiked(ctx, &pb.PostOfUserRequest{
+		Account: account,
+		Limit:   int32(limit),
+		Page:    int32(page),
+	})
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	data, err := p.AssemblePostAndUser(ctx, resp.Posts)
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	internal.Success(c, data)
 }

@@ -13,7 +13,9 @@ func postRoute(engine *gin.RouterGroup) {
 	pRoute.POST("/", middlewares.Auth(), pHandler.CreatePost)
 	pRoute.DELETE("/", middlewares.Auth(), pHandler.DeletePost)
 	pRoute.GET("/category/all", pHandler.GetCategory)
-	pRoute.GET("/category", pHandler.GetPostOfCategory)
-	pRoute.GET("/tag", pHandler.GetPostOfTag)
-	pRoute.POST("/search", pHandler.SearchPost)
+	pRoute.GET("/category", middlewares.SetAccount(), pHandler.GetPostOfCategory)
+	pRoute.GET("/tag", middlewares.SetAccount(), pHandler.GetPostOfTag)
+	pRoute.POST("/search", middlewares.SetAccount(), pHandler.SearchPost)
+	pRoute.GET("/user", middlewares.Auth(), pHandler.GetPostOfUser)
+	pRoute.GET("/liked", middlewares.Auth(), pHandler.GetPostOfUserLiked)
 }

@@ -19,9 +19,11 @@ type PostRepository interface {
 	GetCategory(id []uint32) ([]*model.Category, error)
 	DeletePost(post *model.Post) error
 	GetAllCategory() ([]*model.Category, error)
-	GetPostOfTag(title string) ([]*model.Post, error)
-	GetPostOfCategory(category *model.Category, page, limit uint32) ([]*model.Post, error)
-	SearchPost(content string, searchType string) ([]*model.Post, error)
+	GetPostOfTag(title string, account string) ([]*model.Post, error)
+	GetPostOfCategory(category *model.Category, account string, page uint32, limit uint32) ([]*model.Post, error)
+	SearchPost(content string, searchType string, account string) ([]*model.Post, error)
+	GetPostOfUser(account string, page int32, limit int32) ([]*model.Post, error)
+	GetPostOfUserLiked(account string, page, limit int32) ([]*model.Post, error)
 }
 
 func NewPostRepository(dbUp *gorm.DB) PostRepository {

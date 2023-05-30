@@ -37,9 +37,10 @@ var storage = map[string]int{
 
 var (
 	// data
-	JsonDataError  = &Errno{message: "JSON数据绑定失败", statusCode: 400422}
-	PathDataError  = &Errno{message: "path数据绑定失败", statusCode: 400421}
-	ParamDataError = &Errno{message: "param数据绑定失败", statusCode: 400422}
+	JsonDataError        = &Errno{message: "JSON数据绑定失败", statusCode: 400422}
+	PathDataError        = &Errno{message: "path数据绑定失败", statusCode: 400421}
+	ParamDataError       = &Errno{message: "param数据绑定失败", statusCode: 400422}
+	ConstraintParamError = &Errno{message: "数据关系错误", statusCode: 400400}
 	
 	// user
 	LoginWrongInfoError = &Errno{message: "账号或密码错误", statusCode: 400401}
@@ -49,6 +50,7 @@ var (
 	DatabaseError       = &Errno{message: "数据库出现异常", statusCode: 500502}
 	UserNotVerifyError  = &Errno{message: "用户身份认证失败", statusCode: 400401}
 	TokenNotValidate    = &Errno{message: "无效的用户令牌", statusCode: 400401}
+	UserNoPowerError    = &Errno{message: "你无权进行该操作", statusCode: 400401}
 	
 	// post
 	DeletePostError              = &Errno{message: "删除帖子失败", statusCode: 500501}
@@ -56,4 +58,7 @@ var (
 	GetCategoryInfoError         = &Errno{message: "获取分区失败", statusCode: 500501}
 	GetCategoryCategoryPostError = &Errno{message: "获取分区帖子失败", statusCode: 500501}
 	ResourceNotExist             = &Errno{message: "资源不存在", statusCode: 200204}
+	
+	// server
+	InternalServerError = &Errno{message: "服务器内部问题", statusCode: 500503}
 )

@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func (p *Post) SearchPost(content string, searchType string) ([]*model.Post, error) {
+func (p *Post) SearchPost(content string, searchType string, account string) ([]*model.Post, error) {
 	var str strings.Builder
 	str.WriteByte('%')
 	for _, v := range content {
@@ -34,5 +34,5 @@ func (p *Post) SearchPost(content string, searchType string) ([]*model.Post, err
 			return nil, errors.WithStack(err)
 		}
 	}
-	return posts, nil
+	return p.GetLiked(posts, account)
 }

@@ -41,6 +41,61 @@ func (p *Post) DeletePost(post *model.Post) error {
 	return nil
 }
 
+func (p *Post) GetLiked(posts []*model.Post, account string) ([]*model.Post, error) {
+	if account == "" {
+		return posts, nil
+	}
+	
+	ids := make([]uint32, 0, len(posts))
+	for _, v := range posts {
+		ids = append(ids, v.PostId)
+	}
+	
+	var data = make([]uint32, 0, len(ids))
+	if err := p.db.Table("post_like").Where("account = ? AND post_id IN (?)",
+		account, ids).Pluck("post_id", &data).Error; err != nil {
+		return nil, errors.WithStack(err)
+	}
+	
+	var hash = make(map[uint32]struct{})
+	for _, val := range data {
+		hash[val] = struct{}{}
+	}
+	
+	for key, val := range posts {
+		if _, ok := hash[val.PostId]; ok {
+			posts[key].Liked = true
+		}
+	}
+	
+	return posts, nil
+}
+
+func (p *Post) GetPostOfUser(account string, page, limit int32) ([]*model.Post, error) {
+	var posts = make([]*model.Post, limit)
+	if err := p.db.Table(model.Post{}.Table()).Where("account=?", account).
+		Offset(int(page-1) * int(limit)).Limit(int(limit)).
+		Find(&posts).Error; err != nil {
+		return nil, errors.WithStack(err)
+	}
+	
+	return p.GetLiked(posts, account)
+}
+
+func (p *Post) GetPostOfUserLiked(account string, page, limit int32) ([]*model.Post, error) {
+	var posts = make([]*model.Post, limit)
+	if err := p.db.Table("post").
+		Joins("JOIN post_like ON post.post_id = post_like.post_id AND post_like.account = ?", account).
+		Offset(int(page-1) * int(limit)).Limit(int(limit)).
+		Scan(&posts).Error; err != nil {
+		return nil, errors.WithStack(err)
+	}
+	for key := range posts {
+		posts[key].Liked = true
+	}
+	return posts, nil
+}
+
 //func (p *Post) CreatePost(post *model.Post) error {
 //	session := p.db.Begin()
 //

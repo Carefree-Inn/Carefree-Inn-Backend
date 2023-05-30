@@ -49,6 +49,7 @@ func (p *PostService) convertPost(posts []*model.Post) ([]*pb.PostInfo, error) {
 			Comments:   v.Comments,
 			CreateTime: v.CreateTime.Format("2006-01-02 15:01:05"),
 			Tag:        tags,
+			Liked:      v.Liked,
 		})
 	}
 	

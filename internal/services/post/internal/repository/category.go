@@ -28,7 +28,7 @@ func (p *Post) GetAllCategory() ([]*model.Category, error) {
 	return categories, nil
 }
 
-func (p *Post) GetPostOfCategory(category *model.Category, page, limit uint32) ([]*model.Post, error) {
+func (p *Post) GetPostOfCategory(category *model.Category, account string, page, limit uint32) ([]*model.Post, error) {
 	var posts = make([]*model.Post, 0, 16)
 	if err := p.db.Table(model.Post{}.Table()).
 		Where("category_id=?", category.CategoryId).Preload("Tags").
@@ -36,5 +36,5 @@ func (p *Post) GetPostOfCategory(category *model.Category, page, limit uint32) (
 		Find(&posts).Error; err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return posts, nil
+	return p.GetLiked(posts, account)
 }

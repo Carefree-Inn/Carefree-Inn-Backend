@@ -340,6 +340,43 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "comment.deleteCommentRequest": {
+            "type": "object",
+            "properties": {
+                "comment_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "comment.makeCommentRequest": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "from_user_id": {
+                    "type": "string"
+                },
+                "is_top": {
+                    "type": "boolean"
+                },
+                "post_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "to_user_id": {
+                    "type": "string"
+                },
+                "top_comment_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "internal.Response": {
             "type": "object",
             "properties": {
@@ -349,6 +386,20 @@ const docTemplate = `{
                 },
                 "status": {
                     "type": "integer"
+                }
+            }
+        },
+        "like.makeLikeRequest": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "post_id": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
                 }
             }
         },

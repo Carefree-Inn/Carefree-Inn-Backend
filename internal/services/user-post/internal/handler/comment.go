@@ -9,12 +9,13 @@ import (
 func (up *UserPostService) MakeComment(ctx context.Context, req *pb.MakeCommentRequest, resp *pb.Response) error {
 	return up.userPostDao.MakeComment(
 		&model.Comment{
+			PostId:       req.PostId,
 			IsTop:        req.IsTop,
 			TopCommentId: req.TopCommentId,
 			FromUserId:   req.FromUserId,
 			ToUserId:     req.ToUserId,
 			Content:      req.Content,
-		})
+		}, req.Title, req.Avatar)
 }
 
 func (up *UserPostService) DeleteComment(ctx context.Context, req *pb.DeleteCommentRequest, resp *pb.Response) error {

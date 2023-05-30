@@ -60,6 +60,10 @@ func (p *postHandler) GetPostOfCategory(c *gin.Context) {
 		return
 	}
 	
+	account, exist := c.Get("account")
+	if !exist {
+		account = ""
+	}
 	page, errPage := strconv.Atoi(c.DefaultQuery("page", "1"))
 	limit, errLimit := strconv.Atoi(c.DefaultQuery("limit", "10"))
 	if errPage != nil || errLimit != nil {
@@ -71,8 +75,9 @@ func (p *postHandler) GetPostOfCategory(c *gin.Context) {
 		Category: &pbPost.CategoryInfo{
 			CategoryId: category.CategoryId,
 		},
-		Limit: uint32(limit),
-		Page:  uint32(page),
+		Limit:   uint32(limit),
+		Page:    uint32(page),
+		Account: account.(string),
 	})
 	if err != nil {
 		internal.ServerError(c, errno.GetCategoryCategoryPostError.Error())

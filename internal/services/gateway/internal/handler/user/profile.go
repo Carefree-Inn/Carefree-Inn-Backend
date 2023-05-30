@@ -64,7 +64,7 @@ func (u *userHandler) UpdateProfile(c *gin.Context) {
 	
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
 	account := c.MustGet("account").(string)
-	_, err := u.UpdateUserProfile(ctx, &pb.InnUserProfileRequest{
+	_, err := u.UpdateUserProfile(ctx, &pb.UserProfileRequest{
 		Account:  account,
 		Nickname: req.Nickname,
 		Avatar:   req.Avatar,

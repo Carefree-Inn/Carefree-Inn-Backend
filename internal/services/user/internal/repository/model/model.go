@@ -4,7 +4,7 @@ import "time"
 
 type User struct {
 	Account    string    `gorm:"column:account;type:VARCHAR(20);primaryKey"`
-	Password   string    `gorm:"column:password;type:VARCHAR(20)"`
+	Password   string    `gorm:"column:password;type:VARCHAR(200)"`
 	Nickname   string    `gorm:"column:nickname;type:VARCHAR(30)"`
 	Sex        int32     `gorm:"column:sex"`
 	Avatar     string    `gorm:"column:avatar;type:VARCHAR(200)"`

@@ -32,7 +32,7 @@ func CheckTag(db *gorm.DB, titles []string) ([]*model.Tag, []*model.Tag, error) 
 	return notExist, exist, nil
 }
 
-func (p *Post) GetPostOfTag(title string) ([]*model.Post, error) {
+func (p *Post) GetPostOfTag(title string, account string) ([]*model.Post, error) {
 	var data = make([]*model.Post, 0, 16)
 	
 	if err := p.db.Table(model.Post{}.Table()).
@@ -43,5 +43,5 @@ func (p *Post) GetPostOfTag(title string) ([]*model.Post, error) {
 		Find(&data).Error; err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return data, nil
+	return p.GetLiked(data, account)
 }

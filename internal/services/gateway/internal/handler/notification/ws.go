@@ -8,15 +8,24 @@ import (
 
 var upgrader = websocket.Upgrader{}
 
+//  SendNotification sendNotification
+//	@Summary		获取用户通知（被点赞/评论） api
+//	@Tags			post
+//	@Description	获取用户通知
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorzation	header		string	true	"用户token"
+//	@Success		200				{object}	internal.Response
+//	@Router			/notification [get]
 func (n *notificationHandler) SendNotification(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
-		log.Println()
+		log.Println(err)
 		return
 	}
 	
-	consumerLike := n.client.Subscribe(c.Request.Context(), "like")
-	consumerComment := n.client.Subscribe(c.Request.Context(), "comment")
+	consumerLike := n.client.Subscribe(c.Request.Context(), "like_after")
+	consumerComment := n.client.Subscribe(c.Request.Context(), "comment_after")
 	defer consumerLike.Close()
 	defer consumerComment.Close()
 	

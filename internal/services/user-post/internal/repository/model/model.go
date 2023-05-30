@@ -2,7 +2,7 @@ package model
 
 import "time"
 
-type Like struct {
+type PostLike struct {
 	LikeId     uint32    `gorm:"column:like_id;primaryKey;autoIncrement"`
 	Account    string    `gorm:"column:account;type:varchar(20);index"`
 	PostId     uint32    `gorm:"column:post_id;index"`
@@ -20,8 +20,8 @@ type Comment struct {
 	CreateTime   time.Time `gorm:"column:create_time;autoCreateTime"`
 }
 
-func (Like) Table() string {
-	return "like"
+func (PostLike) Table() string {
+	return "post_like"
 }
 
 func (Comment) Table() string {

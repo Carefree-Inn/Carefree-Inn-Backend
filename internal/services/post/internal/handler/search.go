@@ -12,7 +12,7 @@ func (p *PostService) SearchPost(ctx context.Context, req *pb.SearchRequest, res
 		return errors.WithStack(errno.ResourceNotExist)
 	}
 	
-	posts, err := p.postDao.SearchPost(req.GetContent(), req.SearchType)
+	posts, err := p.postDao.SearchPost(req.GetContent(), req.SearchType, req.Account)
 	if err != nil {
 		return err
 	}

@@ -1,5 +1,29 @@
 basePath: /inn/api/v1
 definitions:
+  comment.deleteCommentRequest:
+    properties:
+      comment_id:
+        type: integer
+    type: object
+  comment.makeCommentRequest:
+    properties:
+      avatar:
+        type: string
+      content:
+        type: string
+      from_user_id:
+        type: string
+      is_top:
+        type: boolean
+      post_id:
+        type: integer
+      title:
+        type: string
+      to_user_id:
+        type: string
+      top_comment_id:
+        type: integer
+    type: object
   internal.Response:
     properties:
       data: {}
@@ -7,6 +31,15 @@ definitions:
         type: string
       status:
         type: integer
+    type: object
+  like.makeLikeRequest:
+    properties:
+      avatar:
+        type: string
+      post_id:
+        type: integer
+      title:
+        type: string
     type: object
   post.createPostRequest:
     properties:

@@ -14,6 +14,8 @@ type Comment struct {
 	CommentTime string `json:"comment_time"`
 	Content     string `json:"content"`
 	CommentType string `json:"comment_type"`
+	Title       string `json:"title"`
+	Avatar      string `json:"avatar"`
 }
 
 func (c *Comment) Marshal() ([]byte, error) {
@@ -24,7 +26,7 @@ func (c *Comment) Unmarshal(data []byte) error {
 	return json.Unmarshal(data, c)
 }
 
-func (up *UserPost) MakeComment(comment *model.Comment) error {
+func (up *UserPost) MakeComment(comment *model.Comment, title, avatar string) error {
 	session := up.db.Begin()
 	if err := session.Table(comment.Table()).Create(comment).Error;
 		err != nil {
@@ -46,6 +48,8 @@ func (up *UserPost) MakeComment(comment *model.Comment) error {
 		Content:     comment.Content,
 		PostId:      comment.PostId,
 		FromUserId:  comment.FromUserId,
+		Title:       title,
+		Avatar:      avatar,
 		CommentType: "make",
 	}
 	
@@ -55,7 +59,7 @@ func (up *UserPost) MakeComment(comment *model.Comment) error {
 	}
 	
 	// comment 使用消费者-订阅者模式是为了对用户进行通知
-	return errors.WithStack(up.rdb.Publish(context.TODO(), "comment", data).Err())
+	return errors.WithStack(up.rdb.Publish(context.TODO(), "comment_after", data).Err())
 }
 
 func (up *UserPost) DeleteComment(comment *model.Comment) error {

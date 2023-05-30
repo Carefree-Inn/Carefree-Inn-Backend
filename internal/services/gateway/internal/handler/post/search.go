@@ -36,11 +36,16 @@ func (p *postHandler) SearchPost(c *gin.Context) {
 		)
 		return
 	}
+	account, exist := c.Get("account")
+	if !exist {
+		account = ""
+	}
 	
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
 	resp, err := p.PostService.SearchPost(ctx, &pb.SearchRequest{
 		SearchType: req.SearchType,
 		Content:    req.Data,
+		Account:    account.(string),
 	})
 	if err != nil {
 		if errno.Is(err, errno.ResourceNotExist) {

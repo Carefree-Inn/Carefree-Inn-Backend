@@ -36,9 +36,9 @@ func NewUserEndpoints() []*api.Endpoint {
 // Client API for User service
 
 type UserService interface {
-	UserLogin(ctx context.Context, in *CCNUInfoRequest, opts ...client.CallOption) (*CCNULoginResponse, error)
-	GetUserProfile(ctx context.Context, in *Request, opts ...client.CallOption) (*InnUserProfileResponse, error)
-	UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, opts ...client.CallOption) (*Response, error)
+	UserLogin(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error)
+	GetUserProfile(ctx context.Context, in *Request, opts ...client.CallOption) (*UserProfileResponse, error)
+	UpdateUserProfile(ctx context.Context, in *UserProfileRequest, opts ...client.CallOption) (*Response, error)
 	GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, opts ...client.CallOption) (*BatchUserProfileResponse, error)
 }
 
@@ -54,9 +54,9 @@ func NewUserService(name string, c client.Client) UserService {
 	}
 }
 
-func (c *userService) UserLogin(ctx context.Context, in *CCNUInfoRequest, opts ...client.CallOption) (*CCNULoginResponse, error) {
+func (c *userService) UserLogin(ctx context.Context, in *LoginRequest, opts ...client.CallOption) (*LoginResponse, error) {
 	req := c.c.NewRequest(c.name, "User.UserLogin", in)
-	out := new(CCNULoginResponse)
+	out := new(LoginResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -64,9 +64,9 @@ func (c *userService) UserLogin(ctx context.Context, in *CCNUInfoRequest, opts .
 	return out, nil
 }
 
-func (c *userService) GetUserProfile(ctx context.Context, in *Request, opts ...client.CallOption) (*InnUserProfileResponse, error) {
+func (c *userService) GetUserProfile(ctx context.Context, in *Request, opts ...client.CallOption) (*UserProfileResponse, error) {
 	req := c.c.NewRequest(c.name, "User.GetUserProfile", in)
-	out := new(InnUserProfileResponse)
+	out := new(UserProfileResponse)
 	err := c.c.Call(ctx, req, out, opts...)
 	if err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (c *userService) GetUserProfile(ctx context.Context, in *Request, opts ...c
 	return out, nil
 }
 
-func (c *userService) UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, opts ...client.CallOption) (*Response, error) {
+func (c *userService) UpdateUserProfile(ctx context.Context, in *UserProfileRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "User.UpdateUserProfile", in)
 	out := new(Response)
 	err := c.c.Call(ctx, req, out, opts...)
@@ -97,17 +97,17 @@ func (c *userService) GetBatchUserProfile(ctx context.Context, in *BatchUserProf
 // Server API for User service
 
 type UserHandler interface {
-	UserLogin(context.Context, *CCNUInfoRequest, *CCNULoginResponse) error
-	GetUserProfile(context.Context, *Request, *InnUserProfileResponse) error
-	UpdateUserProfile(context.Context, *InnUserProfileRequest, *Response) error
+	UserLogin(context.Context, *LoginRequest, *LoginResponse) error
+	GetUserProfile(context.Context, *Request, *UserProfileResponse) error
+	UpdateUserProfile(context.Context, *UserProfileRequest, *Response) error
 	GetBatchUserProfile(context.Context, *BatchUserProfileRequest, *BatchUserProfileResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
 	type user interface {
-		UserLogin(ctx context.Context, in *CCNUInfoRequest, out *CCNULoginResponse) error
-		GetUserProfile(ctx context.Context, in *Request, out *InnUserProfileResponse) error
-		UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, out *Response) error
+		UserLogin(ctx context.Context, in *LoginRequest, out *LoginResponse) error
+		GetUserProfile(ctx context.Context, in *Request, out *UserProfileResponse) error
+		UpdateUserProfile(ctx context.Context, in *UserProfileRequest, out *Response) error
 		GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, out *BatchUserProfileResponse) error
 	}
 	type User struct {
@@ -121,15 +121,15 @@ type userHandler struct {
 	UserHandler
 }
 
-func (h *userHandler) UserLogin(ctx context.Context, in *CCNUInfoRequest, out *CCNULoginResponse) error {
+func (h *userHandler) UserLogin(ctx context.Context, in *LoginRequest, out *LoginResponse) error {
 	return h.UserHandler.UserLogin(ctx, in, out)
 }
 
-func (h *userHandler) GetUserProfile(ctx context.Context, in *Request, out *InnUserProfileResponse) error {
+func (h *userHandler) GetUserProfile(ctx context.Context, in *Request, out *UserProfileResponse) error {
 	return h.UserHandler.GetUserProfile(ctx, in, out)
 }
 
-func (h *userHandler) UpdateUserProfile(ctx context.Context, in *InnUserProfileRequest, out *Response) error {
+func (h *userHandler) UpdateUserProfile(ctx context.Context, in *UserProfileRequest, out *Response) error {
 	return h.UserHandler.UpdateUserProfile(ctx, in, out)
 }
 

@@ -16,17 +16,19 @@ func (d *User) VerifyUser(account, password string) error {
 		}
 		return errors.WithStack(err)
 	}
-	afterBcrypt, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	if err != nil {
-		return errors.WithStack(err)
-	}
-	if user.Password != string(afterBcrypt) {
+	
+	if bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(password)) != nil {
 		return errno.LoginWrongInfoError
 	}
 	return nil
 }
 
 func (d *User) CreateUser(user *model.User) error {
+	afterBcrypt, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return errors.WithStack(err)
+	}
+	user.Password = string(afterBcrypt)
 	session := d.db.Begin()
 	if err := session.Table(user.Table()).Create(&user).Error; err != nil {
 		session.Rollback()

@@ -48,5 +48,5 @@ message UserProfileResponse {
 }
 
 message BatchUserProfileResponse {
-	repeated UserProfileResponse data = 1;
+	map<string,UserProfileResponse> data = 1;
 }

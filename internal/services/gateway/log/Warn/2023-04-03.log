@@ -1,8 +1,0 @@
-{
-  "X-Request-Id": "7a68bc11-8c09-429b-8491-f6ef7fb17066",
-  "error": "strconv.Atoi: parsing \"t1\": invalid syntax",
-  "level": "warning",
-  "msg": "[path数据绑定失败]",
-  "stack": "strconv.Atoi: parsing \"t1\": invalid syntax\ngateway/internal/handler/post.(*postHandler).GetPostOfCategory\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/gateway/internal/handler/post/category.go:56\ngithub.com/gin-gonic/gin.(*Context).Next\n\t/home/yyj/code/pkg/mod/github.com/gin-gonic/gin@v1.9.0/context.go:174\ngithub.com/gin-gonic/gin.CustomRecoveryWithWriter.func1\n\t/home/yyj/code/pkg/mod/github.com/gin-gonic/gin@v1.9.0/recovery.go:102\ngithub.com/gin-gonic/gin.(*Context).Next\n\t/home/yyj/code/pkg/mod/github.com/gin-gonic/gin@v1.9.0/context.go:174\ngateway/pkg/middlewares.Logger.func1\n\t/home/yyj/code/git/Carefree-Inn-Backend/internal/services/gateway/pkg/middlewares/log.go:15\ngithub.com/gin-gonic/gin.(*Context).Next\n\t/home/yyj/code/pkg/mod/github.com/gin-gonic/gin@v1.9.0/context.go:174\ngithub.com/gin-gonic/gin.(*Engine).handleHTTPRequest\n\t/home/yyj/code/pkg/mod/github.com/gin-gonic/gin@v1.9.0/gin.go:620\ngithub.com/gin-gonic/gin.(*Engine).ServeHTTP\n\t/home/yyj/code/pkg/mod/github.com/gin-gonic/gin@v1.9.0/gin.go:576\nnet/http.serverHandler.ServeHTTP\n\t/usr/local/go/src/net/http/server.go:2916\nnet/http.(*conn).serve\n\t/usr/local/go/src/net/http/server.go:1966\nruntime.goexit\n\t/usr/local/go/src/runtime/asm_amd64.s:1571",
-  "time": "2023-04-03 22:55:50"
-}

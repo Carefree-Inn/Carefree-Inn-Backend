@@ -34,10 +34,14 @@ func (p *postHandler) GetPostOfTag(c *gin.Context) {
 		)
 		return
 	}
-	
+	account, exist := c.Get("account")
+	if !exist {
+		account = ""
+	}
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
 	resp, err := p.PostService.GetPostOfTag(ctx, &pb.PostOfTagRequest{
-		Title: tag.Title,
+		Title:   tag.Title,
+		Account: account.(string),
 	})
 	if err != nil {
 		internal.ServerError(c, errno.CreatePostError.Error())

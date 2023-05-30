@@ -41,8 +41,6 @@ type UserPostService interface {
 	GetCommentOfPost(ctx context.Context, in *GetCommentOfPostRequest, opts ...client.CallOption) (*CommentOfPostResponse, error)
 	MakeLike(ctx context.Context, in *MakeLikeRequest, opts ...client.CallOption) (*Response, error)
 	CancelLike(ctx context.Context, in *CancelLikeRequest, opts ...client.CallOption) (*Response, error)
-	GetLikeOfUser(ctx context.Context, in *LikeOfUserRequest, opts ...client.CallOption) (*LikeOfUserResponse, error)
-	IsBatchLiked(ctx context.Context, in *BactchLikedRequest, opts ...client.CallOption) (*BatchLikedResponse, error)
 }
 
 type userPostService struct {
@@ -107,26 +105,6 @@ func (c *userPostService) CancelLike(ctx context.Context, in *CancelLikeRequest,
 	return out, nil
 }
 
-func (c *userPostService) GetLikeOfUser(ctx context.Context, in *LikeOfUserRequest, opts ...client.CallOption) (*LikeOfUserResponse, error) {
-	req := c.c.NewRequest(c.name, "UserPost.GetLikeOfUser", in)
-	out := new(LikeOfUserResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *userPostService) IsBatchLiked(ctx context.Context, in *BactchLikedRequest, opts ...client.CallOption) (*BatchLikedResponse, error) {
-	req := c.c.NewRequest(c.name, "UserPost.IsBatchLiked", in)
-	out := new(BatchLikedResponse)
-	err := c.c.Call(ctx, req, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // Server API for UserPost service
 
 type UserPostHandler interface {
@@ -135,8 +113,6 @@ type UserPostHandler interface {
 	GetCommentOfPost(context.Context, *GetCommentOfPostRequest, *CommentOfPostResponse) error
 	MakeLike(context.Context, *MakeLikeRequest, *Response) error
 	CancelLike(context.Context, *CancelLikeRequest, *Response) error
-	GetLikeOfUser(context.Context, *LikeOfUserRequest, *LikeOfUserResponse) error
-	IsBatchLiked(context.Context, *BactchLikedRequest, *BatchLikedResponse) error
 }
 
 func RegisterUserPostHandler(s server.Server, hdlr UserPostHandler, opts ...server.HandlerOption) error {
@@ -146,8 +122,6 @@ func RegisterUserPostHandler(s server.Server, hdlr UserPostHandler, opts ...serv
 		GetCommentOfPost(ctx context.Context, in *GetCommentOfPostRequest, out *CommentOfPostResponse) error
 		MakeLike(ctx context.Context, in *MakeLikeRequest, out *Response) error
 		CancelLike(ctx context.Context, in *CancelLikeRequest, out *Response) error
-		GetLikeOfUser(ctx context.Context, in *LikeOfUserRequest, out *LikeOfUserResponse) error
-		IsBatchLiked(ctx context.Context, in *BactchLikedRequest, out *BatchLikedResponse) error
 	}
 	type UserPost struct {
 		userPost
@@ -178,12 +152,4 @@ func (h *userPostHandler) MakeLike(ctx context.Context, in *MakeLikeRequest, out
 
 func (h *userPostHandler) CancelLike(ctx context.Context, in *CancelLikeRequest, out *Response) error {
 	return h.UserPostHandler.CancelLike(ctx, in, out)
-}
-
-func (h *userPostHandler) GetLikeOfUser(ctx context.Context, in *LikeOfUserRequest, out *LikeOfUserResponse) error {
-	return h.UserPostHandler.GetLikeOfUser(ctx, in, out)
-}
-
-func (h *userPostHandler) IsBatchLiked(ctx context.Context, in *BactchLikedRequest, out *BatchLikedResponse) error {
-	return h.UserPostHandler.IsBatchLiked(ctx, in, out)
 }

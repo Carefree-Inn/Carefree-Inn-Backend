@@ -9,7 +9,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/pkg/errors"
-	"golang.org/x/crypto/bcrypt"
 	pb "user/proto"
 )
 
@@ -39,21 +38,13 @@ func (u *userHandler) Login(c *gin.Context) {
 	}
 	
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
-	password, err := bcrypt.GenerateFromPassword([]byte(req.Password), bcrypt.DefaultCost)
-	if err != nil {
-		internal.ServerError(c, errno.LoginServerError.Error())
-		return
-	}
 	
-	_, err = u.UserLogin(ctx, &pb.CCNUInfoRequest{
+	_, err := u.UserLogin(ctx, &pb.LoginRequest{
 		Account:  req.Account,
-		Password: string(password),
+		Password: req.Password,
 	})
 	if err != nil {
-		if errno.Is(err, errno.UserNotExistError) {
-			internal.Error(c, err)
-			return
-		} else if errno.Is(err, errno.LoginWrongInfoError) {
+		if errno.Is(err, errno.LoginWrongInfoError) {
 			internal.Error(c, err)
 			return
 		}
