@@ -89,7 +89,7 @@ type deleteCommentRequest struct {
 //	@Description	删除评论
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string				true	"用户token"
+//	@Param			Authorzation	header		string					true	"用户token"
 //	@Param			object			body		deleteCommentRequest	true	"评论信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/comment [delete]
@@ -123,10 +123,10 @@ func (l *commentHandler) DeleteComment(c *gin.Context) {
 //	@Description	获取帖子下的评论
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string				true	"用户token"
-//	@Param			post_id	query		int							true	"帖子id"
-//	@Param			page	query		int							false	"页码"
-//	@Param			limit	query		int							false	"条数"
+//	@Param			Authorzation	header		string	true	"用户token"
+//	@Param			post_id			query		int		true	"帖子id"
+//	@Param			page			query		int		false	"页码"
+//	@Param			limit			query		int		false	"条数"
 //	@Success		200				{object}	internal.Response
 //	@Router			/comment [get]
 func (l *commentHandler) GetCommentOfPost(c *gin.Context) {
