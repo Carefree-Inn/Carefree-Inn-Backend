@@ -32,7 +32,7 @@ func (p *PostService) GetPostOfCategory(ctx context.Context, in *pb.PostOfCatego
 		return err
 	}
 	
-	data, err := p.convertPost(posts)
+	data, err := p.convertPost(posts...)
 	if err != nil {
 		return err
 	}

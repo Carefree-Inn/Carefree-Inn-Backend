@@ -11,17 +11,19 @@ import (
 	"strconv"
 	"user-post/pkg/log"
 	pb "user-post/proto"
+	pbUser "user/proto"
 )
 
 type makeCommentRequest struct {
 	IsTop        bool   `json:"is_top"`
 	TopCommentId uint32 `json:"top_comment_id"`
-	FromUserId   string `json:"from_user_id"`
-	ToUserId     string `json:"to_user_id"`
-	Content      string `json:"content"`
-	PostId       uint32 `json:"post_id"`
-	Title        string `json:"title"`
-	Avatar       string `json:"avatar"`
+	
+	ToUserAccount string `json:"to_user_account"`
+	Content       string `json:"content"`
+	PostId        uint32 `json:"post_id"`
+	
+	FromUserNickName string `json:"from_user_nick_name"`
+	FromUserAvatar   string `json:"from_user_avatar"`
 }
 
 //  MakeComment makeComment
@@ -30,7 +32,7 @@ type makeCommentRequest struct {
 //	@Description	评论
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string				true	"用户token"
+//	@Param			Authorization	header		string				true	"用户token"
 //	@Param			object			body		makeCommentRequest	true	"评论信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/comment [post]
@@ -47,29 +49,24 @@ func (l *commentHandler) MakeComment(c *gin.Context) {
 		return
 	}
 	
-	if req.IsTop && req.ToUserId != "" ||
-		!req.IsTop && req.ToUserId == "" {
+	if req.IsTop && req.ToUserAccount != "" ||
+		!req.IsTop && req.ToUserAccount == "" {
 		internal.Error(c, errno.ConstraintParamError)
 		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.ConstraintParamError)
 		return
 	}
 	
 	account := c.MustGet("account").(string)
-	if account != req.FromUserId {
-		internal.Error(c, errno.UserNoPowerError)
-		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.UserNoPowerError)
-		return
-	}
 	
 	_, err := l.UserPostService.MakeComment(ctx, &pb.MakeCommentRequest{
-		PostId:       req.PostId,
-		IsTop:        req.IsTop,
-		ToUserId:     req.ToUserId,
-		FromUserId:   req.FromUserId,
-		Content:      req.Content,
-		TopCommentId: req.TopCommentId,
-		Title:        req.Title,
-		Avatar:       req.Avatar,
+		PostId:           req.PostId,
+		IsTop:            req.IsTop,
+		ToUserAccount:    req.ToUserAccount,
+		FromUserAccount:  account,
+		Content:          req.Content,
+		TopCommentId:     req.TopCommentId,
+		UserAvatar:       req.FromUserAvatar,
+		FromUserNickName: req.FromUserNickName,
 	})
 	if err != nil {
 		internal.ServerError(c, errno.InternalServerError.Error())
@@ -89,7 +86,7 @@ type deleteCommentRequest struct {
 //	@Description	删除评论
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string					true	"用户token"
+//	@Param			Authorization	header		string					true	"用户token"
 //	@Param			object			body		deleteCommentRequest	true	"评论信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/comment [delete]
@@ -123,12 +120,11 @@ func (l *commentHandler) DeleteComment(c *gin.Context) {
 //	@Description	获取帖子下的评论
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string	true	"用户token"
-//	@Param			post_id			query		int		true	"帖子id"
-//	@Param			page			query		int		false	"页码"
-//	@Param			limit			query		int		false	"条数"
-//	@Success		200				{object}	internal.Response
-//	@Router			/comment [get]
+//	@Param			post_id	query		int	true	"帖子id"
+//	@Param			page	query		int	false	"页码"
+//	@Param			limit	query		int	false	"条数"
+//	@Success		200		{object}	internal.Response
+//	@Router			/comment/post [get]
 func (l *commentHandler) GetCommentOfPost(c *gin.Context) {
 	pageStr, limitStr := c.DefaultQuery("page", "1"), c.DefaultQuery("limit", "10")
 	postIdStr := c.Query("post_id")
@@ -168,6 +164,76 @@ func (l *commentHandler) GetCommentOfPost(c *gin.Context) {
 	if err != nil {
 		internal.ServerError(c, errno.InternalServerError.Error())
 		return
+	}
+	
+	internal.Success(c, data)
+}
+
+//  GetCommentOfUser getCommentOfUser
+//	@Summary		获取用户的评论 api
+//	@Tags			user
+//	@Description	获取用户的评论
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string	true	"用户token"
+//	@Param			page			query		int		false	"页码"
+//	@Param			limit			query		int		false	"条数"
+//	@Success		200				{object}	internal.Response
+//	@Router			/comment/user [get]
+func (l *commentHandler) GetCommentOfUser(c *gin.Context) {
+	pageStr, limitStr := c.DefaultQuery("page", "1"), c.DefaultQuery("limit", "10")
+	
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.ParamDataError)
+		return
+	}
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.ParamDataError)
+		return
+	}
+	
+	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
+	account := c.MustGet("account").(string)
+	resp, err := l.UserPostService.GetCommentOfUser(ctx,
+		&pb.GetCommentOfUserRequest{
+			Account: account,
+			Limit:   int32(uint32(limit)),
+			Page:    int32(uint32(page)),
+		})
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	selfInfo, err := l.UserService.GetUserProfile(ctx, &pbUser.Request{Account: account})
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	data := make([]*Comment, 0, len(resp.Comments))
+	for _, val := range resp.Comments {
+		one := &Comment{
+			CommentId: val.CommentId,
+			FromUser: &UserInfo{
+				Account:  selfInfo.Account,
+				Avatar:   selfInfo.Avatar,
+				Sex:      int8(selfInfo.Sex),
+				Nickname: selfInfo.Nickname,
+			},
+			ToUser:     &UserInfo{Account: val.ToUserId},
+			Content:    val.Content,
+			CreateTime: val.CreateTime,
+			
+			PostId:       val.PostId,
+			IsTop:        val.IsTop,
+			TopCommentId: val.TopCommentId,
+		}
+		data = append(data, one)
 	}
 	
 	internal.Success(c, data)

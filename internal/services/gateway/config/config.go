@@ -19,6 +19,11 @@ type Config struct {
 		Mode string `yaml:"mode"`
 		Port string `yaml:"port"`
 	}
+	QiNiu struct {
+		AccessKey string `yaml:"accessKey""`
+		SecretKey string `yaml:"secretKey"`
+		Bucket    string `yaml:"bucket"`
+	}
 }
 
 func (cfg *config) init() {

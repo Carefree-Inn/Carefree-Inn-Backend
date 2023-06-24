@@ -59,7 +59,7 @@ func (p *postHandler) SearchPost(c *gin.Context) {
 		internal.ServerError(c, errno.DatabaseError.Error())
 	}
 	
-	data, err := p.AssemblePostAndUser(ctx, resp.Posts)
+	data, err := p.AssemblePostAndUser(ctx, resp.Posts...)
 	if err != nil {
 		internal.ServerError(c, errno.GetCategoryCategoryPostError.Error())
 		return

@@ -57,7 +57,7 @@ func (p *PostService) GetPostOfUser(ctx context.Context, in *pb.PostOfUserReques
 		return err
 	}
 	
-	data, err := p.convertPost(posts)
+	data, err := p.convertPost(posts...)
 	if err != nil {
 		return err
 	}
@@ -72,11 +72,46 @@ func (p *PostService) GetPostOfUserLiked(ctx context.Context, in *pb.PostOfUserR
 		return err
 	}
 	
-	data, err := p.convertPost(posts)
+	data, err := p.convertPost(posts...)
 	if err != nil {
 		return err
 	}
 	
 	resp.Posts = data
+	return nil
+}
+
+func (p *PostService) GetPost(ctx context.Context, in *pb.GetPostRequest, resp *pb.GetPostResponse) error {
+	post, err := p.postDao.GetPost(in.PostId)
+	if err != nil {
+		return err
+	}
+	
+	data, err := p.convertPost(post...)
+	if err != nil {
+		return err
+	}
+	
+	resp.Post = &pb.PostInfo{}
+	resp.Post = data[0]
+	
+	return nil
+}
+func (p *PostService) PostSquare(ctx context.Context, in *pb.Request, resp *pb.PostSquareResponse) error {
+	tags, err := p.postDao.PostSquare()
+	if err != nil {
+		return err
+	}
+	
+	var data = make([]*pb.TagInfo, 0, len(tags))
+	for _, one := range tags {
+		data = append(data, &pb.TagInfo{
+			Title: one.Title,
+			TagId: one.TagId,
+		})
+	}
+	
+	resp.Tags = data
+	
 	return nil
 }

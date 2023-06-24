@@ -17,7 +17,7 @@ import (
 //	@Description	获取用户信息
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string	true	"用户token"
+//	@Param			Authorization	header		string	true	"用户token"
 //	@Success		200				{object}	internal.Response
 //	@Router			/user/profile [get]
 func (u *userHandler) GetProfile(c *gin.Context) {
@@ -41,18 +41,24 @@ func (u *userHandler) GetProfile(c *gin.Context) {
 	})
 }
 
+type updateProfileRequest struct {
+	Nickname string `json:"nickname"`
+	Sex      int8   `json:"sex"`
+	Avatar   string `json:"avatar"`
+}
+
 //  UpdateProfile updateProfile
 //	@Summary		修改用户信息 api
 //	@Tags			user
 //	@Description	修改用户信息
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string		true	"用户token"
+//	@Param			Authorization	header		string		true	"用户token"
 //	@Param			object			body		userInfo	true	"需要修改的信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/user/profile [put]
 func (u *userHandler) UpdateProfile(c *gin.Context) {
-	var req userInfo
+	var req updateProfileRequest
 	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
 		internal.Error(c, errno.JsonDataError)
 		log.Info(

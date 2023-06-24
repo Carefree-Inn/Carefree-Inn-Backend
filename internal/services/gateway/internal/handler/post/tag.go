@@ -17,13 +17,13 @@ type getPostOfTag struct {
 
 //  GetPostOfTag getPostOfTag
 //	@Summary		获取tag下的帖子 api
-//	@Tags			post
+//	@Tags			tag
 //	@Description	获取tag下的帖子
 //	@Accept			json
 //	@Produce		json
 //	@Param			object	body		getPostOfTag	true	"tag信息"
 //	@Success		200		{object}	internal.Response
-//	@Router			/post/tag [post]
+//	@Router			/post/tag [get]
 func (p *postHandler) GetPostOfTag(c *gin.Context) {
 	var tag getPostOfTag
 	if err := c.ShouldBindJSON(&tag); err != nil {
@@ -53,7 +53,7 @@ func (p *postHandler) GetPostOfTag(c *gin.Context) {
 		accounts = append(accounts, v.Account)
 	}
 	
-	data, err := p.AssemblePostAndUser(ctx, resp.Posts)
+	data, err := p.AssemblePostAndUser(ctx, resp.Posts...)
 	if err != nil {
 		internal.ServerError(c, errno.GetCategoryCategoryPostError.Error())
 		return

@@ -5,7 +5,7 @@ import (
 	pb "post/proto"
 )
 
-func (p *PostService) convertPost(posts []*model.Post) ([]*pb.PostInfo, error) {
+func (p *PostService) convertPost(posts ...*model.Post) ([]*pb.PostInfo, error) {
 	var data = make([]*pb.PostInfo, 0, len(posts))
 	var t = make(map[uint32]bool)
 	var ids = make([]uint32, 0, len(data))

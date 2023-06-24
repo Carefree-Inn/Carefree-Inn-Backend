@@ -15,29 +15,9 @@ import (
 )
 
 const loginUrl = "https://account.ccnu.edu.cn/cas/login"
-const avatarUrl = "http://yichen.api.z7zz.cn/api/sjtx2.php"
-const defaultAvatat = ""
+const DefaultAvatat = ""
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
-
-func GetAvatar() string {
-	resp, err := http.Get(avatarUrl)
-	if err != nil {
-		return defaultAvatat
-	}
-	
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return defaultAvatat
-	}
-	
-	var m = make(map[string]any)
-	if json.Unmarshal(body, &m) != nil {
-		return defaultAvatat
-	}
-	avatar := m["text"].(string)
-	return avatar
-}
 
 func Login(sid, psd string) error {
 	return request(sid, psd)

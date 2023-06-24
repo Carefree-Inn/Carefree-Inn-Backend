@@ -17,55 +17,6 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/comment": {
-            "get": {
-                "description": "获取帖子下的评论",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "comment"
-                ],
-                "summary": "获取帖子下的评论 api",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户token",
-                        "name": "Authorzation",
-                        "in": "header",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "帖子id",
-                        "name": "post_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "integer",
-                        "description": "页码",
-                        "name": "page",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "条数",
-                        "name": "limit",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/internal.Response"
-                        }
-                    }
-                }
-            },
             "post": {
                 "description": "评论",
                 "consumes": [
@@ -82,7 +33,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
@@ -121,7 +72,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
@@ -133,6 +84,94 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/comment.deleteCommentRequest"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/comment/post": {
+            "get": {
+                "description": "获取帖子下的评论",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "comment"
+                ],
+                "summary": "获取帖子下的评论 api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "帖子id",
+                        "name": "post_id",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "条数",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/comment/user": {
+            "get": {
+                "description": "获取用户的评论",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获取用户的评论 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "条数",
+                        "name": "limit",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -162,7 +201,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
@@ -201,7 +240,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
@@ -240,7 +279,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     }
@@ -272,7 +311,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
@@ -311,7 +350,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
@@ -345,7 +384,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "post"
+                    "category"
                 ],
                 "summary": "获取分区帖子信息 api",
                 "parameters": [
@@ -391,9 +430,85 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "post"
+                    "category"
                 ],
                 "summary": "获取分区信息 api",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/info": {
+            "get": {
+                "description": "帖子详情",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "post"
+                ],
+                "summary": "帖子详情 api",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "帖子id",
+                        "name": "post_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/liked": {
+            "get": {
+                "description": "获取用户点赞的帖子",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获取用户点赞的帖子 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "条数",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -438,8 +553,31 @@ const docTemplate = `{
                 }
             }
         },
+        "/post/square": {
+            "get": {
+                "description": "话题广场",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tag"
+                ],
+                "summary": "话题广场 api",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/post/tag": {
-            "post": {
+            "get": {
                 "description": "获取tag下的帖子",
                 "consumes": [
                     "application/json"
@@ -448,7 +586,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "post"
+                    "tag"
                 ],
                 "summary": "获取tag下的帖子 api",
                 "parameters": [
@@ -460,6 +598,50 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/post.getPostOfTag"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/post/user": {
+            "get": {
+                "description": "获取用户发布的帖子",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "获取用户发布的帖子 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "条数",
+                        "name": "limit",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -523,7 +705,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     }
@@ -553,7 +735,7 @@ const docTemplate = `{
                     {
                         "type": "string",
                         "description": "用户token",
-                        "name": "Authorzation",
+                        "name": "Authorization",
                         "in": "header",
                         "required": true
                     },
@@ -590,13 +772,7 @@ const docTemplate = `{
         "comment.makeCommentRequest": {
             "type": "object",
             "properties": {
-                "avatar": {
-                    "type": "string"
-                },
                 "content": {
-                    "type": "string"
-                },
-                "from_user_id": {
                     "type": "string"
                 },
                 "is_top": {
@@ -605,14 +781,17 @@ const docTemplate = `{
                 "post_id": {
                     "type": "integer"
                 },
-                "title": {
-                    "type": "string"
-                },
-                "to_user_id": {
+                "to_user_account": {
                     "type": "string"
                 },
                 "top_comment_id": {
                     "type": "integer"
+                },
+                "user_avatar": {
+                    "type": "string"
+                },
+                "user_nick_name": {
+                    "type": "string"
                 }
             }
         },
@@ -766,8 +945,8 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "139.196.30.123",
-	BasePath:         "/inn/api/v1",
+	Host:             "139.196.30.123:8080",
+	BasePath:         "/inn/api/v1/",
 	Schemes:          []string{},
 	Title:            "Inn",
 	Description:      "Inn",

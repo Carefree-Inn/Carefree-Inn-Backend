@@ -6,3 +6,7 @@ micro:
 gin:
   mode: "debug"
   port: ":8080"
+qiniu:
+  accessKey: ""
+  secretKey: ""
+  bucket: ""

@@ -31,7 +31,7 @@ type createPostRequest struct {
 //	@Description	创建帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string				true	"用户token"
+//	@Param			Authorization	header		string				true	"用户token"
 //	@Param			object			body		createPostRequest	true	"帖子信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/post [post]
@@ -86,7 +86,7 @@ type deletePostRequest struct {
 //	@Description	删除帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string				true	"用户token"
+//	@Param			Authorization	header		string				true	"用户token"
 //	@Param			object			body		deletePostRequest	true	"帖子信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/post [delete]
@@ -120,14 +120,15 @@ func (p *postHandler) DeletePost(c *gin.Context) {
 
 //  GetPostOfUser getPostOfUser
 //	@Summary		获取用户发布的帖子 api
-//	@Tags			post
+//	@Tags			user
 //	@Description	获取用户发布的帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string	true	"用户token"
+//	@Param			Authorization	header		string	true	"用户token"
 //	@Param			page			query		int		false	"页码"
 //	@Param			limit			query		int		false	"条数"
 //	@Success		200				{object}	internal.Response
+//	@Router			/post/user [get]
 func (p *postHandler) GetPostOfUser(c *gin.Context) {
 	page, errPage := strconv.Atoi(c.DefaultQuery("page", "1"))
 	limit, errLimit := strconv.Atoi(c.DefaultQuery("limit", "10"))
@@ -150,7 +151,7 @@ func (p *postHandler) GetPostOfUser(c *gin.Context) {
 		return
 	}
 	
-	data, err := p.AssemblePostAndUser(ctx, resp.Posts)
+	data, err := p.AssemblePostAndUser(ctx, resp.Posts...)
 	if err != nil {
 		internal.ServerError(c, errno.InternalServerError.Error())
 		return
@@ -161,14 +162,15 @@ func (p *postHandler) GetPostOfUser(c *gin.Context) {
 
 //  GetPostOfUserLiked getPostOfUserLiked
 //	@Summary		获取用户点赞的帖子 api
-//	@Tags			post
+//	@Tags			user
 //	@Description	获取用户点赞的帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string	true	"用户token"
+//	@Param			Authorization	header		string	true	"用户token"
 //	@Param			page			query		int		false	"页码"
 //	@Param			limit			query		int		false	"条数"
 //	@Success		200				{object}	internal.Response
+//	@Router			/post/liked [get]
 func (p *postHandler) GetPostOfUserLiked(c *gin.Context) {
 	page, errPage := strconv.Atoi(c.DefaultQuery("page", "1"))
 	limit, errLimit := strconv.Atoi(c.DefaultQuery("limit", "10"))
@@ -191,11 +193,78 @@ func (p *postHandler) GetPostOfUserLiked(c *gin.Context) {
 		return
 	}
 	
-	data, err := p.AssemblePostAndUser(ctx, resp.Posts)
+	data, err := p.AssemblePostAndUser(ctx, resp.Posts...)
 	if err != nil {
 		internal.ServerError(c, errno.InternalServerError.Error())
 		return
 	}
 	
 	internal.Success(c, data)
+}
+
+//  GetPost getPost
+//	@Summary		帖子详情 api
+//	@Tags			post
+//	@Description	帖子详情
+//	@Accept			json
+//	@Produce		json
+//	@Param			post_id	query		int	true	"帖子id"
+//	@Success		200		{object}	internal.Response
+//	@Router			/post/info [get]
+func (p *postHandler) GetPost(c *gin.Context) {
+	postId := c.DefaultQuery("post_id", "-1")
+	if postId == "-1" {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.ParamDataError)
+		return
+	}
+	
+	id, err := strconv.Atoi(postId)
+	if err != nil {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), err)
+		return
+	}
+	
+	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
+	resp, err := p.PostService.GetPost(ctx, &pb.GetPostRequest{PostId: uint32(id)})
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	data, err := p.AssemblePostAndUser(ctx, resp.Post)
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	internal.Success(c, data[0])
+}
+
+//  GetPost getPost
+//	@Summary		话题广场 api
+//	@Tags			tag
+//	@Description	话题广场
+//	@Accept			json
+//	@Produce		json
+//	@Success		200	{object}	internal.Response
+//	@Router			/post/square [get]
+func (p *postHandler) PostSquare(c *gin.Context) {
+	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
+	resp, err := p.PostService.PostSquare(ctx, &pb.Request{})
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	tag := make([]*tagInfo, 0, len(resp.Tags))
+	for _, val := range resp.Tags {
+		tag = append(tag, &tagInfo{
+			TagId: val.TagId,
+			Title: val.Title,
+		})
+	}
+	
+	internal.Success(c, tag)
 }

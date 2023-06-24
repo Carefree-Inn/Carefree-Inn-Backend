@@ -8,6 +8,7 @@ service UserPost {
   rpc MakeComment(MakeCommentRequest) returns(Response) {}
   rpc DeleteComment(DeleteCommentRequest) returns(Response) {}
   rpc GetCommentOfPost(GetCommentOfPostRequest) returns(CommentOfPostResponse) {}
+  rpc GetCommentOfUser(GetCommentOfUserRequest) returns(CommentOfUserResponse) {}
 
   rpc MakeLike(MakeLikeRequest) returns(Response) {}
   rpc CancelLike(CancelLikeRequest) returns(Response) {}
@@ -17,14 +18,16 @@ message Request{}
 message Response{}
 
 message MakeCommentRequest{
-  string FromUserId = 1;
-  string ToUserId = 2;
+  string FromUserAccount = 1;
+  string ToUserAccount = 2;
+
   string Content = 3;
   uint32 PostId = 4;
   bool IsTop = 5;
   uint32 TopCommentId = 6;
-  string Title = 7;
-  string Avatar = 8;
+
+  string FromUserNickName = 7;
+  string UserAvatar = 8;
 }
 
 message DeleteCommentRequest{
@@ -94,6 +97,29 @@ message BactchLikedRequest{
 message BatchLikedResponse{
   string Account = 1;
   repeated LikeStatus Status = 2;
+}
+
+message GetCommentOfUserRequest{
+  string Account = 1;
+  int32 Page = 2;
+  int32 Limit = 3;
+}
+
+message UserComment{
+  uint32 CommentId = 1;
+  string FromUserId = 2;
+  string ToUserId = 3;
+  string Content = 4;
+  string CreateTime = 5;
+
+  uint32 PostId = 6;
+  bool IsTop = 7;
+  uint32 TopCommentId = 8;
+}
+
+message CommentOfUserResponse{
+  string Account = 1;
+  repeated UserComment Comments = 2;
 }
 
 

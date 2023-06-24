@@ -5,68 +5,50 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a6224e1b-59c8-49a9-8a5e-85c0ec872a3e" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/../gateway/internal/handler/comment/comment.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/internal/handler/comment/common.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/internal/handler/comment/entity.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/internal/handler/like/common.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/internal/handler/like/entity.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/internal/handler/like/like.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/route/notification.go" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../gateway/route/user-post.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/docs/docs.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/docs/docs.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/docs/swagger.json" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/docs/swagger.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/docs/swagger.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/docs/swagger.yaml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../gateway/internal/handler/qiniu/token.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/docs/docs.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/docs/swagger.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/docs/swagger.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/comment/comment.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/comment/comment.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/like/like.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/like/like.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/notification/ws.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/notification/ws.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/post/category.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/post/category.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/post/common.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/post/common.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/post/entity.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/post/entity.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/post/post.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/post/post.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/post/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/post/search.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/post/tag.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/post/tag.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/user/login.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/user/login.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/user/profile.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/user/profile.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/log/Info/2023-03-30.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/log/Warn/2023-04-03.log" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/log/Warn/2023-04-10.log" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/pkg/errno/errno.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/pkg/errno/errno.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/pkg/middlewares/info.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/pkg/middlewares/info.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/route/notification.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/route/notification.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/route/post.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/route/post.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../gateway/route/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/route/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../gateway/route/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/route/user.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/route/user-post.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/route/user-post.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/config.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/handler/category.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handler/category.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/handler/convert.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handler/convert.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/handler/post.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handler/post.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/handler/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handler/search.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/handler/tag.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/handler/tag.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/category.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/category.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/model/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/model/model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/post.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/post.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/search.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/internal/repository/tag.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/tag.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proto/post.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/post.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proto/post.pb.micro.go" beforeDir="false" afterPath="$PROJECT_DIR$/proto/post.pb.micro.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/proto/post.proto" beforeDir="false" afterPath="$PROJECT_DIR$/proto/post.proto" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-post/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-post/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/go.sum" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/internal/handler/comment.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/handler/comment.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-post/internal/handler/like.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/handler/like.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/comment.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/comment.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/like.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/like.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/model/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/model/model.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/repository.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/proto/user-post.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/proto/user-post.pb.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/proto/user-post.pb.micro.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/proto/user-post.pb.micro.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/proto/user-post.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/proto/user-post.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user/internal/handler/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user/internal/handler/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user/internal/repository/model/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user/internal/repository/model/model.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user/internal/repository/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user/internal/repository/user.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user/proto/user.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user/proto/user.pb.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user/proto/user.pb.micro.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user/proto/user.pb.micro.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../user/proto/user.proto" beforeDir="false" afterPath="$PROJECT_DIR$/../user/proto/user.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../user/pkg/CCNU.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user/pkg/CCNU.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,26 +83,26 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultGoTemplateProperty": "Go File",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.go.format.on.save.advertiser.fired": "true",
-    "RunOnceActivity.go.formatter.settings.were.checked": "true",
-    "RunOnceActivity.go.migrated.go.modules.settings": "true",
-    "RunOnceActivity.go.modules.go.list.on.any.changes.was.set": "true",
-    "RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "configurable..is.expanded": "false",
-    "configurable.GoLibrariesConfigurable.is.expanded": "true",
-    "go.import.settings.migrated": "true",
-    "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "//wsl$/Ubuntu-D/home/yyj/code/git/Carefree-Inn-Backend/internal/services/gateway",
-    "settings.editor.selected.configurable": "go.vgo",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultGoTemplateProperty&quot;: &quot;Go File&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.format.on.save.advertiser.fired&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.formatter.settings.were.checked&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.migrated.go.modules.settings&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.modules.go.list.on.any.changes.was.set&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.go.watchers.conflict.with.on.save.actions.check.performed&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;configurable..is.expanded&quot;: &quot;false&quot;,
+    &quot;configurable.GoLibrariesConfigurable.is.expanded&quot;: &quot;true&quot;,
+    &quot;go.import.settings.migrated&quot;: &quot;true&quot;,
+    &quot;go.sdk.automatically.set&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;//wsl$/Ubuntu-D/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;go.vgo&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="\\wsl$\Ubuntu-D\home\yyj\code\git\Carefree-Inn-Backend\internal\services\post\pkg" />
@@ -205,14 +187,14 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DlvLineBreakpoint">
-          <url>file://$PROJECT_DIR$/internal/handler/tag.go</url>
-          <line>13</line>
-          <option name="timeStamp" value="14" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
           <url>file://$PROJECT_DIR$/internal/repository/post.go</url>
           <line>64</line>
           <option name="timeStamp" value="16" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/internal/handler/post.go</url>
+          <line>89</line>
+          <option name="timeStamp" value="18" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

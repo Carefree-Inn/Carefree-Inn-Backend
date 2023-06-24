@@ -9,8 +9,8 @@ server:
 category:
   start: false
   region:
-    - "t1"
-    - "t2"
-    - "t3"
-    - "t4"
-    - "t5"
+    - "聊天嗑瓜子"
+    - "吃喝玩乐"
+    - "二手物品"
+    - "选课"
+    - "学习组队"

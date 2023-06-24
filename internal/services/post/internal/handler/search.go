@@ -17,7 +17,7 @@ func (p *PostService) SearchPost(ctx context.Context, req *pb.SearchRequest, res
 		return err
 	}
 	
-	data, err := p.convertPost(posts)
+	data, err := p.convertPost(posts...)
 	if err != nil {
 		return err
 	}

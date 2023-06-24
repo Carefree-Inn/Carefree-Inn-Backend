@@ -8,12 +8,13 @@ import (
 )
 
 type LikeInfo struct {
-	PostId     uint32 `json:"post_id"`
-	Account    string `json:"account"`
-	CreateTime string `json:"create_time"`
-	LikeType   string `json:"like_type"`
-	Title      string `json:"title"`
-	Avatar     string `json:"avatar"`
+	PostId uint32 `json:"post_id"`
+	
+	ToUserAccount   string `json:"to_user_account"`
+	CreateTime      string `json:"create_time"`
+	LikeType        string `json:"like_type"`
+	FromUserAccount string `json:"from_user_account"`
+	FromUserAvatar  string `json:"from_user_avatar"`
 }
 
 func (l *LikeInfo) Marshal() ([]byte, error) {
@@ -26,12 +27,11 @@ func (l *LikeInfo) Unmarshal(data []byte) error {
 
 func (up *UserPost) MakeLike(postId uint32, account string, title, avatar string) error {
 	info, err := (&LikeInfo{
-		PostId:     postId,
-		Account:    account,
-		CreateTime: time.Now().Format("2006-01-02 15:04:05"),
-		LikeType:   "make",
-		Title:      title,
-		Avatar:     avatar,
+		PostId:          postId,
+		FromUserAccount: account,
+		CreateTime:      time.Now().Format("2006-01-02 15:04:05"),
+		LikeType:        "make",
+		FromUserAvatar:  avatar,
 	}).Marshal()
 	
 	if err != nil {
@@ -44,10 +44,10 @@ func (up *UserPost) MakeLike(postId uint32, account string, title, avatar string
 
 func (up *UserPost) DeleteLike(postId uint32, account string) error {
 	info, err := (&LikeInfo{
-		PostId:     postId,
-		Account:    account,
-		CreateTime: time.Now().Format("2006-01-02 15:04:05"),
-		LikeType:   "delete",
+		PostId:          postId,
+		FromUserAccount: account,
+		CreateTime:      time.Now().Format("2006-01-02 15:04:05"),
+		LikeType:        "delete",
 	}).Marshal()
 	if err != nil {
 		return errors.WithStack(err)

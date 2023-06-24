@@ -44,6 +44,8 @@ type PostService interface {
 	GetPostOfUser(ctx context.Context, in *PostOfUserRequest, opts ...client.CallOption) (*PostResponse, error)
 	GetPostOfUserLiked(ctx context.Context, in *PostOfUserRequest, opts ...client.CallOption) (*PostResponse, error)
 	SearchPost(ctx context.Context, in *SearchRequest, opts ...client.CallOption) (*PostResponse, error)
+	GetPost(ctx context.Context, in *GetPostRequest, opts ...client.CallOption) (*GetPostResponse, error)
+	PostSquare(ctx context.Context, in *Request, opts ...client.CallOption) (*PostSquareResponse, error)
 }
 
 type postService struct {
@@ -138,6 +140,26 @@ func (c *postService) SearchPost(ctx context.Context, in *SearchRequest, opts ..
 	return out, nil
 }
 
+func (c *postService) GetPost(ctx context.Context, in *GetPostRequest, opts ...client.CallOption) (*GetPostResponse, error) {
+	req := c.c.NewRequest(c.name, "Post.GetPost", in)
+	out := new(GetPostResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *postService) PostSquare(ctx context.Context, in *Request, opts ...client.CallOption) (*PostSquareResponse, error) {
+	req := c.c.NewRequest(c.name, "Post.PostSquare", in)
+	out := new(PostSquareResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for Post service
 
 type PostHandler interface {
@@ -149,6 +171,8 @@ type PostHandler interface {
 	GetPostOfUser(context.Context, *PostOfUserRequest, *PostResponse) error
 	GetPostOfUserLiked(context.Context, *PostOfUserRequest, *PostResponse) error
 	SearchPost(context.Context, *SearchRequest, *PostResponse) error
+	GetPost(context.Context, *GetPostRequest, *GetPostResponse) error
+	PostSquare(context.Context, *Request, *PostSquareResponse) error
 }
 
 func RegisterPostHandler(s server.Server, hdlr PostHandler, opts ...server.HandlerOption) error {
@@ -161,6 +185,8 @@ func RegisterPostHandler(s server.Server, hdlr PostHandler, opts ...server.Handl
 		GetPostOfUser(ctx context.Context, in *PostOfUserRequest, out *PostResponse) error
 		GetPostOfUserLiked(ctx context.Context, in *PostOfUserRequest, out *PostResponse) error
 		SearchPost(ctx context.Context, in *SearchRequest, out *PostResponse) error
+		GetPost(ctx context.Context, in *GetPostRequest, out *GetPostResponse) error
+		PostSquare(ctx context.Context, in *Request, out *PostSquareResponse) error
 	}
 	type Post struct {
 		post
@@ -203,4 +229,12 @@ func (h *postHandler) GetPostOfUserLiked(ctx context.Context, in *PostOfUserRequ
 
 func (h *postHandler) SearchPost(ctx context.Context, in *SearchRequest, out *PostResponse) error {
 	return h.PostHandler.SearchPost(ctx, in, out)
+}
+
+func (h *postHandler) GetPost(ctx context.Context, in *GetPostRequest, out *GetPostResponse) error {
+	return h.PostHandler.GetPost(ctx, in, out)
+}
+
+func (h *postHandler) PostSquare(ctx context.Context, in *Request, out *PostSquareResponse) error {
+	return h.PostHandler.PostSquare(ctx, in, out)
 }

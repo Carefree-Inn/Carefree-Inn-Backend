@@ -89,12 +89,12 @@ func (d *UserPost) processLike() {
 			if err := session.Table(model.PostLike{}.Table()).Create(
 				&model.PostLike{
 					PostId:     likeInfo.PostId,
-					Account:    likeInfo.Account,
+					Account:    likeInfo.FromUserAccount,
 					CreateTime: createTime,
 				}).Error; err != nil {
 				log.Warn(log.WithFields(logrus.Fields{
 					"post_id": likeInfo.PostId,
-					"account": likeInfo.Account,
+					"account": likeInfo.FromUserAccount,
 				}), errors.WithStack(err), "点赞失败")
 				session.Rollback()
 				continue
@@ -103,7 +103,7 @@ func (d *UserPost) processLike() {
 					likeInfo.PostId).Error; errAdd != nil {
 					log.Warn(log.WithFields(logrus.Fields{
 						"post_id": likeInfo.PostId,
-						"account": likeInfo.Account,
+						"account": likeInfo.FromUserAccount,
 					}), errors.WithStack(err), "点赞失败")
 					session.Rollback()
 					continue
@@ -111,7 +111,7 @@ func (d *UserPost) processLike() {
 				
 				log.Info(log.WithFields(logrus.Fields{
 					"post_id": likeInfo.PostId,
-					"account": likeInfo.Account,
+					"account": likeInfo.FromUserAccount,
 				}), "点赞成功")
 				session.Commit()
 				
@@ -121,10 +121,10 @@ func (d *UserPost) processLike() {
 		case "delete":
 			if err := session.Where(
 				"post_id=? AND account=?", likeInfo.PostId,
-				likeInfo.Account).Delete(&model.PostLike{}).Error; err != nil {
+				likeInfo.FromUserAccount).Delete(&model.PostLike{}).Error; err != nil {
 				log.Warn(log.WithFields(logrus.Fields{
 					"post_id": likeInfo.PostId,
-					"account": likeInfo.Account,
+					"account": likeInfo.FromUserAccount,
 				}), errors.WithStack(err), "取消点赞失败")
 				session.Rollback()
 				continue
@@ -133,7 +133,7 @@ func (d *UserPost) processLike() {
 					likeInfo.PostId).Error; errAdd != nil {
 					log.Warn(log.WithFields(logrus.Fields{
 						"post_id": likeInfo.PostId,
-						"account": likeInfo.Account,
+						"account": likeInfo.FromUserAccount,
 					}), errors.WithStack(err), "点赞失败")
 					session.Rollback()
 					continue
@@ -141,7 +141,7 @@ func (d *UserPost) processLike() {
 				
 				log.Info(log.WithFields(logrus.Fields{
 					"post_id": likeInfo.PostId,
-					"account": likeInfo.Account,
+					"account": likeInfo.FromUserAccount,
 				}), "取消点赞成功")
 				session.Commit()
 				
@@ -156,6 +156,7 @@ type UserPostRepository interface {
 	DeleteComment(comment *model.Comment) error
 	MakeComment(comment *model.Comment, title string, avatar string) error
 	GetCommentOfPost(postId uint32, page, limit uint32) ([]*model.Comment, error)
+	GetCommentOfUser(account string, page, limit uint32) ([]*model.Comment, error)
 	
 	MakeLike(postId uint32, account string, title string, avatar string) error
 	DeleteLike(postId uint32, account string) error

@@ -26,11 +26,14 @@ func (u *UserService) UserLogin(ctx context.Context, in *pb.LoginRequest, resp *
 	verifyErr := u.userDao.VerifyUser(in.Account, in.Password)
 	if verifyErr != nil {
 		if errors.Is(verifyErr, errno.UserNotExistError) {
+			if err := CCNU.Login(in.Account, in.Password); err != nil {
+				return errno.LoginWrongInfoError
+			}
 			if err := u.userDao.CreateUser(&model.User{
 				Account:  in.Account,
 				Password: in.Password,
 				Nickname: in.Account,
-				Avatar:   CCNU.GetAvatar(),
+				Avatar:   CCNU.DefaultAvatat,
 			}); err != nil {
 				return err
 			}

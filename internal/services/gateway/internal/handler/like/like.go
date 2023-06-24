@@ -14,9 +14,11 @@ import (
 )
 
 type makeLikeRequest struct {
-	Title  string `json:"title"`
-	Avatar string `json:"avatar"`
-	PostId int    `json:"post_id"`
+	FromUserAvatar  string `json:"from_user_avatar"`
+	FromUserAccount string `json:"from_user_account"`
+	ToUserAccount   string `json:"to_user_account"`
+	
+	PostId int `json:"post_id"`
 }
 
 //  MakeLike makeLike
@@ -25,7 +27,7 @@ type makeLikeRequest struct {
 //	@Description	点赞
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string			true	"用户token"
+//	@Param			Authorization	header		string			true	"用户token"
 //	@Param			object			body		makeLikeRequest	true	"被点赞帖子相关信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/like [post]
@@ -45,8 +47,7 @@ func (l *likeHandler) MakeLike(c *gin.Context) {
 	_, err := l.UserPostService.MakeLike(ctx, &pb.MakeLikeRequest{
 		PostId:  uint32(req.PostId),
 		Account: c.MustGet("account").(string),
-		Title:   req.Title,
-		Avatar:  req.Avatar,
+		Avatar:  req.FromUserAvatar,
 	})
 	if err != nil {
 		internal.ServerError(c, errno.InternalServerError.Error())
@@ -62,7 +63,7 @@ func (l *likeHandler) MakeLike(c *gin.Context) {
 //	@Description	取消点赞
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorzation	header		string	true	"用户token"
+//	@Param			Authorization	header		string	true	"用户token"
 //	@Param			post_id			query		int		true	"帖子id"
 //	@Success		200				{object}	internal.Response
 //	@Router			/like [delete]

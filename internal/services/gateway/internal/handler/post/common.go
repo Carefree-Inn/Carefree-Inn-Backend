@@ -6,7 +6,7 @@ import (
 	pbUser "user/proto"
 )
 
-func (p *postHandler) AssemblePostAndUser(ctx context.Context, posts []*pbPost.PostInfo) ([]*PostInfo, error) {
+func (p *postHandler) AssemblePostAndUser(ctx context.Context, posts ...*pbPost.PostInfo) ([]*PostInfo, error) {
 	var accounts = make([]string, 0, len(posts))
 	for _, v := range posts {
 		accounts = append(accounts, v.Account)

@@ -39,6 +39,7 @@ type UserPostService interface {
 	MakeComment(ctx context.Context, in *MakeCommentRequest, opts ...client.CallOption) (*Response, error)
 	DeleteComment(ctx context.Context, in *DeleteCommentRequest, opts ...client.CallOption) (*Response, error)
 	GetCommentOfPost(ctx context.Context, in *GetCommentOfPostRequest, opts ...client.CallOption) (*CommentOfPostResponse, error)
+	GetCommentOfUser(ctx context.Context, in *GetCommentOfUserRequest, opts ...client.CallOption) (*CommentOfUserResponse, error)
 	MakeLike(ctx context.Context, in *MakeLikeRequest, opts ...client.CallOption) (*Response, error)
 	CancelLike(ctx context.Context, in *CancelLikeRequest, opts ...client.CallOption) (*Response, error)
 }
@@ -85,6 +86,16 @@ func (c *userPostService) GetCommentOfPost(ctx context.Context, in *GetCommentOf
 	return out, nil
 }
 
+func (c *userPostService) GetCommentOfUser(ctx context.Context, in *GetCommentOfUserRequest, opts ...client.CallOption) (*CommentOfUserResponse, error) {
+	req := c.c.NewRequest(c.name, "UserPost.GetCommentOfUser", in)
+	out := new(CommentOfUserResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *userPostService) MakeLike(ctx context.Context, in *MakeLikeRequest, opts ...client.CallOption) (*Response, error) {
 	req := c.c.NewRequest(c.name, "UserPost.MakeLike", in)
 	out := new(Response)
@@ -111,6 +122,7 @@ type UserPostHandler interface {
 	MakeComment(context.Context, *MakeCommentRequest, *Response) error
 	DeleteComment(context.Context, *DeleteCommentRequest, *Response) error
 	GetCommentOfPost(context.Context, *GetCommentOfPostRequest, *CommentOfPostResponse) error
+	GetCommentOfUser(context.Context, *GetCommentOfUserRequest, *CommentOfUserResponse) error
 	MakeLike(context.Context, *MakeLikeRequest, *Response) error
 	CancelLike(context.Context, *CancelLikeRequest, *Response) error
 }
@@ -120,6 +132,7 @@ func RegisterUserPostHandler(s server.Server, hdlr UserPostHandler, opts ...serv
 		MakeComment(ctx context.Context, in *MakeCommentRequest, out *Response) error
 		DeleteComment(ctx context.Context, in *DeleteCommentRequest, out *Response) error
 		GetCommentOfPost(ctx context.Context, in *GetCommentOfPostRequest, out *CommentOfPostResponse) error
+		GetCommentOfUser(ctx context.Context, in *GetCommentOfUserRequest, out *CommentOfUserResponse) error
 		MakeLike(ctx context.Context, in *MakeLikeRequest, out *Response) error
 		CancelLike(ctx context.Context, in *CancelLikeRequest, out *Response) error
 	}
@@ -144,6 +157,10 @@ func (h *userPostHandler) DeleteComment(ctx context.Context, in *DeleteCommentRe
 
 func (h *userPostHandler) GetCommentOfPost(ctx context.Context, in *GetCommentOfPostRequest, out *CommentOfPostResponse) error {
 	return h.UserPostHandler.GetCommentOfPost(ctx, in, out)
+}
+
+func (h *userPostHandler) GetCommentOfUser(ctx context.Context, in *GetCommentOfUserRequest, out *CommentOfUserResponse) error {
+	return h.UserPostHandler.GetCommentOfUser(ctx, in, out)
 }
 
 func (h *userPostHandler) MakeLike(ctx context.Context, in *MakeLikeRequest, out *Response) error {

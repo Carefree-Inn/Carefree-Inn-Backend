@@ -16,6 +16,9 @@ service Post {
 	rpc GetPostOfUserLiked(PostOfUserRequest) returns (PostResponse){}
 
 	rpc SearchPost(SearchRequest) returns (PostResponse){}
+
+	rpc GetPost(GetPostRequest) returns (GetPostResponse){}
+	rpc PostSquare(Request) returns (PostSquareResponse){}
 }
 
 message Request{}
@@ -88,4 +91,16 @@ message PostOfUserRequest{
 	string Account = 1;
 	int32 Page = 2;
 	int32 Limit = 3;
+}
+
+message GetPostRequest{
+	uint32 PostId = 1;
+}
+
+message GetPostResponse {
+	PostInfo Post = 1;
+}
+
+message PostSquareResponse{
+	repeated TagInfo Tags = 1;
 }

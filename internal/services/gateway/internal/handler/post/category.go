@@ -14,7 +14,7 @@ import (
 
 //  GetCategory getCategory
 //	@Summary		获取分区信息 api
-//	@Tags			post
+//	@Tags			category
 //	@Description	获取分区信息
 //	@Accept			json
 //	@Produce		json
@@ -38,7 +38,7 @@ type getPostOfCategoryRequest struct {
 
 //  GetPostCategory getPostCategory
 //	@Summary		获取分区帖子信息 api
-//	@Tags			post
+//	@Tags			category
 //	@Description	获取分区帖子信息
 //	@Accept			json
 //	@Produce		json
@@ -84,7 +84,7 @@ func (p *postHandler) GetPostOfCategory(c *gin.Context) {
 		return
 	}
 	
-	data, err := p.AssemblePostAndUser(ctx, resp.Posts)
+	data, err := p.AssemblePostAndUser(ctx, resp.Posts...)
 	if err != nil {
 		internal.ServerError(c, errno.GetCategoryCategoryPostError.Error())
 		return
