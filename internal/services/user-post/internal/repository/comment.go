@@ -85,7 +85,7 @@ func (up *UserPost) GetCommentOfPost(postId uint32, page, limit uint32) ([]*mode
 	comments := make([]*model.Comment, 0, limit)
 	if err := up.db.Table(model.Comment{}.Table()).Where(
 		"post_id=?", postId).Offset(int((page - 1) * limit)).Limit(int(limit)).
-		Find(&comments).Error; err != nil {
+		Order("create_time desc").Find(&comments).Error; err != nil {
 		return nil, err
 	}
 	return comments, nil
@@ -95,7 +95,7 @@ func (up *UserPost) GetCommentOfUser(account string, page, limit uint32) ([]*mod
 	comments := make([]*model.Comment, 0, limit)
 	if err := up.db.Table(model.Comment{}.Table()).Where(
 		"from_id=?", account).Offset(int((page - 1) * limit)).Limit(int(limit)).
-		Find(&comments).Error; err != nil {
+		Order("create_time desc").Find(&comments).Error; err != nil {
 		return nil, err
 	}
 	return comments, nil

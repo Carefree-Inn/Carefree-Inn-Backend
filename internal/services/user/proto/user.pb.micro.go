@@ -40,6 +40,7 @@ type UserService interface {
 	GetUserProfile(ctx context.Context, in *Request, opts ...client.CallOption) (*UserProfileResponse, error)
 	UpdateUserProfile(ctx context.Context, in *UserProfileRequest, opts ...client.CallOption) (*Response, error)
 	GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, opts ...client.CallOption) (*BatchUserProfileResponse, error)
+	MakeFeedback(ctx context.Context, in *MakeFeedbackRequest, opts ...client.CallOption) (*Response, error)
 }
 
 type userService struct {
@@ -94,6 +95,16 @@ func (c *userService) GetBatchUserProfile(ctx context.Context, in *BatchUserProf
 	return out, nil
 }
 
+func (c *userService) MakeFeedback(ctx context.Context, in *MakeFeedbackRequest, opts ...client.CallOption) (*Response, error) {
+	req := c.c.NewRequest(c.name, "User.MakeFeedback", in)
+	out := new(Response)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for User service
 
 type UserHandler interface {
@@ -101,6 +112,7 @@ type UserHandler interface {
 	GetUserProfile(context.Context, *Request, *UserProfileResponse) error
 	UpdateUserProfile(context.Context, *UserProfileRequest, *Response) error
 	GetBatchUserProfile(context.Context, *BatchUserProfileRequest, *BatchUserProfileResponse) error
+	MakeFeedback(context.Context, *MakeFeedbackRequest, *Response) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
@@ -109,6 +121,7 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		GetUserProfile(ctx context.Context, in *Request, out *UserProfileResponse) error
 		UpdateUserProfile(ctx context.Context, in *UserProfileRequest, out *Response) error
 		GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, out *BatchUserProfileResponse) error
+		MakeFeedback(ctx context.Context, in *MakeFeedbackRequest, out *Response) error
 	}
 	type User struct {
 		user
@@ -135,4 +148,8 @@ func (h *userHandler) UpdateUserProfile(ctx context.Context, in *UserProfileRequ
 
 func (h *userHandler) GetBatchUserProfile(ctx context.Context, in *BatchUserProfileRequest, out *BatchUserProfileResponse) error {
 	return h.UserHandler.GetBatchUserProfile(ctx, in, out)
+}
+
+func (h *userHandler) MakeFeedback(ctx context.Context, in *MakeFeedbackRequest, out *Response) error {
+	return h.UserHandler.MakeFeedback(ctx, in, out)
 }

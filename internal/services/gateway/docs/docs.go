@@ -77,13 +77,11 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "评论信息",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/comment.deleteCommentRequest"
-                        }
+                        "type": "integer",
+                        "description": "评论id",
+                        "name": "comment_id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -110,6 +108,13 @@ const docTemplate = `{
                 ],
                 "summary": "获取帖子下的评论 api",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "帖子id",
@@ -355,13 +360,11 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "帖子信息",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/post.deletePostRequest"
-                        }
+                        "type": "integer",
+                        "description": "帖子id",
+                        "name": "post_id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -389,6 +392,13 @@ const docTemplate = `{
                 "summary": "获取分区帖子信息 api",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "integer",
                         "description": "页码",
                         "name": "page",
@@ -401,13 +411,11 @@ const docTemplate = `{
                         "in": "query"
                     },
                     {
-                        "description": "分类信息",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/post.getPostOfCategoryRequest"
-                        }
+                        "type": "integer",
+                        "description": "话题id",
+                        "name": "category_id",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -457,6 +465,13 @@ const docTemplate = `{
                 ],
                 "summary": "帖子详情 api",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
                     {
                         "type": "integer",
                         "description": "帖子id",
@@ -534,6 +549,13 @@ const docTemplate = `{
                 "summary": "搜索帖子 api",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "description": "搜索信息",
                         "name": "object",
                         "in": "body",
@@ -566,6 +588,15 @@ const docTemplate = `{
                     "tag"
                 ],
                 "summary": "话题广场 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -591,13 +622,18 @@ const docTemplate = `{
                 "summary": "获取tag下的帖子 api",
                 "parameters": [
                     {
-                        "description": "tag信息",
-                        "name": "object",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/post.getPostOfTag"
-                        }
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "tag标题",
+                        "name": "tag",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -642,6 +678,47 @@ const docTemplate = `{
                         "description": "条数",
                         "name": "limit",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/feedback": {
+            "post": {
+                "description": "用户对帖子的反馈信息",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "反馈 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "反馈信息",
+                        "name": "object",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/user.makeFeedbackRequest"
+                        }
                     }
                 ],
                 "responses": {
@@ -745,7 +822,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/user.userInfo"
+                            "$ref": "#/definitions/user.updateProfileRequest"
                         }
                     }
                 ],
@@ -761,18 +838,16 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "comment.deleteCommentRequest": {
-            "type": "object",
-            "properties": {
-                "comment_id": {
-                    "type": "integer"
-                }
-            }
-        },
         "comment.makeCommentRequest": {
             "type": "object",
             "properties": {
                 "content": {
+                    "type": "string"
+                },
+                "from_user_avatar": {
+                    "type": "string"
+                },
+                "from_user_nick_name": {
                     "type": "string"
                 },
                 "is_top": {
@@ -786,12 +861,6 @@ const docTemplate = `{
                 },
                 "top_comment_id": {
                     "type": "integer"
-                },
-                "user_avatar": {
-                    "type": "string"
-                },
-                "user_nick_name": {
-                    "type": "string"
                 }
             }
         },
@@ -810,13 +879,16 @@ const docTemplate = `{
         "like.makeLikeRequest": {
             "type": "object",
             "properties": {
-                "avatar": {
+                "from_user_account": {
+                    "type": "string"
+                },
+                "from_user_avatar": {
                     "type": "string"
                 },
                 "post_id": {
                     "type": "integer"
                 },
-                "title": {
+                "to_user_account": {
                     "type": "string"
                 }
             }
@@ -859,39 +931,6 @@ const docTemplate = `{
                 }
             }
         },
-        "post.deletePostRequest": {
-            "type": "object",
-            "required": [
-                "post_id"
-            ],
-            "properties": {
-                "post_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "post.getPostOfCategoryRequest": {
-            "type": "object",
-            "required": [
-                "category_id"
-            ],
-            "properties": {
-                "category_id": {
-                    "type": "integer"
-                }
-            }
-        },
-        "post.getPostOfTag": {
-            "type": "object",
-            "required": [
-                "title"
-            ],
-            "properties": {
-                "title": {
-                    "type": "string"
-                }
-            }
-        },
         "post.searchRequest": {
             "type": "object",
             "required": [
@@ -907,6 +946,34 @@ const docTemplate = `{
                 }
             }
         },
+        "user.makeFeedbackRequest": {
+            "type": "object",
+            "properties": {
+                "content": {
+                    "type": "string"
+                },
+                "feedback_type": {
+                    "type": "string"
+                },
+                "post_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "user.updateProfileRequest": {
+            "type": "object",
+            "properties": {
+                "avatar": {
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "sex": {
+                    "type": "integer"
+                }
+            }
+        },
         "user.user": {
             "type": "object",
             "required": [
@@ -919,23 +986,6 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
-                }
-            }
-        },
-        "user.userInfo": {
-            "type": "object",
-            "properties": {
-                "account": {
-                    "type": "string"
-                },
-                "avatar": {
-                    "type": "string"
-                },
-                "nickname": {
-                    "type": "string"
-                },
-                "sex": {
-                    "type": "integer"
                 }
             }
         }

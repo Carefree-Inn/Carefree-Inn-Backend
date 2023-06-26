@@ -73,7 +73,7 @@ func (up *UserPostService) GetCommentOfUser(ctx context.Context, req *pb.GetComm
 			FromUserId: one.FromUserId,
 			ToUserId:   one.ToUserId,
 			Content:    one.Content,
-			CreateTime: one.CreateTime.Format("2006-01-02 15-04-05"),
+			CreateTime: one.CreateTime.Format("2006-01-02 15:04:05"),
 			
 			PostId:       one.PostId,
 			IsTop:        one.IsTop,

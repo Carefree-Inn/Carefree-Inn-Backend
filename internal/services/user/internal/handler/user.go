@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
+	"time"
 	"user/internal/repository"
 	"user/internal/repository/model"
 	CCNU "user/pkg"
@@ -51,6 +52,7 @@ func (u *UserService) GetUserProfile(ctx context.Context, in *pb.Request, resp *
 		resp.Nickname = one.Nickname
 		resp.Sex = pb.Sex(one.Sex)
 		resp.Avatar = one.Avatar
+		resp.Days = int32(time.Now().Sub(one.CreateTime).Hours() / 24)
 	}
 	return nil
 }

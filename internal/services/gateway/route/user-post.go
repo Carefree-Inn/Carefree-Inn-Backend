@@ -19,7 +19,7 @@ func userPostRoute(engine *gin.RouterGroup) {
 	
 	commentRoute.POST("/", middlewares.Auth(), commentHandler.MakeComment)
 	commentRoute.DELETE("/", middlewares.Auth(), commentHandler.DeleteComment)
-	commentRoute.GET("/post", commentHandler.GetCommentOfPost)
+	commentRoute.GET("/post", middlewares.Auth(), commentHandler.GetCommentOfPost)
 	commentRoute.GET("/user", middlewares.Auth(), commentHandler.GetCommentOfUser)
 	
 }

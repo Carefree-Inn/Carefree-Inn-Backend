@@ -22,8 +22,9 @@ type searchRequest struct {
 //	@Description	搜索帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			object	body		searchRequest	true	"搜索信息"
-//	@Success		200		{object}	internal.Response
+//	@Param			Authorization	header		string			true	"用户token"
+//	@Param			object			body		searchRequest	true	"搜索信息"
+//	@Success		200				{object}	internal.Response
 //	@Router			/post/search [post]
 func (p *postHandler) SearchPost(c *gin.Context) {
 	var req searchRequest
@@ -36,16 +37,13 @@ func (p *postHandler) SearchPost(c *gin.Context) {
 		)
 		return
 	}
-	account, exist := c.Get("account")
-	if !exist {
-		account = ""
-	}
+	account := c.MustGet("account").(string)
 	
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
 	resp, err := p.PostService.SearchPost(ctx, &pb.SearchRequest{
 		SearchType: req.SearchType,
 		Content:    req.Data,
-		Account:    account.(string),
+		Account:    account,
 	})
 	if err != nil {
 		if errno.Is(err, errno.ResourceNotExist) {

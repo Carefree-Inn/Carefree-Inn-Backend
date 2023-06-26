@@ -1,10 +1,12 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"post/internal/repository/model"
 	"post/pkg/errno"
+	"time"
 )
 
 func (p *Post) GetCategory(id []uint32) ([]*model.Category, error) {
@@ -30,8 +32,9 @@ func (p *Post) GetAllCategory() ([]*model.Category, error) {
 
 func (p *Post) GetPostOfCategory(category *model.Category, account string, page, limit uint32) ([]*model.Post, error) {
 	var posts = make([]*model.Post, 0, 16)
+	minute := time.Now().Minute() / 5
 	if err := p.db.Table(model.Post{}.Table()).
-		Where("category_id=?", category.CategoryId).Preload("Tags").
+		Where("category_id=?", category.CategoryId).Preload("Tags").Order(fmt.Sprintf("RAND(%d)", minute)).
 		Offset(int((page - 1) * limit)).Limit(int(limit)).
 		Find(&posts).Error; err != nil {
 		return nil, errors.WithStack(err)

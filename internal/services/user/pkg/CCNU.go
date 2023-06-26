@@ -4,7 +4,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 	jsoniter "github.com/json-iterator/go"
 	"io"
-	"log"
 	"net/http"
 	"net/http/cookiejar"
 	"net/url"
@@ -55,7 +54,6 @@ func request(sid, psd string) error {
 	if err != nil {
 		return err
 	}
-	log.Println(string(info))
 	
 	if yes, err := regexp.Match("success", info); err != nil {
 		return err

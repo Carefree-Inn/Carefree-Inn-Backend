@@ -76,9 +76,9 @@ func (l *commentHandler) MakeComment(c *gin.Context) {
 	internal.Success(c, "评论成功")
 }
 
-type deleteCommentRequest struct {
-	CommentId uint32 `json:"comment_id"`
-}
+//type deleteCommentRequest struct {
+//	CommentId uint32 `json:"comment_id"`
+//}
 
 //  DeleteComment deleteComment
 //	@Summary		删除评论 api
@@ -86,16 +86,26 @@ type deleteCommentRequest struct {
 //	@Description	删除评论
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorization	header		string					true	"用户token"
-//	@Param			object			body		deleteCommentRequest	true	"评论信息"
+//	@Param			Authorization	header		string	true	"用户token"
+//	@Param			comment_id		query		int		true	"评论id"
 //	@Success		200				{object}	internal.Response
 //	@Router			/comment [delete]
 func (l *commentHandler) DeleteComment(c *gin.Context) {
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
 	
-	var req deleteCommentRequest
-	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
-		internal.Error(c, errno.JsonDataError)
+	var comment = c.Query("comment_id")
+	if comment == "" {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(
+			log.WithField("X-Request-Id", c.MustGet("uuid")),
+			nil, errno.JsonDataError.Error(),
+		)
+		return
+	}
+	
+	commentId, err := strconv.Atoi(comment)
+	if err != nil {
+		internal.Error(c, errno.ParamDataError)
 		log.Warn(
 			log.WithField("X-Request-Id", c.MustGet("uuid")),
 			errors.WithStack(err), errno.JsonDataError.Error(),
@@ -103,8 +113,8 @@ func (l *commentHandler) DeleteComment(c *gin.Context) {
 		return
 	}
 	
-	_, err := l.UserPostService.DeleteComment(ctx, &pb.DeleteCommentRequest{
-		CommentId: req.CommentId,
+	_, err = l.UserPostService.DeleteComment(ctx, &pb.DeleteCommentRequest{
+		CommentId: uint32(commentId),
 	})
 	if err != nil {
 		internal.ServerError(c, errno.InternalServerError.Error())
@@ -120,10 +130,11 @@ func (l *commentHandler) DeleteComment(c *gin.Context) {
 //	@Description	获取帖子下的评论
 //	@Accept			json
 //	@Produce		json
-//	@Param			post_id	query		int	true	"帖子id"
-//	@Param			page	query		int	false	"页码"
-//	@Param			limit	query		int	false	"条数"
-//	@Success		200		{object}	internal.Response
+//	@Param			Authorization	header		string	true	"用户token"
+//	@Param			post_id			query		int		true	"帖子id"
+//	@Param			page			query		int		false	"页码"
+//	@Param			limit			query		int		false	"条数"
+//	@Success		200				{object}	internal.Response
 //	@Router			/comment/post [get]
 func (l *commentHandler) GetCommentOfPost(c *gin.Context) {
 	pageStr, limitStr := c.DefaultQuery("page", "1"), c.DefaultQuery("limit", "10")

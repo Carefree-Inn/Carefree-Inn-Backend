@@ -45,6 +45,7 @@ type UserRepository interface {
 	GetUserProfile(account string) (*model.User, error)
 	VerifyUser(account, password string) error
 	GetBatchUserProfile(accounts []string) ([]*model.User, error)
+	MakeFeedback(feedback *model.Feedback) error
 }
 
 func NewUserRepository(dbUp *gorm.DB) UserRepository {

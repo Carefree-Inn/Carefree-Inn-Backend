@@ -60,7 +60,7 @@ func (up *UserPost) DeleteLike(postId uint32, account string) error {
 func (up *UserPost) GetLikes(account string, page int32, limit int32) ([]*model.PostLike, error) {
 	likes := make([]*model.PostLike, 20)
 	if err := up.db.Table(model.PostLike{}.Table()).Where("account=?",
-		account).Offset(int((page - 1) * limit)).Limit(int(limit)).Find(&likes).Error; err != nil {
+		account).Offset(int((page - 1) * limit)).Limit(int(limit)).Order("create_time desc").Find(&likes).Error; err != nil {
 		return nil, errors.WithStack(err)
 	}
 	return likes, nil

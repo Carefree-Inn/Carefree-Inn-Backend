@@ -74,7 +74,7 @@ func (p *Post) GetLiked(posts []*model.Post, account string) ([]*model.Post, err
 func (p *Post) GetPostOfUser(account string, page, limit int32) ([]*model.Post, error) {
 	var posts = make([]*model.Post, 0, limit)
 	if err := p.db.Table(model.Post{}.Table()).Where("account=?", account).
-		Offset(int(page-1) * int(limit)).Limit(int(limit)).Preload("Tags").
+		Offset(int(page-1) * int(limit)).Limit(int(limit)).Preload("Tags").Order("create_time desc").
 		Find(&posts).Error; err != nil {
 		return nil, errors.WithStack(err)
 	}
@@ -98,8 +98,8 @@ func (p *Post) GetPostOfUserLiked(account string, page, limit int32) ([]*model.P
 
 func (p *Post) PostSquare() ([]*model.Tag, error) {
 	tags := make([]*model.Tag, 0, 10)
-	if err := p.db.Table("tag").Group("title").
-		Order("count(*) DESC").Limit(10).Find(&tags).
+	if err := p.db.Table("tag").Select([]string{"title", "count(*) as total"}).Group("title").
+		Order("total DESC").Limit(10).Find(&tags).
 		Error; err != nil {
 		return nil, errors.WithStack(err)
 	}

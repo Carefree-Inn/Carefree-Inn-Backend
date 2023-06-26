@@ -13,4 +13,5 @@ func userRoute(engine *gin.RouterGroup) {
 	uRoute.POST("/login", uHandler.Login)
 	uRoute.GET("/profile", middlewares.Auth(), uHandler.GetProfile)
 	uRoute.PUT("/profile", middlewares.Auth(), uHandler.UpdateProfile)
+	uRoute.POST("/feedback", middlewares.Auth(), uHandler.MakeFeedback)
 }

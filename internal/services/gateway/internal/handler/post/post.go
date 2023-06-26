@@ -86,14 +86,24 @@ type deletePostRequest struct {
 //	@Description	删除帖子
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorization	header		string				true	"用户token"
-//	@Param			object			body		deletePostRequest	true	"帖子信息"
+//	@Param			Authorization	header		string	true	"用户token"
+//	@Param			post_id			query		int		true	"帖子id"
 //	@Success		200				{object}	internal.Response
 //	@Router			/post [delete]
 func (p *postHandler) DeletePost(c *gin.Context) {
-	var req deletePostRequest
-	if err := c.ShouldBindWith(&req, binding.JSON); err != nil {
-		internal.Error(c, errno.JsonDataError)
+	var post = c.Query("category_id")
+	if post == "" {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(
+			log.WithField("X-Request-Id", c.MustGet("uuid")),
+			nil, errno.JsonDataError.Error(),
+		)
+		return
+	}
+	
+	post_id, err := strconv.Atoi(post)
+	if err != nil {
+		internal.Error(c, errno.ParamDataError)
 		log.Warn(
 			log.WithField("X-Request-Id", c.MustGet("uuid")),
 			errors.WithStack(err), errno.JsonDataError.Error(),
@@ -104,8 +114,8 @@ func (p *postHandler) DeletePost(c *gin.Context) {
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
 	account := c.MustGet("account").(string)
 	
-	_, err := p.PostService.DeletePost(ctx, &pb.DeletePostRequest{
-		PostId:  req.PostId,
+	_, err = p.PostService.DeletePost(ctx, &pb.DeletePostRequest{
+		PostId:  uint32(post_id),
 		Account: account,
 	})
 	if err != nil {
@@ -208,8 +218,9 @@ func (p *postHandler) GetPostOfUserLiked(c *gin.Context) {
 //	@Description	帖子详情
 //	@Accept			json
 //	@Produce		json
-//	@Param			post_id	query		int	true	"帖子id"
-//	@Success		200		{object}	internal.Response
+//	@Param			Authorization	header		string	true	"用户token"
+//	@Param			post_id			query		int		true	"帖子id"
+//	@Success		200				{object}	internal.Response
 //	@Router			/post/info [get]
 func (p *postHandler) GetPost(c *gin.Context) {
 	postId := c.DefaultQuery("post_id", "-1")
@@ -248,7 +259,8 @@ func (p *postHandler) GetPost(c *gin.Context) {
 //	@Description	话题广场
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{object}	internal.Response
+//	@Param			Authorization	header		string	true	"用户token"
+//	@Success		200				{object}	internal.Response
 //	@Router			/post/square [get]
 func (p *postHandler) PostSquare(c *gin.Context) {
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
@@ -258,12 +270,9 @@ func (p *postHandler) PostSquare(c *gin.Context) {
 		return
 	}
 	
-	tag := make([]*tagInfo, 0, len(resp.Tags))
+	tag := make([]string, 0, len(resp.Tags))
 	for _, val := range resp.Tags {
-		tag = append(tag, &tagInfo{
-			TagId: val.TagId,
-			Title: val.Title,
-		})
+		tag = append(tag, val.Title)
 	}
 	
 	internal.Success(c, tag)

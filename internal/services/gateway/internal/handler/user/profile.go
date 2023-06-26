@@ -38,6 +38,7 @@ func (u *userHandler) GetProfile(c *gin.Context) {
 		Nickname: profile.Nickname,
 		Sex:      int8(profile.Sex),
 		Avatar:   profile.Avatar,
+		Days:     profile.Days,
 	})
 }
 
@@ -53,8 +54,8 @@ type updateProfileRequest struct {
 //	@Description	修改用户信息
 //	@Accept			json
 //	@Produce		json
-//	@Param			Authorization	header		string		true	"用户token"
-//	@Param			object			body		userInfo	true	"需要修改的信息"
+//	@Param			Authorization	header		string					true	"用户token"
+//	@Param			object			body		updateProfileRequest	true	"需要修改的信息"
 //	@Success		200				{object}	internal.Response
 //	@Router			/user/profile [put]
 func (u *userHandler) UpdateProfile(c *gin.Context) {

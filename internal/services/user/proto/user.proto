@@ -10,6 +10,8 @@ service User {
 	rpc GetUserProfile(Request) returns(UserProfileResponse){}
 	rpc UpdateUserProfile(UserProfileRequest) returns(Response){}
 	rpc GetBatchUserProfile(BatchUserProfileRequest) returns(BatchUserProfileResponse){}
+
+	rpc MakeFeedback(MakeFeedbackRequest) returns(Response){}
 }
 
 message Request {
@@ -44,9 +46,17 @@ message UserProfileResponse {
 	string account = 1;
 	string nickname = 2;
 	string avatar = 3;
-	Sex sex = 4;
+	int32 days = 4;
+	Sex sex = 5;
 }
 
 message BatchUserProfileResponse {
 	map<string,UserProfileResponse> data = 1;
+}
+
+message MakeFeedbackRequest{
+	string Account = 1;
+	string FeedbackType = 2;
+	string Content = 3;
+	int32 PostId = 4;
 }

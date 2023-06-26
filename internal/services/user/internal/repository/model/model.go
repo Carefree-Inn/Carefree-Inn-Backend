@@ -14,7 +14,9 @@ type User struct {
 
 // 功能反馈
 type Feedback struct {
-	Account      string `gorm:"column:account;primaryKey""`
+	FeedbackId   int32  `gorm:"column:feedback_id;primaryKey;autoIncrement"`
+	Account      string `gorm:"column:account"`
+	PostId       int32  `gorm:"column:post_id"`
 	FeedbackType string `gorm:"column:feedback_type;type:VARCHAR(100)"`
 	Content      string `gorm:"content;type:TEXT"`
 }

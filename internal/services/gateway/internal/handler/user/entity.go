@@ -20,4 +20,5 @@ type userInfo struct {
 	Nickname string `json:"nickname"`
 	Sex      int8   `json:"sex"`
 	Avatar   string `json:"avatar"`
+	Days     int32  `json:"days"`
 }

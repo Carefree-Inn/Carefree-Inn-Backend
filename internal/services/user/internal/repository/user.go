@@ -30,7 +30,7 @@ func (d *User) CreateUser(user *model.User) error {
 	}
 	user.Password = string(afterBcrypt)
 	session := d.db.Begin()
-	if err := session.Table(user.Table()).Create(&user).Error; err != nil {
+	if err := session.Table(user.Table()).Create(user).Error; err != nil {
 		session.Rollback()
 		return errors.WithStack(err)
 	}

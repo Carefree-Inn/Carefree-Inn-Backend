@@ -48,7 +48,17 @@ func (u *userHandler) Login(c *gin.Context) {
 			internal.Error(c, err)
 			return
 		}
-		
+		if errno.Is(err, errno.UserNotExistError) {
+			str, errGenerate := pkg.GenerateToken(req.Account)
+			if errGenerate != nil {
+				internal.ServerError(c, errno.TokenGenerateError.Error())
+				return
+			}
+			
+			internal.Success(c, str)
+			return
+		}
+		log.Warn(nil, errors.WithStack(err))
 		internal.ServerError(c, errno.LoginServerError.Error())
 		return
 	}

@@ -1,9 +1,11 @@
 package repository
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
 	"gorm.io/gorm"
 	"post/internal/repository/model"
+	"time"
 )
 
 func CheckTag(db *gorm.DB, titles []string) ([]*model.Tag, []*model.Tag, error) {
@@ -34,11 +36,11 @@ func CheckTag(db *gorm.DB, titles []string) ([]*model.Tag, []*model.Tag, error) 
 
 func (p *Post) GetPostOfTag(title string, account string) ([]*model.Post, error) {
 	var data = make([]*model.Post, 0, 16)
-	
+	minute := time.Now().Minute() / 5
 	if err := p.db.Table(model.Post{}.Table()).
 		Joins("JOIN post_tags pt ON post.post_id = pt.post_post_id").
 		Joins("JOIN tag t ON t.tag_id = pt.tag_tag_id").
-		Where("t.title = ?", title).
+		Where("t.title = ?", title).Order(fmt.Sprintf("RAND(%d)", minute)).
 		Preload("Tags").
 		Find(&data).Error; err != nil {
 		return nil, errors.WithStack(err)
