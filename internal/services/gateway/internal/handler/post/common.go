@@ -47,6 +47,7 @@ func (p *postHandler) assemble(ref map[string]*userInfo, unknown any) (any, erro
 			UserInfo:   ref[v.Account],
 			CreateTime: v.CreateTime,
 			Likes:      v.Likes,
+			Comments:   v.Comments,
 			Liked:      v.Liked,
 		})
 	}

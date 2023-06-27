@@ -42,6 +42,7 @@ type PostInfo struct {
 	Category   categoryInfo `json:"category"`
 	Tags       []*tagInfo   `json:"tags"`
 	Likes      uint32       `json:"likes"`
+	Comments   uint32       `json:"comments"`
 	CreateTime string       `json:"create_time"`
 	PostId     uint32       `json:"post_id"`
 	Liked      bool         `json:"liked"`

@@ -4,7 +4,17 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a6224e1b-59c8-49a9-8a5e-85c0ec872a3e" name="变更" comment="" />
+    <list default="true" id="a6224e1b-59c8-49a9-8a5e-85c0ec872a3e" name="变更" comment="">
+      <change afterPath="$PROJECT_DIR$/../gateway/pkg/token_test.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/config.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/config.yaml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/notification/ws.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/notification/ws.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/post/common.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/post/common.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../gateway/internal/handler/post/entity.go" beforeDir="false" afterPath="$PROJECT_DIR$/../gateway/internal/handler/post/entity.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/model/model.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/model/model.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/notification.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/notification.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/repository.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/repository.go" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,7 +63,7 @@
     "configurable.GoLibrariesConfigurable.is.expanded": "true",
     "go.import.settings.migrated": "true",
     "go.sdk.automatically.set": "true",
-    "last_opened_file_path": "//wsl$/Ubuntu-D/home/yyj/code/git/Carefree-Inn-Backend/internal/services/user-post",
+    "last_opened_file_path": "//wsl$/Ubuntu-D/home/yyj/code/git/Carefree-Inn-Backend/internal/services/post",
     "settings.editor.selected.configurable": "go.vgo",
     "vue.rearranger.settings.migration": "true"
   }

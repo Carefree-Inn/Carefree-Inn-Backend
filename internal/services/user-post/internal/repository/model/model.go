@@ -21,16 +21,16 @@ type Comment struct {
 }
 
 type Notification struct {
-	ActionType       string `gorm:"column:action_type;primaryKey"`
-	FromUserAccount  string `gorm:"column:from_user_account"`
-	FromUserNickname string `gorm:"column:from_user_nickname"`
-	FromUserAvatar   string `gorm:"column:from_user_avatar"`
-	ToUserAccount    string `gorm:"column:to_user_account"`
-	PostId           uint32 `gorm:"post_id"`
+	ActionType       string `gorm:"column:action_type;primaryKey;type:varchar(50)"`
+	FromUserAccount  string `gorm:"column:from_user_account;type:varchar(15)"`
+	FromUserNickname string `gorm:"column:from_user_nickname;type:varchar(100)"`
+	FromUserAvatar   string `gorm:"column:from_user_avatar;type:varchar(250)"`
+	ToUserAccount    string `gorm:"column:to_user_account;type:varchar(15)"`
+	PostId           uint32 `gorm:"column:post_id"`
 	
 	ActionId       uint32    `gorm:"column:action_id;primaryKey"`
 	ActionTime     time.Time `gorm:"column:action_time"`
-	CommentContent string    `gorm:"column:comment_content;type:varchar(250);default:null"`
+	CommentContent string    `gorm:"column:comment_content;type:varchar(500);default:null"`
 }
 
 func (PostLike) Table() string {

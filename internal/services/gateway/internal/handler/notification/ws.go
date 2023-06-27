@@ -134,6 +134,19 @@ func (n *notificationHandler) SendNotification(c *gin.Context) {
 	
 }
 
+type Notification struct {
+	ActionType       string `json:"action_type"`
+	FromUserAccount  string `json:"from_user_account"`
+	FromUserNickname string `json:"from_user_nickname"`
+	FromUserAvatar   string `json:"from_user_avatar"`
+	ToUserAccount    string `json:"to_user_account"`
+	PostId           uint32 `json:"post_id"`
+	
+	ActionId       uint32 `json:"action_id"`
+	ActionTime     string `json:"action_time"`
+	CommentContent string `json:"comment_content"`
+}
+
 //  GetNotificationHistory getNotificationHistory
 //	@Summary		获取历史通知 api
 //	@Tags			notification
@@ -169,10 +182,25 @@ func (n *notificationHandler) GetNotificationHistory(c *gin.Context) {
 		Limit:   uint32(limit),
 	})
 	
+	data := make([]*Notification, 0, len(resp.Notifications))
+	for _, val := range resp.Notifications {
+		data = append(data, &Notification{
+			ActionType:       val.ActionType,
+			FromUserAccount:  val.FromUserAccount,
+			FromUserNickname: val.FromUserNickname,
+			FromUserAvatar:   val.FromUserAvatar,
+			ToUserAccount:    val.ToUserAccount,
+			PostId:           val.PostId,
+			ActionId:         val.ActionId,
+			ActionTime:       val.ActionTime,
+			CommentContent:   val.CommentContent,
+		})
+	}
+	
 	if err != nil {
 		internal.ServerError(c, errno.InternalServerError.Error())
 		return
 	}
 	
-	internal.Success(c, resp.Notifications)
+	internal.Success(c, data)
 }

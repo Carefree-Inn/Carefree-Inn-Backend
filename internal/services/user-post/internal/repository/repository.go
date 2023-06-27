@@ -82,7 +82,7 @@ func (d *UserPost) processLike() {
 		fmt.Println(likeInfo)
 		switch likeInfo.LikeType {
 		case "make":
-			createTime, err := time.Parse("2006-04-02 15:04:05", likeInfo.CreateTime)
+			createTime, err := time.Parse("2006-01-02 15:04:05", likeInfo.CreateTime)
 			if err != nil {
 				createTime = time.Now()
 			}
