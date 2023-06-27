@@ -14,11 +14,11 @@ import (
 )
 
 type makeLikeRequest struct {
-	FromUserAvatar  string `json:"from_user_avatar"`
-	FromUserAccount string `json:"from_user_account"`
-	ToUserAccount   string `json:"to_user_account"`
+	FromUserAvatar   string `json:"from_user_avatar"`
+	FromUserNickname string `json:"from_user_nickname"`
 	
-	PostId int `json:"post_id"`
+	ToUserAccount string `json:"to_user_account"`
+	PostId        int    `json:"post_id"`
 }
 
 //  MakeLike makeLike
@@ -45,11 +45,17 @@ func (l *likeHandler) MakeLike(c *gin.Context) {
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
 	
 	_, err := l.UserPostService.MakeLike(ctx, &pb.MakeLikeRequest{
-		PostId:  uint32(req.PostId),
-		Account: c.MustGet("account").(string),
-		Avatar:  req.FromUserAvatar,
+		PostId:           uint32(req.PostId),
+		FromUserAccount:  c.MustGet("account").(string),
+		FromUserAvatar:   req.FromUserAvatar,
+		FromUserNickname: req.FromUserNickname,
+		ToUserAccount:    req.ToUserAccount,
 	})
 	if err != nil {
+		if errno.Is(err, errno.DuplicateLike) {
+			internal.Error(c, errno.DuplicateLike)
+			return
+		}
 		internal.ServerError(c, errno.InternalServerError.Error())
 		return
 	}

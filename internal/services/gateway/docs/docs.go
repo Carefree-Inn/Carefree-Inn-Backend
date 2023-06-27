@@ -299,6 +299,50 @@ const docTemplate = `{
                 }
             }
         },
+        "/notification/history": {
+            "get": {
+                "description": "获取历史通知",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "notification"
+                ],
+                "summary": "获取历史通知 api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "页码",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "条数",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/internal.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/post": {
             "post": {
                 "description": "创建帖子",
@@ -847,7 +891,7 @@ const docTemplate = `{
                 "from_user_avatar": {
                     "type": "string"
                 },
-                "from_user_nick_name": {
+                "from_user_nickname": {
                     "type": "string"
                 },
                 "is_top": {
@@ -879,10 +923,10 @@ const docTemplate = `{
         "like.makeLikeRequest": {
             "type": "object",
             "properties": {
-                "from_user_account": {
+                "from_user_avatar": {
                     "type": "string"
                 },
-                "from_user_avatar": {
+                "from_user_nickname": {
                     "type": "string"
                 },
                 "post_id": {

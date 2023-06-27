@@ -30,4 +30,5 @@ var storage = map[string]int{}
 
 var (
 	BadRequestInfo = &Errno{message: "请求信息错误", statusCode: 400400}
+	DuplicateLike  = &Errno{message: "重复点赞", statusCode: 400403}
 )

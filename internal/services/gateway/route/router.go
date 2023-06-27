@@ -21,7 +21,7 @@ func Route(engine *gin.Engine, config *config.Config) {
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	
 	base := engine.Group("/inn/api/v1")
-	base.GET("/upload/token", qiniu.NewQiNiuHandler(config.QiNiu.AccessKey, config.QiNiu.SecretKey, config.QiNiu.Bucket).GetToken)
+	base.POST("/upload/file", qiniu.NewQiNiuHandler(config.QiNiu.AccessKey, config.QiNiu.SecretKey, config.QiNiu.Bucket, config.QiNiu.Prefix).UploadFile)
 	
 	userRoute(base)
 	postRoute(base)

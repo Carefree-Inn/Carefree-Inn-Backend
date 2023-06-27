@@ -6,12 +6,12 @@ type Errno struct {
 }
 
 func Is(errA error, errB error) bool {
-	if _, ok := storage[errA.Error()]; !ok {
-		return false
-	}
-	if _, ok := storage[errB.Error()]; !ok {
-		return false
-	}
+	//if _, ok := storage[errA.Error()]; !ok {
+	//	return false
+	//}
+	//if _, ok := storage[errB.Error()]; !ok {
+	//	return false
+	//}
 	return storage[errA.Error()] == storage[errB.Error()]
 }
 
@@ -41,6 +41,7 @@ var (
 	PathDataError        = &Errno{message: "path数据绑定失败", statusCode: 400421}
 	ParamDataError       = &Errno{message: "param数据绑定失败", statusCode: 400422}
 	ConstraintParamError = &Errno{message: "数据关系错误", statusCode: 400400}
+	HeaderNotExist       = &Errno{message: "请求头不存在", statusCode: 400403}
 	
 	// user
 	LoginWrongInfoError = &Errno{message: "账号或密码错误", statusCode: 400401}
@@ -58,6 +59,8 @@ var (
 	GetCategoryInfoError         = &Errno{message: "获取分区失败", statusCode: 500501}
 	GetCategoryCategoryPostError = &Errno{message: "获取分区帖子失败", statusCode: 500501}
 	ResourceNotExist             = &Errno{message: "资源不存在", statusCode: 200204}
+	DuplicateLike                = &Errno{message: "重复点赞", statusCode: 400403}
+	ErrNoFile                    = &Errno{message: "文件不存在", statusCode: 200204}
 	
 	// server
 	InternalServerError = &Errno{message: "服务器内部问题", statusCode: 500503}

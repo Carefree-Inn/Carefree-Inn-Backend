@@ -22,7 +22,7 @@ type makeCommentRequest struct {
 	Content       string `json:"content"`
 	PostId        uint32 `json:"post_id"`
 	
-	FromUserNickName string `json:"from_user_nick_name"`
+	FromUserNickName string `json:"from_user_nickname"`
 	FromUserAvatar   string `json:"from_user_avatar"`
 }
 
@@ -65,7 +65,7 @@ func (l *commentHandler) MakeComment(c *gin.Context) {
 		FromUserAccount:  account,
 		Content:          req.Content,
 		TopCommentId:     req.TopCommentId,
-		UserAvatar:       req.FromUserAvatar,
+		FromUserAvatar:   req.FromUserAvatar,
 		FromUserNickName: req.FromUserNickName,
 	})
 	if err != nil {

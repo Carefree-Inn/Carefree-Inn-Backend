@@ -1,11 +1,17 @@
 package notification
 
 import (
+	"context"
 	"encoding/json"
+	"gateway/internal"
+	"gateway/pkg"
+	"gateway/pkg/errno"
+	"gateway/pkg/log"
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	"log"
 	"net/http"
+	"strconv"
+	pb "user-post/proto"
 )
 
 var upgrader = websocket.Upgrader{
@@ -17,11 +23,14 @@ var upgrader = websocket.Upgrader{
 type LikeInfo struct {
 	PostId uint32 `json:"post_id"`
 	
-	ToUserAccount   string `json:"to_user_account"`
-	CreateTime      string `json:"create_time"`
-	LikeType        string `json:"like_type"`
-	FromUserAccount string `json:"from_user_account"`
-	FromUserAvatar  string `json:"from_user_avatar"`
+	ToUserAccount string `json:"to_user_account"`
+	ToUserAvatar  string `json:"to_user_avatar"`
+	CreateTime    string `json:"create_time"`
+	LikeType      string `json:"like_type"`
+	
+	FromUserAccount  string `json:"from_user_account"`
+	FromUserAvatar   string `json:"from_user_avatar"`
+	FromUserNickname string `json:"from_user_nickname"`
 }
 
 func (l *LikeInfo) Marshal() ([]byte, error) {
@@ -68,7 +77,7 @@ func (n *notificationHandler) SendNotification(c *gin.Context) {
 	ws, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	defer ws.Close()
 	if err != nil {
-		log.Println(err)
+		log.Warn(nil, err)
 		return
 	}
 	
@@ -85,7 +94,7 @@ func (n *notificationHandler) SendNotification(c *gin.Context) {
 			}
 			var likeInfo LikeInfo
 			if err := likeInfo.Unmarshal([]byte(msg.Payload)); err != nil {
-				log.Println("Unmarshal err:", err)
+				log.Warn(nil, err, "Unmarshal err:")
 				continue
 			}
 			
@@ -95,7 +104,7 @@ func (n *notificationHandler) SendNotification(c *gin.Context) {
 			
 			err := ws.WriteMessage(websocket.TextMessage, []byte(msg.Payload))
 			if err != nil {
-				log.Println("Like: fail to send message with websocket:", err)
+				log.Warn(nil, err, ",Like: fail to send message with websocket:")
 				continue
 			}
 		
@@ -105,7 +114,7 @@ func (n *notificationHandler) SendNotification(c *gin.Context) {
 			}
 			var comment Comment
 			if err := comment.Unmarshal([]byte(msg.Payload)); err != nil {
-				log.Println("Unmarshal err:", err)
+				log.Warn(nil, err, "Unmarshal err:")
 				continue
 			}
 			
@@ -115,7 +124,7 @@ func (n *notificationHandler) SendNotification(c *gin.Context) {
 			
 			err := ws.WriteMessage(websocket.TextMessage, []byte(msg.Payload))
 			if err != nil {
-				log.Println("Comment: fail to send message with websocket:", err)
+				log.Warn(nil, err, "Comment: fail to send message with websocket:")
 				continue
 			}
 		case <-c.Request.Context().Done():
@@ -123,4 +132,47 @@ func (n *notificationHandler) SendNotification(c *gin.Context) {
 		}
 	}
 	
+}
+
+//  GetNotificationHistory getNotificationHistory
+//	@Summary		获取历史通知 api
+//	@Tags			notification
+//	@Description	获取历史通知
+//	@Accept			json
+//	@Produce		json
+//	@Param			Authorization	header		string	true	"用户token"
+//	@Param			page			query		int		false	"页码"
+//	@Param			limit			query		int		false	"条数"
+//	@Success		200				{object}	internal.Response
+//	@Router			/notification/history [get]
+func (n *notificationHandler) GetNotificationHistory(c *gin.Context) {
+	pageStr, limitStr := c.DefaultQuery("page", "1"), c.DefaultQuery("limit", "10")
+	
+	page, err := strconv.Atoi(pageStr)
+	if err != nil {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.ParamDataError)
+		return
+	}
+	limit, err := strconv.Atoi(limitStr)
+	if err != nil {
+		internal.Error(c, errno.ParamDataError)
+		log.Warn(log.WithField("X-Request-Id", c.MustGet("uuid")), errno.ParamDataError)
+		return
+	}
+	
+	account := c.MustGet("account").(string)
+	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
+	resp, err := n.UserPostService.GetNotificationHistory(ctx, &pb.GetNotificationRequest{
+		Account: account,
+		Page:    uint32(page),
+		Limit:   uint32(limit),
+	})
+	
+	if err != nil {
+		internal.ServerError(c, errno.InternalServerError.Error())
+		return
+	}
+	
+	internal.Success(c, resp.Notifications)
 }

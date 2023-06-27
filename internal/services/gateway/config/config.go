@@ -23,6 +23,7 @@ type Config struct {
 		AccessKey string `yaml:"accessKey""`
 		SecretKey string `yaml:"secretKey"`
 		Bucket    string `yaml:"bucket"`
+		Prefix    string `json:"prefix"`
 	}
 }
 

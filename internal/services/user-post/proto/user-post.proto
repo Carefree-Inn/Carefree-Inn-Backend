@@ -12,6 +12,7 @@ service UserPost {
 
   rpc MakeLike(MakeLikeRequest) returns(Response) {}
   rpc CancelLike(CancelLikeRequest) returns(Response) {}
+  rpc GetNotificationHistory(GetNotificationRequest) returns(GetNotificationResponse){}
 }
 
 message Request{}
@@ -27,7 +28,7 @@ message MakeCommentRequest{
   uint32 TopCommentId = 6;
 
   string FromUserNickName = 7;
-  string UserAvatar = 8;
+  string FromUserAvatar = 8;
 }
 
 message DeleteCommentRequest{
@@ -63,9 +64,11 @@ message CommentOfPostResponse{
 
 message MakeLikeRequest{
   uint32 PostId = 1;
-  string Account = 2;
-  string Title = 3;
-  string Avatar = 4;
+  string FromUserAccount = 2;
+  string FromUserAvatar = 3;
+  string FromUserNickname = 4;
+
+  string ToUserAccount = 5;
 }
 
 message CancelLikeRequest{
@@ -122,6 +125,29 @@ message CommentOfUserResponse{
   repeated UserComment Comments = 2;
 }
 
+message GetNotificationRequest {
+  string Account = 1;
+  uint32 page = 2;
+  uint32 limit = 3;
+}
+
+message Notification{
+  string ActionType = 1;
+  string FromUserAccount  =2;
+  string FromUserNickname =3;
+  string FromUserAvatar   =4;
+  string ToUserAccount    =5;
+  uint32 PostId           =6;
+
+  uint32 ActionId       =7;
+  string ActionTime     =8;
+  string CommentContent =9;
+}
+
+message GetNotificationResponse{
+  repeated Notification notifications = 1;
+  string Account = 2;
+}
 
 
 

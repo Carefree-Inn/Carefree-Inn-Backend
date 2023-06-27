@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"github.com/pkg/errors"
+	"time"
 	"user-post/internal/repository/model"
 )
 
@@ -13,7 +14,6 @@ type Comment struct {
 	
 	CommentTime string `json:"comment_time"`
 	Content     string `json:"content"`
-	CommentType string `json:"comment_type"`
 	
 	FromUserAccount  string `json:"from_user_account"`
 	FromUserAvatar   string `json:"from_user_avatar"`
@@ -28,7 +28,39 @@ func (c *Comment) Unmarshal(data []byte) error {
 	return json.Unmarshal(data, c)
 }
 
-func (up *UserPost) MakeComment(comment *model.Comment, nickname, avatar string) error {
+func (up *UserPost) SetNotification(action any, id uint32, createTime time.Time) error {
+	notification := model.Notification{}
+	switch x := action.(type) {
+	case *LikeInfo:
+		notification.PostId = x.PostId
+		notification.FromUserAccount = x.FromUserAccount
+		notification.FromUserNickname = x.FromUserNickname
+		notification.FromUserAvatar = x.FromUserAvatar
+		notification.ToUserAccount = x.ToUserAccount
+		notification.ActionType = "like"
+		notification.ActionId = id
+		notification.ActionTime = createTime
+	case *Comment:
+		notification.PostId = x.PostId
+		notification.FromUserNickname = x.FromUserNickName
+		notification.FromUserAccount = x.FromUserAccount
+		notification.FromUserAvatar = x.FromUserAvatar
+		notification.ToUserAccount = x.ToUserAccount
+		notification.ActionType = "comment"
+		notification.ActionId = id
+		notification.ActionTime = createTime
+		notification.CommentContent = x.Content
+	}
+	
+	tx := up.db.Begin()
+	if err := tx.Table("notification").Create(&notification).Error; err != nil {
+		tx.Rollback()
+		return errors.WithStack(err)
+	}
+	return errors.WithStack(tx.Commit().Error)
+}
+
+func (up *UserPost) MakeComment(comment *model.Comment, commentInfo *Comment) error {
 	session := up.db.Begin()
 	if err := session.Table(comment.Table()).Create(comment).Error;
 		err != nil {
@@ -43,20 +75,14 @@ func (up *UserPost) MakeComment(comment *model.Comment, nickname, avatar string)
 	
 	session.Commit()
 	
-	repoComment := &Comment{
-		CommentId:     comment.CommentId,
-		ToUserAccount: comment.ToUserId,
-		CommentTime:   comment.CreateTime.Format("2006-01-02 15:04:05"),
-		Content:       comment.Content,
-		PostId:        comment.PostId,
-		
-		FromUserAvatar:   comment.FromUserId,
-		FromUserNickName: nickname,
-		FromUserAccount:  comment.FromUserId,
-		CommentType:      "make",
+	commentInfo.CommentId = comment.CommentId
+	commentInfo.CommentTime = comment.CreateTime.Format("2006-01-02 15:04-05")
+	
+	if err := up.SetNotification(commentInfo, commentInfo.CommentId, comment.CreateTime); err != nil {
+		return err
 	}
 	
-	data, err := repoComment.Marshal()
+	data, err := commentInfo.Marshal()
 	if err != nil {
 		return errors.WithStack(err)
 	}

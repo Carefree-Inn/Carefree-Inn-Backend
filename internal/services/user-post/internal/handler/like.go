@@ -2,11 +2,21 @@ package handler
 
 import (
 	"context"
+	"time"
+	"user-post/internal/repository"
 	pb "user-post/proto"
 )
 
 func (up *UserPostService) MakeLike(ctx context.Context, req *pb.MakeLikeRequest, resp *pb.Response) error {
-	return up.userPostDao.MakeLike(req.PostId, req.Account, req.Title, req.Avatar)
+	return up.userPostDao.MakeLike(&repository.LikeInfo{
+		PostId:           req.PostId,
+		ToUserAccount:    req.ToUserAccount,
+		FromUserNickname: req.FromUserNickname,
+		FromUserAccount:  req.FromUserAccount,
+		FromUserAvatar:   req.FromUserAvatar,
+		CreateTime:       time.Now().Format("2006-01-02 15:04:05"),
+		LikeType:         "make",
+	})
 }
 
 func (up *UserPostService) CancelLike(ctx context.Context, req *pb.CancelLikeRequest, resp *pb.Response) error {

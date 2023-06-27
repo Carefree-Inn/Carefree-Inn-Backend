@@ -42,6 +42,7 @@ type UserPostService interface {
 	GetCommentOfUser(ctx context.Context, in *GetCommentOfUserRequest, opts ...client.CallOption) (*CommentOfUserResponse, error)
 	MakeLike(ctx context.Context, in *MakeLikeRequest, opts ...client.CallOption) (*Response, error)
 	CancelLike(ctx context.Context, in *CancelLikeRequest, opts ...client.CallOption) (*Response, error)
+	GetNotificationHistory(ctx context.Context, in *GetNotificationRequest, opts ...client.CallOption) (*GetNotificationResponse, error)
 }
 
 type userPostService struct {
@@ -116,6 +117,16 @@ func (c *userPostService) CancelLike(ctx context.Context, in *CancelLikeRequest,
 	return out, nil
 }
 
+func (c *userPostService) GetNotificationHistory(ctx context.Context, in *GetNotificationRequest, opts ...client.CallOption) (*GetNotificationResponse, error) {
+	req := c.c.NewRequest(c.name, "UserPost.GetNotificationHistory", in)
+	out := new(GetNotificationResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // Server API for UserPost service
 
 type UserPostHandler interface {
@@ -125,6 +136,7 @@ type UserPostHandler interface {
 	GetCommentOfUser(context.Context, *GetCommentOfUserRequest, *CommentOfUserResponse) error
 	MakeLike(context.Context, *MakeLikeRequest, *Response) error
 	CancelLike(context.Context, *CancelLikeRequest, *Response) error
+	GetNotificationHistory(context.Context, *GetNotificationRequest, *GetNotificationResponse) error
 }
 
 func RegisterUserPostHandler(s server.Server, hdlr UserPostHandler, opts ...server.HandlerOption) error {
@@ -135,6 +147,7 @@ func RegisterUserPostHandler(s server.Server, hdlr UserPostHandler, opts ...serv
 		GetCommentOfUser(ctx context.Context, in *GetCommentOfUserRequest, out *CommentOfUserResponse) error
 		MakeLike(ctx context.Context, in *MakeLikeRequest, out *Response) error
 		CancelLike(ctx context.Context, in *CancelLikeRequest, out *Response) error
+		GetNotificationHistory(ctx context.Context, in *GetNotificationRequest, out *GetNotificationResponse) error
 	}
 	type UserPost struct {
 		userPost
@@ -169,4 +182,8 @@ func (h *userPostHandler) MakeLike(ctx context.Context, in *MakeLikeRequest, out
 
 func (h *userPostHandler) CancelLike(ctx context.Context, in *CancelLikeRequest, out *Response) error {
 	return h.UserPostHandler.CancelLike(ctx, in, out)
+}
+
+func (h *userPostHandler) GetNotificationHistory(ctx context.Context, in *GetNotificationRequest, out *GetNotificationResponse) error {
+	return h.UserPostHandler.GetNotificationHistory(ctx, in, out)
 }

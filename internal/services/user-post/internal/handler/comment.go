@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"user-post/internal/repository"
 	"user-post/internal/repository/model"
 	pb "user-post/proto"
 )
@@ -10,12 +11,19 @@ func (up *UserPostService) MakeComment(ctx context.Context, req *pb.MakeCommentR
 	return up.userPostDao.MakeComment(
 		&model.Comment{
 			PostId:       req.PostId,
-			IsTop:        req.IsTop,
-			TopCommentId: req.TopCommentId,
 			FromUserId:   req.FromUserAccount,
 			ToUserId:     req.ToUserAccount,
 			Content:      req.Content,
-		}, req.FromUserNickName, req.UserAvatar)
+			IsTop:        req.IsTop,
+			TopCommentId: req.TopCommentId,
+		}, &repository.Comment{
+			PostId:           req.PostId,
+			ToUserAccount:    req.ToUserAccount,
+			Content:          req.Content,
+			FromUserAccount:  req.FromUserAccount,
+			FromUserAvatar:   req.FromUserAvatar,
+			FromUserNickName: req.FromUserNickName,
+		})
 }
 
 func (up *UserPostService) DeleteComment(ctx context.Context, req *pb.DeleteCommentRequest, resp *pb.Response) error {

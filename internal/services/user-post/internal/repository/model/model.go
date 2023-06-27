@@ -20,6 +20,19 @@ type Comment struct {
 	CreateTime   time.Time `gorm:"column:create_time;autoCreateTime"`
 }
 
+type Notification struct {
+	ActionType       string `gorm:"column:action_type;primaryKey"`
+	FromUserAccount  string `gorm:"column:from_user_account"`
+	FromUserNickname string `gorm:"column:from_user_nickname"`
+	FromUserAvatar   string `gorm:"column:from_user_avatar"`
+	ToUserAccount    string `gorm:"column:to_user_account"`
+	PostId           uint32 `gorm:"post_id"`
+	
+	ActionId       uint32    `gorm:"column:action_id;primaryKey"`
+	ActionTime     time.Time `gorm:"column:action_time"`
+	CommentContent string    `gorm:"column:comment_content;type:varchar(250);default:null"`
+}
+
 func (PostLike) Table() string {
 	return "post_like"
 }

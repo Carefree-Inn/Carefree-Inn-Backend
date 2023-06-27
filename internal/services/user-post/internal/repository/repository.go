@@ -26,7 +26,7 @@ func Init(dsn string) *Database {
 		log.Fatal(nil, errors.WithStack(err), "数据库初始化失败")
 	}
 	
-	if err := db.AutoMigrate(&model.PostLike{}, &model.Comment{}); err != nil {
+	if err := db.AutoMigrate(&model.PostLike{}, &model.Comment{}, &model.Notification{}); err != nil {
 		log.Fatal(nil, errors.WithStack(err), "数据表初始化失败")
 	}
 	
@@ -86,12 +86,13 @@ func (d *UserPost) processLike() {
 			if err != nil {
 				createTime = time.Now()
 			}
+			postLike := model.PostLike{
+				PostId:     likeInfo.PostId,
+				Account:    likeInfo.FromUserAccount,
+				CreateTime: createTime,
+			}
 			if err := session.Table(model.PostLike{}.Table()).Create(
-				&model.PostLike{
-					PostId:     likeInfo.PostId,
-					Account:    likeInfo.FromUserAccount,
-					CreateTime: createTime,
-				}).Error; err != nil {
+				&postLike).Error; err != nil {
 				log.Warn(log.WithFields(logrus.Fields{
 					"post_id": likeInfo.PostId,
 					"account": likeInfo.FromUserAccount,
@@ -107,6 +108,15 @@ func (d *UserPost) processLike() {
 					}), errors.WithStack(err), "点赞失败")
 					session.Rollback()
 					continue
+				} else {
+					if errNotification := d.SetNotification(&likeInfo, postLike.LikeId, postLike.CreateTime); errNotification != nil {
+						log.Warn(log.WithFields(logrus.Fields{
+							"post_id": likeInfo.PostId,
+							"account": likeInfo.FromUserAccount,
+						}), errors.WithStack(err), "点赞失败")
+						session.Rollback()
+						continue
+					}
 				}
 				
 				log.Info(log.WithFields(logrus.Fields{
@@ -154,14 +164,16 @@ var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 type UserPostRepository interface {
 	DeleteComment(comment *model.Comment) error
-	MakeComment(comment *model.Comment, title string, avatar string) error
+	MakeComment(comment *model.Comment, commentInfo *Comment) error
 	GetCommentOfPost(postId uint32, page, limit uint32) ([]*model.Comment, error)
 	GetCommentOfUser(account string, page, limit uint32) ([]*model.Comment, error)
 	
-	MakeLike(postId uint32, account string, title string, avatar string) error
+	MakeLike(likeInfo *LikeInfo) error
 	DeleteLike(postId uint32, account string) error
 	GetLikes(account string, page int32, limit int32) ([]*model.PostLike, error)
 	IsBatchLiked(account string, postIds []uint32) ([]*model.PostLike, error)
+	
+	GetNotificationHistory(account string, page, limit uint32) ([]*model.Notification, error)
 }
 
 func NewUserPostRepository(database *Database) UserPostRepository {

@@ -10,3 +10,4 @@ qiniu:
   accessKey: ""
   secretKey: ""
   bucket: ""
+  prefix: ""
