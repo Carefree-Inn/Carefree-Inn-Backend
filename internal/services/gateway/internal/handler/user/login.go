@@ -55,7 +55,13 @@ func (u *userHandler) Login(c *gin.Context) {
 				return
 			}
 			
-			internal.Success(c, str)
+			internal.Success(c, struct {
+				Token   string `json:"token"`
+				IsFirst bool   `json:"is_first"`
+			}{
+				str,
+				true,
+			})
 			return
 		}
 		log.Warn(nil, errors.WithStack(err))
@@ -69,5 +75,11 @@ func (u *userHandler) Login(c *gin.Context) {
 		return
 	}
 	
-	internal.Success(c, str)
+	internal.Success(c, struct {
+		Token   string `json:"token"`
+		IsFirst bool   `json:"is_first"`
+	}{
+		str,
+		false,
+	})
 }

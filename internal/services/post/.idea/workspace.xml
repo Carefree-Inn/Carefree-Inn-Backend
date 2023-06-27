@@ -26,6 +26,7 @@
       <change beforePath="$PROJECT_DIR$/internal/repository/post.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/post.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/search.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/search.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/internal/repository/tag.go" beforeDir="false" afterPath="$PROJECT_DIR$/internal/repository/tag.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../user-post/internal/handler/comment.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/handler/comment.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/comment.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/comment.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user-post/internal/repository/like.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user-post/internal/repository/like.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user/internal/handler/user.go" beforeDir="false" afterPath="$PROJECT_DIR$/../user/internal/handler/user.go" afterDir="false" />
