@@ -25,7 +25,7 @@ func NewLogger(dir string) {
 }
 
 func WithField(key string, value interface{}) *logrus.Entry {
-	return logger.WithField(key, value)
+	return logrus.WithField(key, value)
 }
 
 func WithFields(fields logrus.Fields) *logrus.Entry {

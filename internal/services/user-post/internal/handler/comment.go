@@ -53,7 +53,12 @@ func (up *UserPostService) GetCommentOfPost(ctx context.Context, req *pb.GetComm
 			})
 			index[v.CommentId] = start
 			start++
-		} else {
+		}
+	}
+	
+	for _, v := range comments {
+		if !v.IsTop {
+			// 顺序错误，一开始就是没有top的怎么办
 			topComments[index[v.TopCommentId]].Comments = append(topComments[index[v.TopCommentId]].Comments,
 				&pb.CommentResponse{
 					CommentId:  v.CommentId,
@@ -64,6 +69,7 @@ func (up *UserPostService) GetCommentOfPost(ctx context.Context, req *pb.GetComm
 				})
 		}
 	}
+	
 	resp.Comments = topComments
 	return nil
 }
