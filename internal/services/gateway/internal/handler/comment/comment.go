@@ -230,15 +230,15 @@ func (l *commentHandler) GetCommentOfUser(c *gin.Context) {
 	for _, val := range resp.Comments {
 		one := &Comment{
 			CommentId: val.CommentId,
-			FromUser: &UserInfo{
+			FromUserAccount: &UserInfo{
 				Account:  selfInfo.Account,
 				Avatar:   selfInfo.Avatar,
 				Sex:      int8(selfInfo.Sex),
 				Nickname: selfInfo.Nickname,
 			},
-			ToUser:     &UserInfo{Account: val.ToUserId},
-			Content:    val.Content,
-			CreateTime: val.CreateTime,
+			ToUserAccount: &UserInfo{Account: val.ToUserId},
+			Content:       val.Content,
+			CreateTime:    val.CreateTime,
 			
 			PostId:       val.PostId,
 			IsTop:        val.IsTop,

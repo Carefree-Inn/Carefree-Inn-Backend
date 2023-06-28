@@ -23,6 +23,7 @@ func (up *UserPostService) GetNotificationHistory(ctx context.Context, in *pb.Ge
 			ActionId:         val.ActionId,
 			ActionTime:       val.ActionTime.Format("2006-01-02 15:04:02"),
 			CommentContent:   val.CommentContent,
+			IsToPost:         val.IsToPost,
 		})
 	}
 	

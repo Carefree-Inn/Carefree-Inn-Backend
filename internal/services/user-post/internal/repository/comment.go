@@ -18,6 +18,7 @@ type Comment struct {
 	FromUserAccount  string `json:"from_user_account"`
 	FromUserAvatar   string `json:"from_user_avatar"`
 	FromUserNickName string `json:"from_user_nick_name"`
+	IsToPost         bool   `json:"is_to_post"`
 }
 
 func (c *Comment) Marshal() ([]byte, error) {
@@ -50,6 +51,10 @@ func (up *UserPost) SetNotification(action any, id uint32, createTime time.Time)
 		notification.ActionId = id
 		notification.ActionTime = createTime
 		notification.CommentContent = x.Content
+		
+		if notification.ToUserAccount == "" {
+			notification.IsToPost = true
+		}
 	}
 	
 	tx := up.db.Begin()
@@ -77,6 +82,7 @@ func (up *UserPost) MakeComment(comment *model.Comment, commentInfo *Comment) er
 	
 	commentInfo.CommentId = comment.CommentId
 	commentInfo.CommentTime = comment.CreateTime.Format("2006-01-02 15:04-05")
+	commentInfo.IsToPost = comment.IsTop
 	
 	if err := up.SetNotification(commentInfo, commentInfo.CommentId, comment.CreateTime); err != nil {
 		return err

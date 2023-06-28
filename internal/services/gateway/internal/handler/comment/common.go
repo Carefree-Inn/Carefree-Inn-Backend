@@ -51,28 +51,28 @@ func (c *commentHandler) Assemble(ctx context.Context, userIds []string, respons
 	var comments = make([]*Comment, 0, len(resp.Data))
 	for _, val := range response.Comments {
 		comment := &Comment{
-			CommentId:    val.CommentId,
-			PostId:       response.PostId,
-			Content:      val.Content,
-			CreateTime:   val.CreateTime,
-			FromUser:     c.Convert(resp.Data[val.FromUserId]),
-			ToUser:       nil,
-			IsTop:        true,
-			TopCommentId: 0,
-			ChildComment: make([]*Comment, 0),
+			CommentId:       val.CommentId,
+			PostId:          response.PostId,
+			Content:         val.Content,
+			CreateTime:      val.CreateTime,
+			FromUserAccount: c.Convert(resp.Data[val.FromUserId]),
+			ToUserAccount:   nil,
+			IsTop:           true,
+			TopCommentId:    0,
+			ChildComment:    make([]*Comment, 0),
 		}
 		for _, v := range val.Comments {
 			comment.ChildComment = append(comment.ChildComment,
 				&Comment{
-					CommentId:    v.CommentId,
-					PostId:       response.PostId,
-					Content:      v.Content,
-					CreateTime:   v.CreateTime,
-					FromUser:     c.Convert(resp.Data[v.FromUserId]),
-					ToUser:       c.Convert(resp.Data[v.ToUserId]),
-					IsTop:        false,
-					TopCommentId: val.CommentId,
-					ChildComment: nil,
+					CommentId:       v.CommentId,
+					PostId:          response.PostId,
+					Content:         v.Content,
+					CreateTime:      v.CreateTime,
+					FromUserAccount: c.Convert(resp.Data[v.FromUserId]),
+					ToUserAccount:   c.Convert(resp.Data[v.ToUserId]),
+					IsTop:           false,
+					TopCommentId:    val.CommentId,
+					ChildComment:    nil,
 				})
 		}
 		comments = append(comments, comment)

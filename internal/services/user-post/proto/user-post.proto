@@ -142,6 +142,7 @@ message Notification{
   uint32 ActionId       =7;
   string ActionTime     =8;
   string CommentContent =9;
+  bool IsToPost = 10;
 }
 
 message GetNotificationResponse{

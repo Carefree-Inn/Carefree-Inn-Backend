@@ -53,6 +53,7 @@ type Comment struct {
 	FromUserAccount  string `json:"from_user_account"`
 	FromUserAvatar   string `json:"from_user_avatar"`
 	FromUserNickName string `json:"from_user_nick_name"`
+	IsToPost         bool   `json:"is_to_post"`
 }
 
 func (c *Comment) Marshal() ([]byte, error) {
@@ -145,6 +146,7 @@ type Notification struct {
 	ActionId       uint32 `json:"action_id"`
 	ActionTime     string `json:"action_time"`
 	CommentContent string `json:"comment_content"`
+	IsToPost       bool   `json:"is_to_post"`
 }
 
 //  GetNotificationHistory getNotificationHistory
@@ -194,6 +196,7 @@ func (n *notificationHandler) GetNotificationHistory(c *gin.Context) {
 			ActionId:         val.ActionId,
 			ActionTime:       val.ActionTime,
 			CommentContent:   val.CommentContent,
+			IsToPost:         val.IsToPost,
 		})
 	}
 	

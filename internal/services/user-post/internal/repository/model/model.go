@@ -31,6 +31,7 @@ type Notification struct {
 	ActionId       uint32    `gorm:"column:action_id;primaryKey"`
 	ActionTime     time.Time `gorm:"column:action_time"`
 	CommentContent string    `gorm:"column:comment_content;type:varchar(500);default:null"`
+	IsToPost       bool      `gorm:"column:is_to_post"`
 }
 
 func (PostLike) Table() string {
