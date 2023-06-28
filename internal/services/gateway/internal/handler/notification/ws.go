@@ -53,7 +53,9 @@ type Comment struct {
 	FromUserAccount  string `json:"from_user_account"`
 	FromUserAvatar   string `json:"from_user_avatar"`
 	FromUserNickName string `json:"from_user_nick_name"`
-	IsToPost         bool   `json:"is_to_post"`
+	
+	IsToPost  bool   `json:"is_to_post"`
+	PostOwner string `json:"post_owner"`
 }
 
 func (c *Comment) Marshal() ([]byte, error) {
@@ -119,7 +121,7 @@ func (n *notificationHandler) SendNotification(c *gin.Context) {
 				continue
 			}
 			
-			if comment.ToUserAccount != account {
+			if comment.ToUserAccount != account || !comment.IsToPost && comment.PostOwner != account {
 				continue
 			}
 			
@@ -147,6 +149,7 @@ type Notification struct {
 	ActionTime     string `json:"action_time"`
 	CommentContent string `json:"comment_content"`
 	IsToPost       bool   `json:"is_to_post"`
+	PostOwner      string `json:"post_owner"`
 }
 
 //  GetNotificationHistory getNotificationHistory

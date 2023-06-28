@@ -18,7 +18,9 @@ type Comment struct {
 	FromUserAccount  string `json:"from_user_account"`
 	FromUserAvatar   string `json:"from_user_avatar"`
 	FromUserNickName string `json:"from_user_nick_name"`
-	IsToPost         bool   `json:"is_to_post"`
+	
+	IsToPost  bool   `json:"is_to_post"`
+	PostOwner string `json:"post_owner"`
 }
 
 func (c *Comment) Marshal() ([]byte, error) {
@@ -51,10 +53,8 @@ func (up *UserPost) SetNotification(action any, id uint32, createTime time.Time)
 		notification.ActionId = id
 		notification.ActionTime = createTime
 		notification.CommentContent = x.Content
-		
-		if notification.ToUserAccount == "" {
-			notification.IsToPost = true
-		}
+		notification.PostOwner = x.PostOwner
+		notification.IsToPost = x.IsToPost
 	}
 	
 	tx := up.db.Begin()
@@ -65,11 +65,29 @@ func (up *UserPost) SetNotification(action any, id uint32, createTime time.Time)
 	return errors.WithStack(tx.Commit().Error)
 }
 
+func (up *UserPost) GetAccount(postId uint32) (string, error) {
+	type Data struct {
+		Account string `gorm:"column:account"`
+	}
+	data := Data{}
+	if err := up.db.Table("post").Select("account").Where("post_id = ?", postId).
+		First(&data).Error; err != nil {
+		return "", errors.WithStack(err)
+	}
+	
+	return data.Account, nil
+}
+
 func (up *UserPost) MakeComment(comment *model.Comment, commentInfo *Comment) error {
 	session := up.db.Begin()
 	if err := session.Table(comment.Table()).Create(comment).Error;
 		err != nil {
 		return errors.WithStack(session.Rollback().Error)
+	}
+	
+	account, err := up.GetAccount(comment.PostId)
+	if err != nil {
+		return err
 	}
 	
 	if err := session.Table(comment.Table()).Exec(
@@ -82,7 +100,9 @@ func (up *UserPost) MakeComment(comment *model.Comment, commentInfo *Comment) er
 	
 	commentInfo.CommentId = comment.CommentId
 	commentInfo.CommentTime = comment.CreateTime.Format("2006-01-02 15:04-05")
+	// isToPost 为true PostOwner才作为被通知对象
 	commentInfo.IsToPost = comment.IsTop
+	commentInfo.PostOwner = account
 	
 	if err := up.SetNotification(commentInfo, commentInfo.CommentId, comment.CreateTime); err != nil {
 		return err
