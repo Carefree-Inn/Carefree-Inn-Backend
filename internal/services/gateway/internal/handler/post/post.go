@@ -87,7 +87,7 @@ func (p *postHandler) CreatePost(c *gin.Context) {
 //	@Success		200				{object}	internal.Response
 //	@Router			/post [delete]
 func (p *postHandler) DeletePost(c *gin.Context) {
-	var post = c.Query("category_id")
+	var post = c.Query("post_id")
 	if post == "" {
 		internal.Error(c, errno.ParamDataError)
 		log.Warn(

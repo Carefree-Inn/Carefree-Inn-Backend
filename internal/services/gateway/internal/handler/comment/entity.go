@@ -13,8 +13,8 @@ type Comment struct {
 	Content    string `json:"content"`
 	CreateTime string `json:"create_time"`
 	
-	FromUser *UserInfo `json:"from_user"`
-	ToUser   *UserInfo `json:"to_user_id"`
+	FromUserAccount *UserInfo `json:"from_user_account"`
+	ToUserAccount   *UserInfo `json:"to_user_account"`
 	
 	IsTop        bool       `json:"is_top"`
 	TopCommentId uint32     `json:"top_comment_id"`
