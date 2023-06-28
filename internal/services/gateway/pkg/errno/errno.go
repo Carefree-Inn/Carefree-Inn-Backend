@@ -61,6 +61,7 @@ var (
 	ResourceNotExist             = &Errno{message: "资源不存在", statusCode: 200204}
 	DuplicateLike                = &Errno{message: "重复点赞", statusCode: 400403}
 	ErrNoFile                    = &Errno{message: "文件不存在", statusCode: 200204}
+	NoPowerDeleteError           = &Errno{message: "无权删除该资源", statusCode: 400401}
 	
 	// server
 	InternalServerError = &Errno{message: "服务器内部问题", statusCode: 500503}

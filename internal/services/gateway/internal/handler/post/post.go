@@ -76,10 +76,6 @@ func (p *postHandler) CreatePost(c *gin.Context) {
 	internal.Success(c, nil)
 }
 
-type deletePostRequest struct {
-	PostId uint32 `json:"post_id" binding:"required"`
-}
-
 //  DeletePost deletePostRequest
 //	@Summary		删除帖子 api
 //	@Tags			post
@@ -119,6 +115,11 @@ func (p *postHandler) DeletePost(c *gin.Context) {
 		Account: account,
 	})
 	if err != nil {
+		if errno.Is(err, errno.UserNoPowerError) {
+			internal.Error(c, err)
+			return
+		}
+		
 		internal.ServerError(c, errno.DeletePostError.Error())
 		log.Panic(log.WithField("X-Request-Id", c.MustGet("uuid")),
 			errors.WithStack(err), errno.DeletePostError.Error())
