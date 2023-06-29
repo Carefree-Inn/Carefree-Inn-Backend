@@ -39,5 +39,5 @@ func (p *Post) GetPostOfCategory(category *model.Category, account string, page,
 		Find(&posts).Error; err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return p.GetLiked(posts, account)
+	return p.GetLiked(account, posts...)
 }

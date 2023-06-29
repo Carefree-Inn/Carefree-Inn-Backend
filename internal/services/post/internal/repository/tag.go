@@ -45,5 +45,5 @@ func (p *Post) GetPostOfTag(title string, account string) ([]*model.Post, error)
 		Find(&data).Error; err != nil {
 		return nil, errors.WithStack(err)
 	}
-	return p.GetLiked(data, account)
+	return p.GetLiked(account, data...)
 }

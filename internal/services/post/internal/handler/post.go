@@ -82,7 +82,7 @@ func (p *PostService) GetPostOfUserLiked(ctx context.Context, in *pb.PostOfUserR
 }
 
 func (p *PostService) GetPost(ctx context.Context, in *pb.GetPostRequest, resp *pb.GetPostResponse) error {
-	post, err := p.postDao.GetPost(in.PostId)
+	post, err := p.postDao.GetPost(in.PostId, in.Account)
 	if err != nil {
 		return err
 	}

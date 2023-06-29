@@ -238,8 +238,9 @@ func (p *postHandler) GetPost(c *gin.Context) {
 		return
 	}
 	
+	account := c.MustGet("account").(string)
 	ctx := context.WithValue(c.Request.Context(), "X-Request-Id", pkg.GetUUid(c))
-	resp, err := p.PostService.GetPost(ctx, &pb.GetPostRequest{PostId: uint32(id)})
+	resp, err := p.PostService.GetPost(ctx, &pb.GetPostRequest{PostId: uint32(id), Account: account})
 	if err != nil {
 		internal.ServerError(c, errno.InternalServerError.Error())
 		return

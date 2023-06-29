@@ -26,17 +26,17 @@ func (p *Post) SearchPost(content string, searchType string, account string) ([]
 			return nil, errors.WithStack(err)
 		}
 	} else if searchType == "content" {
-		if err := p.db.Table(model.Post{}.Table()).Where(
-			fmt.Sprintf("content REGEXP '%s'", fmt.Sprintf(".*>[^<]%s[^<]<\\/Text>", strings.Replace(data, "%", "*", -1)))).
+		if err := p.db.Table(model.Post{}.Table()).
+			Where("SUBSTRING_INDEX(SUBSTRING_INDEX(content, '<Text>', -1), '</Text>', 1) LIKE '?'", data).
 			Order(fmt.Sprintf("RAND(%d)", minute)).Find(&posts).Error; err != nil {
 			return nil, errors.WithStack(err)
 		}
 	} else if searchType == "all" {
-		if err := p.db.Table(model.Post{}.Table()).Where(
-			fmt.Sprintf("content REGEXP '%s' OR title LIKE '%s'", fmt.Sprintf(".*>[^<]%s[^<]*<\\/Text>", strings.Replace(data, "%", "*", -1)), data)).
+		if err := p.db.Table(model.Post{}.Table()).
+			Where("title LIKE ? OR SUBSTRING_INDEX(SUBSTRING_INDEX(content, '<Text>', -1), '</Text>', 1) LIKE ?", data, data).
 			Order(fmt.Sprintf("RAND(%d)", minute)).Find(&posts).Error; err != nil {
 			return nil, errors.WithStack(err)
 		}
 	}
-	return p.GetLiked(posts, account)
+	return p.GetLiked(account, posts...)
 }

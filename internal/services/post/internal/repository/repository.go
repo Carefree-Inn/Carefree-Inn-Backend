@@ -25,7 +25,7 @@ type PostRepository interface {
 	GetPostOfUser(account string, page int32, limit int32) ([]*model.Post, error)
 	GetPostOfUserLiked(account string, page, limit int32) ([]*model.Post, error)
 	PostSquare() ([]*model.Tag, error)
-	GetPost(postId uint32) ([]*model.Post, error)
+	GetPost(postId uint32, account string) ([]*model.Post, error)
 }
 
 func NewPostRepository(dbUp *gorm.DB) PostRepository {

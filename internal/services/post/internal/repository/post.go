@@ -41,7 +41,7 @@ func (p *Post) DeletePost(post *model.Post) error {
 	return nil
 }
 
-func (p *Post) GetLiked(posts []*model.Post, account string) ([]*model.Post, error) {
+func (p *Post) GetLiked(account string, posts ...*model.Post) ([]*model.Post, error) {
 	if account == "" {
 		return posts, nil
 	}
@@ -79,7 +79,7 @@ func (p *Post) GetPostOfUser(account string, page, limit int32) ([]*model.Post, 
 		return nil, errors.WithStack(err)
 	}
 	
-	return p.GetLiked(posts, account)
+	return p.GetLiked(account, posts...)
 }
 
 func (p *Post) GetPostOfUserLiked(account string, page, limit int32) ([]*model.Post, error) {
@@ -107,14 +107,19 @@ func (p *Post) PostSquare() ([]*model.Tag, error) {
 	return tags, nil
 }
 
-func (p *Post) GetPost(postId uint32) ([]*model.Post, error) {
+func (p *Post) GetPost(postId uint32, account string) ([]*model.Post, error) {
 	post := make([]*model.Post, 0, 1)
 	if err := p.db.Table(model.Post{}.Table()).Where("post_id=?", postId).Preload("Tags").
 		Find(&post).Error; err != nil {
 		return nil, errors.WithStack(err)
 	}
 	
-	return post, nil
+	data, err := p.GetLiked(account, post...)
+	if err != nil {
+		return nil, errors.WithStack(err)
+	}
+	
+	return data, nil
 }
 
 //func (p *Post) CreatePost(post *model.Post) error {

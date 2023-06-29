@@ -95,6 +95,7 @@ message PostOfUserRequest{
 
 message GetPostRequest{
 	uint32 PostId = 1;
+	string Account = 2;
 }
 
 message GetPostResponse {
